@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 
-class AdapterUsuario(val usuario:List<DataClassUsuario>):RecyclerView.Adapter<AdapterUsuario.holderUsuario>(){
+class AdapterUsuario(val usuario: List<DataClassUsuario>):RecyclerView.Adapter<AdapterUsuario.holderUsuario>(){
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): holderUsuario {
@@ -23,7 +23,7 @@ class AdapterUsuario(val usuario:List<DataClassUsuario>):RecyclerView.Adapter<Ad
     }
 
 
-    class holderUsuario(val view: View):RecyclerView.ViewHolder(view){
+    class holderUsuario(private val view: View):RecyclerView.ViewHolder(view){
         fun render (usuario: DataClassUsuario){
             val btn_usuario = view.findViewById<Button>(R.id.tx_Nombre)
             btn_usuario.text = usuario.name

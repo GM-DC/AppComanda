@@ -1,5 +1,6 @@
 package com.example.apppedido
 
+import android.content.Intent
 import android.os.Binder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,8 +17,6 @@ class activityPasscode : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding2 = ActivityPasscodeBinding.inflate(layoutInflater)
         setContentView(binding2.root)
-
-
 
 
         var numero = ((Math.random() * 10)).toInt()
@@ -91,7 +90,16 @@ class activityPasscode : AppCompatActivity() {
 
 
 
+        /////BOTON SIGUIENTE ////
+        binding2.btnSiguiente2.setOnClickListener {
+            val intent = Intent(this, panelPedido::class.java)
+            startActivity(intent)
+        }
+        ///
+
     }
+
+
 
     private fun numeroPresionado(digito:String){
         binding2.txtCodigo.text = "${binding2.txtCodigo.text}${digito}"
@@ -100,6 +108,9 @@ class activityPasscode : AppCompatActivity() {
     private fun Random.nextInt(range: IntRange): Int {
         return range.start + nextInt(range.last - range.start)
     }
+
+
+
 
 
 }
