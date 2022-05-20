@@ -1,0 +1,12 @@
+Android Collapsing Toolbar // Movimiento arriba
+CoordinatorLayout  // Movimiento arriba
+
+
+
+
+
+
+
+
+Fuentes:
+https://betterprogramming.pub/how-to-present-a-bottom-sheet-view-controller-in-ios-a5a3e2047af9

@@ -2,6 +2,7 @@ package com.example.apppedido
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apppedido.databinding.ActivityInicioBinding
@@ -56,7 +57,7 @@ class MainActivity : AppCompatActivity() {
     fun initUsuario(){
         val rviUsuario = findViewById<RecyclerView>(R.id.rvUsuarios)
 
-        rviUsuario.layoutManager = LinearLayoutManager(this)
+        rviUsuario.layoutManager = GridLayoutManager(this,3,RecyclerView.HORIZONTAL,false)
         val adapter = AdapterUsuario(listaUsuario)
         rviUsuario.adapter = adapter
     }

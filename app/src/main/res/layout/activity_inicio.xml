@@ -19,15 +19,14 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvUsuarios"
-        android:layout_width="153dp"
-        android:layout_height="97dp"
+        android:layout_width="348dp"
+        android:layout_height="272dp"
+        android:scrollbars="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.6"
-        android:scrollbars="horizontal"
-        />
+        app:layout_constraintVertical_bias="0.6" />
 
     <Button
         android:id="@+id/btn_sigiente"

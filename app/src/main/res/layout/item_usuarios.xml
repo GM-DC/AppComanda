@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="140dp"
-    android:layout_height="70dp"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="150dp"
+    android:layout_height="70dp"
     android:orientation="horizontal">
 
 
     <Button
         android:id="@+id/tx_Nombre"
-        android:layout_width="140dp"
-        android:layout_height="match_parent"
+        android:layout_width="171dp"
+        android:layout_height="60dp"
         android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="0dp"
         android:layout_weight="1"
         android:text="Button"
+        android:textSize="14sp"
         tools:text="Nombre" />
 
 </LinearLayout>
