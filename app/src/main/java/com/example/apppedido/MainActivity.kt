@@ -31,7 +31,9 @@ class MainActivity : AppCompatActivity() {
         DataClassUsuario("8","Maria"),
         DataClassUsuario("9","Dessire"),
         DataClassUsuario("10","Dani"),
-        DataClassUsuario("11","Ruben")
+        DataClassUsuario("11","Ruben"),
+        DataClassUsuario("10","Pepe"),
+        DataClassUsuario("11","Rubi")
     )
 
     fun initUsuario(){
