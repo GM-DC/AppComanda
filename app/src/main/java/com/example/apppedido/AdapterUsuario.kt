@@ -25,12 +25,12 @@ class AdapterUsuario(val usuario:List<DataClassUsuario>):RecyclerView.Adapter<Ad
 
     class holderUsuario(val view: View):RecyclerView.ViewHolder(view){
         fun render (usuario: DataClassUsuario){
-
             val btn_usuario = view.findViewById<Button>(R.id.tx_Nombre)
-
-            //Prueba
             btn_usuario.text = usuario.name
-
         }
     }
+
+
+
+
 }

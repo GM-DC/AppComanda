@@ -14,10 +14,24 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityInicioBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         initUsuario()
+
+
+
+        /////BOTON SIGUIENTE ////
+
+        binding.btnSigiente.setOnClickListener {
+            val intent = Intent(this, activityPasscode::class.java)
+            startActivity(intent)
+        }
+
+        ///
+
+
     }
 
     val listaUsuario = listOf<DataClassUsuario>(
@@ -43,5 +57,6 @@ class MainActivity : AppCompatActivity() {
         val adapter = AdapterUsuario(listaUsuario)
         rviUsuario.adapter = adapter
     }
+
 
 }
