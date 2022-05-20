@@ -16,6 +16,7 @@ class panelPedido : AppCompatActivity() {
         comp = ActivityPanelPedidoBinding.inflate(layoutInflater)
         setContentView(comp.root)
         initZona()
+        initMesa()
 
     }
 
@@ -24,6 +25,13 @@ class panelPedido : AppCompatActivity() {
         rv_zona.layoutManager = LinearLayoutManager(this,RecyclerView.HORIZONTAL,false)
         val adapter = AdapterZona(listaZona)
         rv_zona.adapter = adapter
+    }
+
+    fun initMesa(){
+        val rv_mesa = findViewById<RecyclerView>(R.id.rv_mesa)
+        rv_mesa.layoutManager = LinearLayoutManager(this,RecyclerView.HORIZONTAL,false)
+        val adapter = AdapterMesa(listaMesa)
+        rv_mesa.adapter = adapter
     }
 
     val listaZona = listOf<DataClassZona>(
@@ -40,6 +48,22 @@ class panelPedido : AppCompatActivity() {
         DataClassZona("11","Zona 11"),
         DataClassZona("10","Zona 12"),
         DataClassZona("11","Zona 13")
+    )
+
+    val listaMesa = listOf<DataClassMesa>(
+        DataClassMesa("1","Mesa 01"),
+        DataClassMesa("2","Mesa 02"),
+        DataClassMesa("3","Mesa 03"),
+        DataClassMesa("4","Mesa 04"),
+        DataClassMesa("5","Mesa 05"),
+        DataClassMesa("6","Mesa 06"),
+        DataClassMesa("7","Mesa 07"),
+        DataClassMesa("8","Mesa 08"),
+        DataClassMesa("9","Mesa 09"),
+        DataClassMesa("10","Mesa 10"),
+        DataClassMesa("11","Mesa 11"),
+        DataClassMesa("10","Mesa 12"),
+        DataClassMesa("11","Mesa 13")
     )
 
 }

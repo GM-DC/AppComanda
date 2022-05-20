@@ -7,7 +7,7 @@ import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import java.util.ArrayList
 
-class AdapterZona (private val data: List<DataClassZona>): RecyclerView.Adapter<AdapterZona.holderZona>() {
+class AdapterZona(private val data: List<DataClassZona>): RecyclerView.Adapter<AdapterZona.holderZona>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterZona.holderZona {
         val layoutInflater = LayoutInflater.from(parent.context)
