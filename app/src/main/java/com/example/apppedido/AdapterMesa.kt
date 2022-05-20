@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 
-class AdapterMesa (private val data: List<DataClassMesa>): RecyclerView.Adapter<AdapterMesa.holderMesa>() {
+class AdapterMesa(private val data: List<DataClassMesa>): RecyclerView.Adapter<AdapterMesa.holderMesa>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterMesa.holderMesa {
         val layoutInflater = LayoutInflater.from(parent.context)
