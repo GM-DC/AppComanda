@@ -2,7 +2,7 @@ package com.example.apppedido
 
 data class DataClassPedido (
 
-    val id:String,
+    val cantidad:Int,
     val namePlato:String,
     val categoria:String,
     val precio:Float,

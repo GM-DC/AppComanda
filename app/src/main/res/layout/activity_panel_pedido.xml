@@ -68,7 +68,7 @@
         app:layout_constraintVertical_bias="0.85"></androidx.recyclerview.widget.RecyclerView>
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/bt_aumentar"
         android:layout_width="50dp"
         android:layout_height="51dp"
         android:text="+"
@@ -105,7 +105,7 @@
         tools:ignore="TouchTargetSizeCheck" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/bt_disminuir"
         android:layout_width="50dp"
         android:layout_height="51dp"
         android:text="-"

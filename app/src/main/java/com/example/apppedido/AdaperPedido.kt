@@ -7,7 +7,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class AdapterPedido(private val data: List<DataClassPedido>): RecyclerView.Adapter<AdapterPedido.holderPedido>() {
+class AdapterPedido(private val data: List<DataClassPedido>,private val onClickListener: (DataClassPedido) -> Unit): RecyclerView.Adapter<AdapterPedido.holderPedido>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterPedido.holderPedido {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -15,7 +15,7 @@ class AdapterPedido(private val data: List<DataClassPedido>): RecyclerView.Adapt
     }
 
     override fun onBindViewHolder(holder: holderPedido, position: Int) {
-        holder.render(data[position])
+        holder.render(data[position],onClickListener)
     }
 
     override fun getItemCount(): Int {
@@ -23,13 +23,17 @@ class AdapterPedido(private val data: List<DataClassPedido>): RecyclerView.Adapt
     }
 
     class holderPedido(private val view: View): RecyclerView.ViewHolder(view){
-        fun render (data: DataClassPedido){
+        fun render (data: DataClassPedido,onClickListener: (DataClassPedido) -> Unit){
             val tv_nombrePlato = view.findViewById<TextView>(R.id.tv_nombrePlato)
             val tv_precio = view.findViewById<TextView>(R.id.tv_precio)
+            val tv_cantidad = view.findViewById<TextView>(R.id.tv_cantidad)
 
-
+            tv_cantidad.text = data.cantidad.toString()
             tv_nombrePlato.text = data.namePlato
             tv_precio.text = data.precio.toString()
+
+
+            itemView.setOnClickListener { onClickListener(data) }
         }
     }
 }

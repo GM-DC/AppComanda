@@ -51,7 +51,7 @@ class panelPedido : AppCompatActivity() {
     fun initPlato(){
         val rv_plato = findViewById<RecyclerView>(R.id.rv_platillo)
         rv_plato.layoutManager = GridLayoutManager(this,3,RecyclerView.HORIZONTAL,false)
-        val adapter = AdapterPlato(listaPlato) { dataclassPlato -> onItemDatos(dataclassPlato) }
+        val adapter = AdapterPlato(listaPlato) { dataclassPlato -> onItemDatosPedido(dataclassPlato) }
         rv_plato.adapter = adapter
     }
 
@@ -59,21 +59,95 @@ class panelPedido : AppCompatActivity() {
         val rv_pedido = findViewById<RecyclerView>(R.id.rv_pedido)
         rv_pedido.layoutManager = LinearLayoutManager(this)
         agregarPlatos()
-        val adapter = AdapterPedido(listaPedido)
+        val adapter = AdapterPedido(listaPedido, {dataclassPedido -> onIntemDatosPlatos(dataclassPedido)})
         rv_pedido.adapter = adapter
 
     }
 
-    fun onItemDatos(dataClassPedido: DataClassPlato){
-        println("Clic")
+    fun onItemDatosPedido(dataClassPedido: DataClassPlato){
         Toast.makeText(this, dataClassPedido.name, Toast.LENGTH_SHORT).show()
-        listaPedido.add(DataClassPedido("1",dataClassPedido.name,"Pollos",25.3f))
+
+        listaPedido.add(DataClassPedido(1,dataClassPedido.name,dataClassPedido.categoria,dataClassPedido.precio))
+
         val rv_pedido = findViewById<RecyclerView>(R.id.rv_pedido)
         rv_pedido.adapter?.notifyDataSetChanged()
         rv_pedido.scrollToPosition(listaPedido.size-1)
     }
 
+    fun onIntemDatosPlatos(dataclassPedido:DataClassPedido){
+        val rv_pedido = findViewById<RecyclerView>(R.id.rv_pedido)
+        val bt_eliminar = findViewById<Button>(R.id.bt_disminuir)
+        val bt_aumentar = findViewById<Button>(R.id.bt_aumentar)
 
+        Toast.makeText(this, dataclassPedido.namePlato, Toast.LENGTH_SHORT).show()
+
+        val datos = dataclassPedido.copy()
+        //println(datos)
+
+        bt_eliminar.setOnClickListener {
+
+            if (datos!=null){
+                listaPedido.remove(datos)
+                rv_pedido.adapter?.notifyDataSetChanged()
+            }else{
+                println("No hay nada")
+                Toast.makeText(this, "No hay datos", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        bt_aumentar.setOnClickListener {
+        /*
+
+
+            if (datos!=null){
+
+                val index:Int = listaPedido.indexOf(datos)
+
+                println(listaPedido.indexOf(datos))
+                println(DataClassPedido((datos.cantidad.toInt()+1).toString(),datos.namePlato,datos.categoria,datos.precio))
+                //rv_pedido.adapter?.notifyDataSetChanged()
+
+                println(listaPedido.set(index,DataClassPedido((datos.cantidad.toInt()+1).toString(),datos.namePlato,datos.categoria,datos.precio)))
+
+
+                Toast.makeText(this, "si hay datos", Toast.LENGTH_SHORT).show()
+            }else{
+
+                println("No hay nada")
+                Toast.makeText(this, "No hay datos", Toast.LENGTH_SHORT).show()
+            }
+            */
+        }
+
+
+        //listaPedido.remove(datos)
+        //rv_pedido.adapter?.notifyDataSetChanged()
+
+
+        /*
+
+        //INICIO -- Premite sabes ----------------
+        var posi = -1
+        for(i in 1..listaPedido.size){
+            println(i)
+            if (listaPedido.get(i).namePlato.equals(dataclassPedido.namePlato)){
+                println(listaPedido.get(i).namePlato.equals(dataclassPedido.namePlato))
+                posi = i
+                println(i)
+            }
+        }
+        //FIN---------------------------------------
+
+
+        if (posi!=-1){
+            listaPedido.remove(datos)
+            val rv_pedido = findViewById<RecyclerView>(R.id.rv_pedido)
+            rv_pedido.adapter?.notifyDataSetChanged()
+        }else{
+            Toast.makeText(this, "No exite", Toast.LENGTH_SHORT).show()
+        }*/
+
+    }
 
 
 
@@ -145,8 +219,8 @@ class panelPedido : AppCompatActivity() {
     val listaPedido = ArrayList<DataClassPedido>()
 
     fun agregarPlatos(){
-        listaPedido.add(DataClassPedido("1","Salchipapa","Pollos",25.3f),)
-        listaPedido.add(DataClassPedido("2","Pollito","Pollos",15.5f))
+        listaPedido.add(DataClassPedido(1,"Salchipapa","Pollos",25.3f),)
+        listaPedido.add(DataClassPedido(1,"Pollito","Pollos",15.5f))
     }
 
 
