@@ -1,6 +1,8 @@
 package com.example.apppedido
 
-class DataClassPlato (
+data class DataClassPlato (
     val id:String,
-    val name:String
+    val name:String,
+    val categoria:String,
+    val precio:Float
 )

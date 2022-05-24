@@ -1,13 +1,13 @@
 package com.example.apppedido
 
 import android.content.Intent
-import android.os.Binder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
 import com.example.apppedido.databinding.ActivityPasscodeBinding
-import org.w3c.dom.Text
 import kotlin.random.Random
+import java.lang.*
+import java.util.*
+
 
 class activityPasscode : AppCompatActivity() {
 
@@ -70,7 +70,8 @@ class activityPasscode : AppCompatActivity() {
                     posicion += 1
 
             }
-        }*/
+        }
+        */
 
 
         println(grupo[2])
@@ -108,9 +109,5 @@ class activityPasscode : AppCompatActivity() {
     private fun Random.nextInt(range: IntRange): Int {
         return range.start + nextInt(range.last - range.start)
     }
-
-
-
-
 
 }

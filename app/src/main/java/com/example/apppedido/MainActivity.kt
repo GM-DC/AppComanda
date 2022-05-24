@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
 
         /////BOTON SIGUIENTE ////
-        binding.btnSigiente.setOnClickListener {
+        binding.btnSiguiente2.setOnClickListener {
             val intent = Intent(this, activityPasscode::class.java)
             startActivity(intent)
         }
@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
     fun initUsuario(){
         val rviUsuario = findViewById<RecyclerView>(R.id.rvUsuarios)
 
-        rviUsuario.layoutManager = GridLayoutManager(this,3,RecyclerView.HORIZONTAL,false)
+        rviUsuario.layoutManager = GridLayoutManager(this,2,RecyclerView.HORIZONTAL,false)
         val adapter = AdapterUsuario(listaUsuario)
         rviUsuario.adapter = adapter
     }

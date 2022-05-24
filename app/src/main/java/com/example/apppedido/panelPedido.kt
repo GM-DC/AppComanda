@@ -2,6 +2,8 @@ package com.example.apppedido
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +22,7 @@ class panelPedido : AppCompatActivity() {
         initMesa()
         initCategoria()
         initPlato()
+        initPedido()
     }
 
 
@@ -48,9 +51,32 @@ class panelPedido : AppCompatActivity() {
     fun initPlato(){
         val rv_plato = findViewById<RecyclerView>(R.id.rv_platillo)
         rv_plato.layoutManager = GridLayoutManager(this,3,RecyclerView.HORIZONTAL,false)
-        val adapter = AdapterPlato(listaPlato)
+        val adapter = AdapterPlato(listaPlato) { dataclassPlato -> onItemDatos(dataclassPlato) }
         rv_plato.adapter = adapter
     }
+
+    fun initPedido(){
+        val rv_pedido = findViewById<RecyclerView>(R.id.rv_pedido)
+        rv_pedido.layoutManager = LinearLayoutManager(this)
+        agregarPlatos()
+        val adapter = AdapterPedido(listaPedido)
+        rv_pedido.adapter = adapter
+
+    }
+
+    fun onItemDatos(dataClassPedido: DataClassPlato){
+        println("Clic")
+        Toast.makeText(this, dataClassPedido.name, Toast.LENGTH_SHORT).show()
+        listaPedido.add(DataClassPedido("1",dataClassPedido.name,"Pollos",25.3f))
+        val rv_pedido = findViewById<RecyclerView>(R.id.rv_pedido)
+        rv_pedido.adapter?.notifyDataSetChanged()
+        rv_pedido.scrollToPosition(listaPedido.size-1)
+    }
+
+
+
+
+
 
     val listaZona = listOf<DataClassZona>(
         DataClassZona("1","Zona01"),
@@ -101,18 +127,46 @@ class panelPedido : AppCompatActivity() {
     )
 
     val listaPlato = listOf<DataClassPlato>(
-        DataClassPlato("1","Salchipapa"),
-        DataClassPlato("2","Pequeños"),
-        DataClassPlato("3","Alitas"),
-        DataClassPlato("4","Broschetas"),
-        DataClassPlato("5","Anticucho"),
-        DataClassPlato("6","Piqueo"),
-        DataClassPlato("7","Porcino"),
-        DataClassPlato("8","Parrila"),
-        DataClassPlato("9","Coca-Cola"),
-        DataClassPlato("10","Inka-Cola"),
-        DataClassPlato("11","Pastel"),
-        DataClassPlato("10","Torta"),
-        DataClassPlato("11","Pan")
+        DataClassPlato("1","Salchipapa","Pollo",25.3f),
+        DataClassPlato("2","Pequeños","Pollo",25.3f),
+        DataClassPlato("3","Alitas","Pollo",25.3f),
+        DataClassPlato("4","Broschetas","Pollo",25.3f),
+        DataClassPlato("5","Anticucho","Pollo",25.3f),
+        DataClassPlato("6","Piqueo","Pollo",25.3f),
+        DataClassPlato("7","Porcino","Pollo",25.3f),
+        DataClassPlato("8","Parrila","Pollo",25.3f),
+        DataClassPlato("9","Coca-Cola","Pollo",25.3f),
+        DataClassPlato("10","Inka-Cola","Pollo",25.3f),
+        DataClassPlato("11","Pastel","Pollo",25.3f),
+        DataClassPlato("10","Torta","Pollo",25.3f),
+        DataClassPlato("11","Pan","Pollo",25.3f)
     )
+
+    val listaPedido = ArrayList<DataClassPedido>()
+
+    fun agregarPlatos(){
+        listaPedido.add(DataClassPedido("1","Salchipapa","Pollos",25.3f),)
+        listaPedido.add(DataClassPedido("2","Pollito","Pollos",15.5f))
+    }
+
+
+    /*
+    listaPedido.add(DataClassPedido("1","Salchipapa","Pollos",25.3f)),
+        DataClassPedido("2","Salchipapa","Pollos",25.3f),
+        DataClassPedido("3","Salchipapa","Pollos",25.3f),
+        DataClassPedido("4","Salchipapa","Pollos",25.3f),
+        DataClassPedido("5","Salchipapa","Pollos",25.3f),
+        DataClassPedido("6","Salchipapa","Pollos",25.3f),
+        DataClassPedido("7","Salchipapa","Pollos",25.3f),
+        DataClassPedido("8","Salchipapa","Pollos",25.3f),
+        DataClassPedido("9","Salchipapa","Pollos",25.3f),
+        DataClassPedido("10","Salchipapa","Pollos",25.3f),
+        DataClassPedido("11","Salchipapa","Pollos",25.3f),
+        DataClassPedido("12","Salchipapa","Pollos",25.3f),
+        DataClassPedido("13","Salchipapa","Pollos",25.3f)
+    */
+
+
+
+
 }
