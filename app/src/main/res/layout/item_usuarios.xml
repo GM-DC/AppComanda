@@ -8,16 +8,11 @@
 
     <Button
         android:id="@+id/tx_Nombre"
-        android:layout_width="171dp"
-        android:layout_height="60dp"
-        android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="0dp"
-        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5sp"
         android:text="Button"
-        android:textSize="14sp"
-        tools:text="Nombre" />
+        android:textSize="12sp"
+        tools:text="Alexsandre" />
 
 </LinearLayout>
