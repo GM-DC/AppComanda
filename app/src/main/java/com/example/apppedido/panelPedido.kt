@@ -3,7 +3,9 @@ package com.example.apppedido
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -64,89 +66,113 @@ class panelPedido : AppCompatActivity() {
 
     }
 
-    fun onItemDatosPedido(dataClassPedido: DataClassPlato){
-        Toast.makeText(this, dataClassPedido.name, Toast.LENGTH_SHORT).show()
-
-        listaPedido.add(DataClassPedido(1,dataClassPedido.name,dataClassPedido.categoria,dataClassPedido.precio))
-
+    fun onItemDatosPedido(dataClassPlato: DataClassPlato){
         val rv_pedido = findViewById<RecyclerView>(R.id.rv_pedido)
-        rv_pedido.adapter?.notifyDataSetChanged()
-        rv_pedido.scrollToPosition(listaPedido.size-1)
+        val datos = dataClassPlato.copy()
+        Toast.makeText(this, dataClassPlato.name, Toast.LENGTH_SHORT).show()
+
+        //-------------Evalua POSICION Y ACCION DE AGREGAR-------------------
+        //println("------- Evalua POSICION Y ACCION DE AGREGAR-------------")
+        var action = 0
+        var pos = -1
+        for (i in listaPedido.indices){
+            if(listaPedido[i].namePlato==datos.name){
+                action += 1
+            }
+            if (action == 1){
+                pos = i
+                println("posicion: $pos")
+                break
+            }
+        }
+        //println("-----------------  FIN  --------------------")
+        //--------------------------- FIN ------------------------------------
+
+
+        //----------------  AGREGA O AUMENTA LA CANTIDAD -------------------
+        if (action == 0){
+            listaPedido.add(DataClassPedido(1,dataClassPlato.name,dataClassPlato.categoria,dataClassPlato.precio))
+            rv_pedido.adapter?.notifyDataSetChanged()
+            rv_pedido.scrollToPosition(listaPedido.size-1)
+        }else{
+            val lt = listaPedido.get(pos)
+            var cantidad = lt.cantidad+1
+            var precioTotal = dataClassPlato.precio*cantidad
+            listaPedido.set(pos, DataClassPedido(cantidad,lt.namePlato,lt.categoria,precioTotal))
+            rv_pedido.adapter?.notifyDataSetChanged()
+        }
+        //-------------------------------------------------------------------
+
     }
 
     fun onIntemDatosPlatos(dataclassPedido:DataClassPedido){
         val rv_pedido = findViewById<RecyclerView>(R.id.rv_pedido)
         val bt_eliminar = findViewById<Button>(R.id.bt_disminuir)
         val bt_aumentar = findViewById<Button>(R.id.bt_aumentar)
-
+        val bt_detalle = findViewById<Button>(R.id.bt_detalle)
+        val datos = dataclassPedido.copy()
         Toast.makeText(this, dataclassPedido.namePlato, Toast.LENGTH_SHORT).show()
 
-        val datos = dataclassPedido.copy()
-        //println(datos)
+        //-------------Posicion--------------------------------------
+        var index = -1
+        for (i in listaPedido.indices) {
+            if (listaPedido[i].namePlato == datos.namePlato){
+                println("Bucle: ${listaPedido[i].namePlato} == ${datos.namePlato}")
+                index = i
+                break
+            }
+        }
+        //----------------------------------------------------------
 
+        //-----------BOTON ELIMINAR----------------
         bt_eliminar.setOnClickListener {
+            println("El index: $index")
+            println("Eliminar condicion: ${datos.namePlato} == ${listaPedido.get(index).namePlato}")
 
-            if (datos!=null){
-                listaPedido.remove(datos)
+            if (datos.namePlato==listaPedido.get(index).namePlato && listaPedido.get(index).cantidad>1){
+                val lt = listaPedido.get(index)
+                var cantidad = lt.cantidad
+                var precioTotal = lt.precio - (lt.precio/lt.cantidad)
+                listaPedido.set(index, DataClassPedido(cantidad-1,lt.namePlato,lt.categoria,precioTotal))
                 rv_pedido.adapter?.notifyDataSetChanged()
             }else{
-                println("No hay nada")
-                Toast.makeText(this, "No hay datos", Toast.LENGTH_SHORT).show()
+                listaPedido.remove(datos)
+                rv_pedido.adapter?.notifyDataSetChanged()
             }
         }
+        //-----------------------------------------
 
+        //-----------BOTON AUMENTAR---------------
         bt_aumentar.setOnClickListener {
-        /*
-
-
-            if (datos!=null){
-
-                val index:Int = listaPedido.indexOf(datos)
-
-                println(listaPedido.indexOf(datos))
-                println(DataClassPedido((datos.cantidad.toInt()+1).toString(),datos.namePlato,datos.categoria,datos.precio))
-                //rv_pedido.adapter?.notifyDataSetChanged()
-
-                println(listaPedido.set(index,DataClassPedido((datos.cantidad.toInt()+1).toString(),datos.namePlato,datos.categoria,datos.precio)))
-
-
-                Toast.makeText(this, "si hay datos", Toast.LENGTH_SHORT).show()
-            }else{
-
-                println("No hay nada")
-                Toast.makeText(this, "No hay datos", Toast.LENGTH_SHORT).show()
-            }
-            */
-        }
-
-
-        //listaPedido.remove(datos)
-        //rv_pedido.adapter?.notifyDataSetChanged()
-
-
-        /*
-
-        //INICIO -- Premite sabes ----------------
-        var posi = -1
-        for(i in 1..listaPedido.size){
-            println(i)
-            if (listaPedido.get(i).namePlato.equals(dataclassPedido.namePlato)){
-                println(listaPedido.get(i).namePlato.equals(dataclassPedido.namePlato))
-                posi = i
-                println(i)
-            }
-        }
-        //FIN---------------------------------------
-
-
-        if (posi!=-1){
-            listaPedido.remove(datos)
-            val rv_pedido = findViewById<RecyclerView>(R.id.rv_pedido)
+            val lt = listaPedido.get(index)
+            var cantidad = lt.cantidad+1
+            var precioTotal = (lt.precio/lt.cantidad)*cantidad
+            listaPedido.set(index, DataClassPedido(cantidad,lt.namePlato,lt.categoria,precioTotal))
             rv_pedido.adapter?.notifyDataSetChanged()
-        }else{
-            Toast.makeText(this, "No exite", Toast.LENGTH_SHORT).show()
-        }*/
+        }
 
+        //-----------BOTON DETALLE-----------------
+        bt_detalle.setOnClickListener {
+
+            val builder = AlertDialog.Builder(this)
+            val vista = layoutInflater.inflate(R.layout.dialogue_detalle,null)
+
+            builder.setView(vista)
+
+            val dialog = builder.create()
+            dialog.show()
+
+
+            val nota = vista.findViewById<EditText>(R.id.et_detalle).text
+            val bt_guardarDetalle = vista.findViewById<Button>(R.id.bt_guardarDetalle)
+
+
+            bt_guardarDetalle.setOnClickListener {
+                val detalle = nota
+                println("GUARDADO: $detalle")
+                dialog.hide()
+            }
+        }
     }
 
 
@@ -201,11 +227,11 @@ class panelPedido : AppCompatActivity() {
     )
 
     val listaPlato = listOf<DataClassPlato>(
-        DataClassPlato("1","Salchipapa","Pollo",25.3f),
-        DataClassPlato("2","Pequeños","Pollo",25.3f),
-        DataClassPlato("3","Alitas","Pollo",25.3f),
-        DataClassPlato("4","Broschetas","Pollo",25.3f),
-        DataClassPlato("5","Anticucho","Pollo",25.3f),
+        DataClassPlato("1","Salchipapa","Pollo",5.0f),
+        DataClassPlato("2","Pequeños","Pollo",7.0f),
+        DataClassPlato("3","Alitas","Pollo",4.5f),
+        DataClassPlato("4","Broschetas","Pollo",6.0f),
+        DataClassPlato("5","Anticucho","Pollo",8.0f),
         DataClassPlato("6","Piqueo","Pollo",25.3f),
         DataClassPlato("7","Porcino","Pollo",25.3f),
         DataClassPlato("8","Parrila","Pollo",25.3f),
@@ -219,28 +245,9 @@ class panelPedido : AppCompatActivity() {
     val listaPedido = ArrayList<DataClassPedido>()
 
     fun agregarPlatos(){
-        listaPedido.add(DataClassPedido(1,"Salchipapa","Pollos",25.3f),)
-        listaPedido.add(DataClassPedido(1,"Pollito","Pollos",15.5f))
+
+        //listaPedido.add(DataClassPedido(1,"Salchipapa","Pollos",25.3f),)
+        //listaPedido.add(DataClassPedido(1,"Pollito","Pollos",15.5f))
     }
-
-
-    /*
-    listaPedido.add(DataClassPedido("1","Salchipapa","Pollos",25.3f)),
-        DataClassPedido("2","Salchipapa","Pollos",25.3f),
-        DataClassPedido("3","Salchipapa","Pollos",25.3f),
-        DataClassPedido("4","Salchipapa","Pollos",25.3f),
-        DataClassPedido("5","Salchipapa","Pollos",25.3f),
-        DataClassPedido("6","Salchipapa","Pollos",25.3f),
-        DataClassPedido("7","Salchipapa","Pollos",25.3f),
-        DataClassPedido("8","Salchipapa","Pollos",25.3f),
-        DataClassPedido("9","Salchipapa","Pollos",25.3f),
-        DataClassPedido("10","Salchipapa","Pollos",25.3f),
-        DataClassPedido("11","Salchipapa","Pollos",25.3f),
-        DataClassPedido("12","Salchipapa","Pollos",25.3f),
-        DataClassPedido("13","Salchipapa","Pollos",25.3f)
-    */
-
-
-
 
 }
