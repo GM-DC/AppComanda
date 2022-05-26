@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ******* PATALLA DE INICIO ********* -->
+    <dimen name="TitulosSize">35sp</dimen>
+    <dimen name="RVWidth">200dp</dimen>
+    <dimen name="RVHeight">300dp</dimen>
+    <dimen name="BTWidth_Usuario">150</dimen>
+    <dimen name="BTHeight_Usuario">70</dimen>
+    <dimen name="Tv_Usuario">12sp</dimen>
+
+    <!-- ******* PATALLA DE PASSCODE ********* -->
+    <dimen name="TLWidth_Passcode">565dp</dimen>
+    <dimen name="TLHeight_Passcode">565dp</dimen>
+    <dimen name="BTWidht_Passcode_Numero"></dimen>
+    <dimen name="BTHeight_Passcode_Numero">110dp</dimen>
+    <dimen name="BTRadius_PC_Numero">70dp</dimen>
+    <dimen name="BTTexto">12sp</dimen>
+    <dimen name="TVPasscode">100sp</dimen>
+    <dimen name="LLTVPasscodeWidht"></dimen>
+    <dimen name="LLTVPasscodeHeight"></dimen>
+
+    <!-- ******* PATALLA DE PASSCODE ********* -->
+    <dimen name="RV_PP_Zona_Width">260dp</dimen>
+    <dimen name="RV_PP_Zona_Height">42dp</dimen>
+    <dimen name="RV_PP_Mesa_Width">260dp</dimen>
+    <dimen name="RV_PP_Mesa_Height">42dp</dimen>
+    <dimen name="RV_PP_Categoria_Wight">370dp</dimen>
+    <dimen name="RV_PP_Categoria_Height">52dp</dimen>
+    <dimen name="RV_PP_Plato_Width">370dp</dimen>
+    <dimen name="RV_PP_Plato_Height">140dp</dimen>
+
+    <dimen name="BT_PP_Zomas_TextoSize">12sp</dimen>
+    <dimen name="BT_PP_Zonas_Width">100dp</dimen>
+    <dimen name="BT_PP_Zonas_Height">50dp</dimen>
+    <dimen name="RV_PP_Pedido_Margin">5dp</dimen>
+
+    <dimen name="BT_PP_Mesa_TextoSize">11sp</dimen>
+    <dimen name="BT_PP_Mesa_Width">86dp</dimen>
+    <dimen name="BT_PP_Mesa_Height">50dp</dimen>
+
+    <dimen name="BT_PP_Categoria_TextoSize">11sp</dimen>
+    <dimen name="BT_PP_Categoria_Width">86dp</dimen>
+    <dimen name="BT_PP_Categoria_Height">50dp</dimen>
+
+    <dimen name="BT_PP_Plato_TextoSize">11sp</dimen>
+    <dimen name="BT_PP_Plato_Width">86dp</dimen>
+    <dimen name="BT_PP_Plato_Height">50dp</dimen>
+
+
+    <dimen name="RV_PP_Pedido_Width">340dp</dimen>
+    <dimen name="RV_PP_Pedido_Height">280dp</dimen>
+    <dimen name="TV_PP_Pedido_TextoSize">17sp</dimen>
+    <dimen name="TV_PP_Pedido_TextoHeight">23dp</dimen>
+    <dimen name="TV_PP_Pedido_TextoWidht_C_O">35dp</dimen>
+    <dimen name="TV_PP_Pedido_TextoWidht_P_PT">70dp</dimen>
+    <dimen name="TV_PP_Pedido_TextoWidht_NP">190dp</dimen>
+
+    <!-- ******* PATALLA DE PEDIDO - BUTTON ********* -->
+    <dimen name="BT_PP_Windth">86dp</dimen>
+    <dimen name="BT_PP_Height">40dp</dimen>
+
+</resources>

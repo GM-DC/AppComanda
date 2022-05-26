@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="100dp"
-    android:layout_height="50dp">
+    android:layout_width="@dimen/BT_PP_Zonas_Width"
+    android:layout_height="@dimen/BT_PP_Zonas_Height">
 
     <Button
         android:id="@+id/tx_zona"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="1dp"
-        android:textSize="12sp"
+        android:layout_margin="0.5dp"
+        android:textSize="@dimen/BT_PP_Zomas_TextoSize"
         tools:text="Zona 01"
         />
 

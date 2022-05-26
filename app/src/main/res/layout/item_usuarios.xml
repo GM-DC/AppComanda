@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="150dp"
-    android:layout_height="70dp"
+    android:layout_width="@dimen/BTWidth_Usuario"
+    android:layout_height="@dimen/BTHeight_Usuario"
     android:orientation="horizontal">
 
 
@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:layout_margin="5sp"
         android:text="Button"
-        android:textSize="12sp"
+        android:textSize="@dimen/Tv_Usuario"
         tools:text="Alexsandre" />
 
 </LinearLayout>
