@@ -188,6 +188,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tv_PTotal"
             android:layout_width="@dimen/RV_PP_Pedido_Width"
             android:layout_height="@dimen/TV_PP_Pedido_TextoHeight"
             android:text="100000000"

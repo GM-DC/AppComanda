@@ -30,7 +30,7 @@ class AdapterPedido(private val data: List<DataClassPedido>,private val onClickL
 
             tv_cantidad.text = data.cantidad.toString()
             tv_nombrePlato.text = data.namePlato
-            tv_precio.text = data.precio.toString()
+            tv_precio.text = (Math.round(data.precio.toDouble()*100.0)/100.0).toString()
 
 
             itemView.setOnClickListener { onClickListener(data) }

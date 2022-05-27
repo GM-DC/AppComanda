@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
@@ -103,6 +104,14 @@ class panelPedido : AppCompatActivity() {
         }
         //-------------------------------------------------------------------
 
+        //------------------  SUMA DE PRECIO DE LA LISTA---------------
+        var cantidad:Float = 0f
+        for (i in listaPedido.indices){
+            cantidad = cantidad + listaPedido[i].precio
+        }
+        val tv_PTotal = findViewById<TextView>(R.id.tv_PTotal)
+        tv_PTotal.text = "S/. ${(Math.round(cantidad) * 100.0 / 100.0).toString()}"
+        //-------------------------------------------------------------
     }
 
     fun onIntemDatosPlatos(dataclassPedido:DataClassPedido){
@@ -139,7 +148,18 @@ class panelPedido : AppCompatActivity() {
                 listaPedido.remove(datos)
                 rv_pedido.adapter?.notifyDataSetChanged()
             }
+
+            //------------------  SUMA DE PRECIO DE LA LISTA---------------
+            var cantidad2:Float = 0f
+            for (i in listaPedido.indices){
+                cantidad2 = cantidad2 + listaPedido[i].precio
+            }
+            val tv_PTotal = findViewById<TextView>(R.id.tv_PTotal)
+            tv_PTotal.text = "S/. ${(Math.round(cantidad2) * 100.0 / 100.0).toString()}"
+            //-------------------------------------------------------------
+
         }
+
         //-----------------------------------------
 
         //-----------BOTON AUMENTAR---------------
@@ -149,6 +169,16 @@ class panelPedido : AppCompatActivity() {
             var precioTotal = (lt.precio/lt.cantidad)*cantidad
             listaPedido.set(index, DataClassPedido(cantidad,lt.namePlato,lt.categoria,precioTotal))
             rv_pedido.adapter?.notifyDataSetChanged()
+
+            //------------------  SUMA DE PRECIO DE LA LISTA---------------
+            var cantidad2:Float = 0f
+            for (i in listaPedido.indices){
+                cantidad2 = cantidad2 + listaPedido[i].precio
+            }
+            val tv_PTotal = findViewById<TextView>(R.id.tv_PTotal)
+            tv_PTotal.text = "S/. ${(Math.round(cantidad2) * 100.0 / 100.0).toString()}"
+            //-------------------------------------------------------------
+
         }
 
         //-----------BOTON DETALLE-----------------
@@ -172,7 +202,9 @@ class panelPedido : AppCompatActivity() {
                 println("GUARDADO: $detalle")
                 dialog.hide()
             }
+
         }
+
     }
 
 
@@ -227,19 +259,19 @@ class panelPedido : AppCompatActivity() {
     )
 
     val listaPlato = listOf<DataClassPlato>(
-        DataClassPlato("1","Salchipapa","Pollo",5.0f),
-        DataClassPlato("2","Pequeños","Pollo",7.0f),
-        DataClassPlato("3","Alitas","Pollo",4.5f),
-        DataClassPlato("4","Broschetas","Pollo",6.0f),
-        DataClassPlato("5","Anticucho","Pollo",8.0f),
-        DataClassPlato("6","Piqueo","Pollo",25.3f),
-        DataClassPlato("7","Porcino","Pollo",25.3f),
-        DataClassPlato("8","Parrila","Pollo",25.3f),
-        DataClassPlato("9","Coca-Cola","Pollo",25.3f),
-        DataClassPlato("10","Inka-Cola","Pollo",25.3f),
-        DataClassPlato("11","Pastel","Pollo",25.3f),
-        DataClassPlato("10","Torta","Pollo",25.3f),
-        DataClassPlato("11","Pan","Pollo",25.3f)
+        DataClassPlato("1","Salchipapa","Pollo",5.01f),
+        DataClassPlato("2","Pequeños","Pollo",7.30f),
+        DataClassPlato("3","Alitas","Pollo",4.56f),
+        DataClassPlato("4","Broschetas","Pollo",6.99f),
+        DataClassPlato("5","Anticucho","Pollo",8.69f),
+        DataClassPlato("6","Piqueo","Pollo",25.35f),
+        DataClassPlato("7","Porcino","Pollo",25.35f),
+        DataClassPlato("8","Parrila","Pollo",25.35f),
+        DataClassPlato("9","Coca-Cola","Pollo",25.35f),
+        DataClassPlato("10","Inka-Cola","Pollo",25.35f),
+        DataClassPlato("11","Pastel","Pollo",25.35f),
+        DataClassPlato("10","Torta","Pollo",25.35f),
+        DataClassPlato("11","Pan","Pollo",25.35f)
     )
 
     val listaPedido = ArrayList<DataClassPedido>()
