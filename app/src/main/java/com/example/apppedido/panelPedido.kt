@@ -1,16 +1,17 @@
 package com.example.apppedido
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apppedido.databinding.ActivityPanelPedidoBinding
+import java.text.DecimalFormat
 
 
 class panelPedido : AppCompatActivity() {
@@ -92,26 +93,31 @@ class panelPedido : AppCompatActivity() {
 
         //----------------  AGREGA O AUMENTA LA CANTIDAD -------------------
         if (action == 0){
-            listaPedido.add(DataClassPedido(1,dataClassPlato.name,dataClassPlato.categoria,dataClassPlato.precio))
+            listaPedido.add(DataClassPedido(1,dataClassPlato.name,dataClassPlato.categoria,dataClassPlato.precio,dataClassPlato.precio))
             rv_pedido.adapter?.notifyDataSetChanged()
             rv_pedido.scrollToPosition(listaPedido.size-1)
         }else{
             val lt = listaPedido.get(pos)
             var cantidad = lt.cantidad+1
             var precioTotal = dataClassPlato.precio*cantidad
-            listaPedido.set(pos, DataClassPedido(cantidad,lt.namePlato,lt.categoria,precioTotal))
+            println("El precio es: $precioTotal")
+            listaPedido.set(pos, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal))
             rv_pedido.adapter?.notifyDataSetChanged()
         }
         //-------------------------------------------------------------------
 
         //------------------  SUMA DE PRECIO DE LA LISTA---------------
-        var cantidad:Float = 0f
+        var cantidadLista:Float = 0f
         for (i in listaPedido.indices){
-            cantidad = cantidad + listaPedido[i].precio
+            cantidadLista = cantidadLista + listaPedido[i].precioTotal
         }
         val tv_PTotal = findViewById<TextView>(R.id.tv_PTotal)
-        tv_PTotal.text = "S/. ${(Math.round(cantidad) * 100.0 / 100.0).toString()}"
+        val formato = DecimalFormat()
+        formato.maximumFractionDigits = 2 //Numero maximo de decimales a mostrar
+        tv_PTotal.text = "S/. ${formato.format(cantidadLista)}"
         //-------------------------------------------------------------
+
+
     }
 
     fun onIntemDatosPlatos(dataclassPedido:DataClassPedido){
@@ -142,7 +148,7 @@ class panelPedido : AppCompatActivity() {
                 val lt = listaPedido.get(index)
                 var cantidad = lt.cantidad
                 var precioTotal = lt.precio - (lt.precio/lt.cantidad)
-                listaPedido.set(index, DataClassPedido(cantidad-1,lt.namePlato,lt.categoria,precioTotal))
+                listaPedido.set(index, DataClassPedido(cantidad-1,lt.namePlato,lt.categoria,precioTotal,lt.precio))
                 rv_pedido.adapter?.notifyDataSetChanged()
             }else{
                 listaPedido.remove(datos)
@@ -167,7 +173,7 @@ class panelPedido : AppCompatActivity() {
             val lt = listaPedido.get(index)
             var cantidad = lt.cantidad+1
             var precioTotal = (lt.precio/lt.cantidad)*cantidad
-            listaPedido.set(index, DataClassPedido(cantidad,lt.namePlato,lt.categoria,precioTotal))
+            listaPedido.set(index, DataClassPedido(cantidad,lt.namePlato,lt.categoria,precioTotal,lt.precio))
             rv_pedido.adapter?.notifyDataSetChanged()
 
             //------------------  SUMA DE PRECIO DE LA LISTA---------------
