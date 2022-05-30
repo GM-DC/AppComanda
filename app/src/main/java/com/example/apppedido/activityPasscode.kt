@@ -32,9 +32,6 @@ class activityPasscode : AppCompatActivity() {
     private fun numeroAleatorio(){
         var grupo = listOf<Int>(1,2,3,4,5,6,7,8,9,0)
 
-
-
-
         binding2.btn01.text = grupo[0].toString()
         binding2.btn02.text = grupo[1].toString()
         binding2.btn03.text = grupo[2].toString()
@@ -56,6 +53,8 @@ class activityPasscode : AppCompatActivity() {
         binding2.btn08.setOnClickListener { numeroPresionado(binding2.btn08.text.toString()) }
         binding2.btn09.setOnClickListener { numeroPresionado(binding2.btn09.text.toString()) }
         binding2.btn00.setOnClickListener { numeroPresionado(binding2.btn00.text.toString()) }
+
+        binding2.btnLimpiar.setOnClickListener { binding2.txtCodigo.text = "" }
 
     }
 

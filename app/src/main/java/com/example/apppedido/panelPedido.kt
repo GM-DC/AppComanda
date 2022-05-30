@@ -1,5 +1,6 @@
 package com.example.apppedido
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -120,13 +121,13 @@ class panelPedido : AppCompatActivity() {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun onIntemDatosPlatos(dataclassPedido:DataClassPedido){
         val rv_pedido = findViewById<RecyclerView>(R.id.rv_pedido)
         val bt_eliminar = findViewById<Button>(R.id.bt_disminuir)
         val bt_aumentar = findViewById<Button>(R.id.bt_aumentar)
         val bt_detalle = findViewById<Button>(R.id.bt_detalle)
-        val datos = dataclassPedido.copy()
-        onWindowFocusChanged(this.hasWindowFocus())
+        var datos = dataclassPedido.copy()
 
         Toast.makeText(this, dataclassPedido.namePlato, Toast.LENGTH_SHORT).show()
 
@@ -151,9 +152,13 @@ class panelPedido : AppCompatActivity() {
                 var precioTotal = lt.precio*cantidad
                 listaPedido.set(index, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion))
                 rv_pedido.adapter?.notifyDataSetChanged()
-            }else{
+                println("Ya no cumple")
+            }else if(datos.namePlato==listaPedido.get(index).namePlato && listaPedido.get(index).cantidad==1){
                 listaPedido.remove(datos)
                 rv_pedido.adapter?.notifyDataSetChanged()
+                println("Removido y actualizado")
+                datos = DataClassPedido(0,"","",0f,0f,"")
+                println(datos)
             }
 
             //------------------  SUMA DE PRECIO DE LA LISTA---------------

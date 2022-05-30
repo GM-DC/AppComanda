@@ -14,23 +14,32 @@
         android:theme="@style/Theme.AppPedido"
         tools:targetApi="31">
         <activity
-            android:name=".activity_Login"
-            android:exported="false" />
-        <activity
-            android:name=".panelPedido"
-            android:exported="false" />
-        <activity
-            android:name=".activityPasscode"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".activity_Login"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".panelPedido"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activityPasscode"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

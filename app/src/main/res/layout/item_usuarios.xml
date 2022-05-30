@@ -1,18 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/BTWidth_Usuario"
     android:layout_height="@dimen/BTHeight_Usuario"
-    android:orientation="horizontal">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:animateLayoutChanges="true"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:background="@drawable/efecto_clic">
 
-    <Button
-        android:id="@+id/tx_Nombre"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="5sp"
-        android:text="Button"
-        android:textSize="@dimen/Tv_Usuario"
-        tools:text="Alexsandre" />
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/usuario"
+                />
 
-</LinearLayout>
+            <TextView
+                android:id="@+id/tx_Nombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:textSize="@dimen/Tv_Usuario"
+                tools:text="Alexsandre"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+
+</androidx.cardview.widget.CardView>
