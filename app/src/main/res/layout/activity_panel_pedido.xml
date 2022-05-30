@@ -71,19 +71,12 @@
         </androidx.recyclerview.widget.RecyclerView>
 
         <LinearLayout
-            android:layout_width="@dimen/RV_PP_Pedido_Width"
-            android:layout_height="@dimen/TV_PP_Pedido_TextoHeight"
+            android:layout_width="430dp"
+            android:layout_height="35dp"
+            android:paddingTop="3dp"
+            android:paddingLeft="8dp"
             android:orientation="horizontal"
-            android:layout_margin="@dimen/RV_PP_Pedido_Margin"
             >
-
-            <TextView
-                android:layout_width="@dimen/TV_PP_Pedido_TextoWidht_C_O"
-                android:layout_height="@dimen/TV_PP_Pedido_TextoHeight"
-                android:text="N"
-                android:textSize="@dimen/TV_PP_Pedido_TextoSize"
-                android:textStyle="bold">
-            </TextView>
 
             <TextView
                 android:layout_width="@dimen/TV_PP_Pedido_TextoWidht_NP"
@@ -97,11 +90,18 @@
             <TextView
                 android:layout_width="@dimen/TV_PP_Pedido_TextoWidht_P_PT"
                 android:layout_height="@dimen/TV_PP_Pedido_TextoHeight"
-                android:text="Precio"
+                android:text="P. Unit"
                 android:layout_margin="1dp"
                 android:textSize="@dimen/TV_PP_Pedido_TextoSize"
                 android:textStyle="bold">
             </TextView>
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:text="Cant."
+                android:textSize="@dimen/TV_PP_Pedido_TextoSize"
+                android:textStyle="bold"></TextView>
 
             <TextView
                 android:layout_width="@dimen/TV_PP_Pedido_TextoWidht_P_PT"
@@ -191,7 +191,7 @@
             android:id="@+id/tv_PTotal"
             android:layout_width="@dimen/RV_PP_Pedido_Width"
             android:layout_height="@dimen/TV_PP_Pedido_TextoHeight"
-            android:text="100000000"
+            android:text="S/.0"
             android:textAlignment="textEnd"
             android:layout_margin="@dimen/RV_PP_Pedido_Margin"
             android:textStyle="bold"

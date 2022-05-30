@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Debug
 import android.util.Log
+import android.widget.Toast
 import com.example.apppedido.databinding.ActivityPasscodeBinding
 import kotlin.random.Random
 import java.lang.*
 import java.time.temporal.TemporalAccessor
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class activityPasscode : AppCompatActivity() {
@@ -21,16 +23,16 @@ class activityPasscode : AppCompatActivity() {
         binding2 = ActivityPasscodeBinding.inflate(layoutInflater)
         setContentView(binding2.root)
 
-        botonSiguiente()
+        recibirDatos()
         numeroAleatorio()
+
 
     }
 
     private fun numeroAleatorio(){
-        val grupo = listOf(1,2,3,4,5,6,7,8,9,0).sorted()
+        var grupo = listOf<Int>(1,2,3,4,5,6,7,8,9,0)
 
-        println("--------------------${grupo.sorted()}-")
-        println("$grupo----------------------")
+
 
 
         binding2.btn01.text = grupo[0].toString()
@@ -44,7 +46,6 @@ class activityPasscode : AppCompatActivity() {
         binding2.btn09.text = grupo[8].toString()
         binding2.btn00.text = grupo[9].toString()
 
-
         binding2.btn01.setOnClickListener { numeroPresionado(binding2.btn01.text.toString()) }
         binding2.btn02.setOnClickListener { numeroPresionado(binding2.btn02.text.toString()) }
         binding2.btn03.setOnClickListener { numeroPresionado(binding2.btn03.text.toString()) }
@@ -56,73 +57,33 @@ class activityPasscode : AppCompatActivity() {
         binding2.btn09.setOnClickListener { numeroPresionado(binding2.btn09.text.toString()) }
         binding2.btn00.setOnClickListener { numeroPresionado(binding2.btn00.text.toString()) }
 
-
-        /*
-
-
-
-        var posicion:Int = 0
-        var recorrido:Int = 0
-
-        println("Numero inicial: $numero")
-
-        /*
-        for (i in 0..9){
-            println("------------caso $i----------------")
-
-            do {
-
-                numero = ((Math.random() * 10)).toInt()
-
-            }while(numero==grupo[posicion])
-
-            grupo.set(posicion, numero)
-            posicion+=1
-
-        }*/
-
-
-
-        /*
-        for(i in 0..9){
-            println("------------caso $i----------------")
-            println(grupo[posicion]==numero)
-            println("grupo[$posicion] ${grupo[i]}==$numero")
-            numero = (Math.random() * 10).toInt()
-
-                if (grupo[i] == numero) {
-                    numero = (Math.random() * 10).toInt()
-                    println("Nuevo numero $numero")
-                    i = 0
-
-                } else {
-                    grupo.set(posicion, numero)
-                    println("numero ingresado: Pos - $posicion // Num - $numero ")
-                    posicion += 1
-
-            }
-        }
-        */
-        */
-
-
-    }
-
-    private fun botonSiguiente(){
-        /////BOTON SIGUIENTE ////
-        binding2.btnSiguiente2.setOnClickListener {
-            val intent = Intent(this, panelPedido::class.java)
-            startActivity(intent)
-        }
-        ///
     }
 
     private fun numeroPresionado(digito:String){
         binding2.txtCodigo.text = "${binding2.txtCodigo.text}${digito}"
+        validarDatos ()
     }
 
-    private fun Random.nextInt(range: IntRange): Int {
-        return range.start + nextInt(range.last - range.start)
+    fun recibirDatos(): String {
+        val nombre = intent.getStringExtra("USUARIO")
+        binding2.tvBienvenidaNombre.text = "BIENVENIDO $nombre"
+        return nombre.toString()
+    }
+
+    fun validarDatos (){
+        val Usuario = intent.getStringExtra("USUARIO")
+        val Passcode = binding2.txtCodigo.text.toString()
+        if (binding2.txtCodigo.length()==5){
+            println("Evalua")
+            if ( Usuario =="GIAN" && Passcode == "12345" ){
+                val intent = Intent(this, panelPedido::class.java)
+                binding2.txtCodigo.text = ""
+                startActivity(intent)
+            }else{
+                binding2.txtCodigo.text=""
+                Toast.makeText(this, "INCORRECTO", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
 }

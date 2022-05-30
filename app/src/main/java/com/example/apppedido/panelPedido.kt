@@ -93,7 +93,7 @@ class panelPedido : AppCompatActivity() {
 
         //----------------  AGREGA O AUMENTA LA CANTIDAD -------------------
         if (action == 0){
-            listaPedido.add(DataClassPedido(1,dataClassPlato.name,dataClassPlato.categoria,dataClassPlato.precio,dataClassPlato.precio))
+            listaPedido.add(DataClassPedido(1,dataClassPlato.name,dataClassPlato.categoria,dataClassPlato.precio,dataClassPlato.precio,""))
             rv_pedido.adapter?.notifyDataSetChanged()
             rv_pedido.scrollToPosition(listaPedido.size-1)
         }else{
@@ -101,7 +101,7 @@ class panelPedido : AppCompatActivity() {
             var cantidad = lt.cantidad+1
             var precioTotal = dataClassPlato.precio*cantidad
             println("El precio es: $precioTotal")
-            listaPedido.set(pos, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal))
+            listaPedido.set(pos, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion))
             rv_pedido.adapter?.notifyDataSetChanged()
         }
         //-------------------------------------------------------------------
@@ -112,7 +112,7 @@ class panelPedido : AppCompatActivity() {
             cantidadLista = cantidadLista + listaPedido[i].precioTotal
         }
         val tv_PTotal = findViewById<TextView>(R.id.tv_PTotal)
-        val formato = DecimalFormat()
+        val formato= DecimalFormat()
         formato.maximumFractionDigits = 2 //Numero maximo de decimales a mostrar
         tv_PTotal.text = "S/. ${formato.format(cantidadLista)}"
         //-------------------------------------------------------------
@@ -126,7 +126,10 @@ class panelPedido : AppCompatActivity() {
         val bt_aumentar = findViewById<Button>(R.id.bt_aumentar)
         val bt_detalle = findViewById<Button>(R.id.bt_detalle)
         val datos = dataclassPedido.copy()
+        onWindowFocusChanged(this.hasWindowFocus())
+
         Toast.makeText(this, dataclassPedido.namePlato, Toast.LENGTH_SHORT).show()
+
 
         //-------------Posicion--------------------------------------
         var index = -1
@@ -141,14 +144,12 @@ class panelPedido : AppCompatActivity() {
 
         //-----------BOTON ELIMINAR----------------
         bt_eliminar.setOnClickListener {
-            println("El index: $index")
-            println("Eliminar condicion: ${datos.namePlato} == ${listaPedido.get(index).namePlato}")
 
             if (datos.namePlato==listaPedido.get(index).namePlato && listaPedido.get(index).cantidad>1){
                 val lt = listaPedido.get(index)
-                var cantidad = lt.cantidad
-                var precioTotal = lt.precio - (lt.precio/lt.cantidad)
-                listaPedido.set(index, DataClassPedido(cantidad-1,lt.namePlato,lt.categoria,precioTotal,lt.precio))
+                var cantidad = lt.cantidad-1
+                var precioTotal = lt.precio*cantidad
+                listaPedido.set(index, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion))
                 rv_pedido.adapter?.notifyDataSetChanged()
             }else{
                 listaPedido.remove(datos)
@@ -156,12 +157,15 @@ class panelPedido : AppCompatActivity() {
             }
 
             //------------------  SUMA DE PRECIO DE LA LISTA---------------
-            var cantidad2:Float = 0f
+            var cantidadLista:Float = 0f
             for (i in listaPedido.indices){
-                cantidad2 = cantidad2 + listaPedido[i].precio
+                cantidadLista = cantidadLista + listaPedido[i].precioTotal
+
             }
             val tv_PTotal = findViewById<TextView>(R.id.tv_PTotal)
-            tv_PTotal.text = "S/. ${(Math.round(cantidad2) * 100.0 / 100.0).toString()}"
+            val formato= DecimalFormat()
+            formato.maximumFractionDigits = 2 //Numero maximo de decimales a mostrar
+            tv_PTotal.text = "S/. ${formato.format(cantidadLista)}"
             //-------------------------------------------------------------
 
         }
@@ -170,19 +174,24 @@ class panelPedido : AppCompatActivity() {
 
         //-----------BOTON AUMENTAR---------------
         bt_aumentar.setOnClickListener {
-            val lt = listaPedido.get(index)
+            val lt = listaPedido[index]
+            println("Boton aumentar $index")
             var cantidad = lt.cantidad+1
-            var precioTotal = (lt.precio/lt.cantidad)*cantidad
-            listaPedido.set(index, DataClassPedido(cantidad,lt.namePlato,lt.categoria,precioTotal,lt.precio))
+            var precioTotal = lt.precio*cantidad
+            listaPedido.set(index, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion))
             rv_pedido.adapter?.notifyDataSetChanged()
 
+
             //------------------  SUMA DE PRECIO DE LA LISTA---------------
-            var cantidad2:Float = 0f
+            var cantidadLista:Float = 0.0f
             for (i in listaPedido.indices){
-                cantidad2 = cantidad2 + listaPedido[i].precio
+                cantidadLista += listaPedido[i].precioTotal
             }
+
             val tv_PTotal = findViewById<TextView>(R.id.tv_PTotal)
-            tv_PTotal.text = "S/. ${(Math.round(cantidad2) * 100.0 / 100.0).toString()}"
+            val formato= DecimalFormat()
+            formato.maximumFractionDigits = 2 //Numero maximo de decimales a mostrar
+            tv_PTotal.text = "S/. ${formato.format(cantidadLista)}"
             //-------------------------------------------------------------
 
         }
@@ -190,27 +199,39 @@ class panelPedido : AppCompatActivity() {
         //-----------BOTON DETALLE-----------------
         bt_detalle.setOnClickListener {
 
+            //***********  Alerta de Dialogo  ***********
             val builder = AlertDialog.Builder(this)
             val vista = layoutInflater.inflate(R.layout.dialogue_detalle,null)
+            val lt = listaPedido.get(index)
 
             builder.setView(vista)
 
             val dialog = builder.create()
             dialog.show()
 
-
-            val nota = vista.findViewById<EditText>(R.id.et_detalle).text
+            //***********Declara elementos *****************
+            var et_detalle = vista.findViewById<EditText>(R.id.et_detalle)
             val bt_guardarDetalle = vista.findViewById<Button>(R.id.bt_guardarDetalle)
+            val tv_observacion = findViewById<TextView>(R.id.tv_observacion)
+            println("El index es: $index   ------------------------")
 
 
+            //*********** BOTON GUARDAR DEL DIALOGO ********
             bt_guardarDetalle.setOnClickListener {
-                val detalle = nota
-                println("GUARDADO: $detalle")
+
+                var detalle:String = et_detalle.text.toString()
+
+                println("Al comienzo: ${listaPedido[index].observacion}")
+                listaPedido[index] = DataClassPedido(lt.cantidad,lt.namePlato,lt.categoria,lt.precio,lt.precioTotal,detalle)
+                println("Al final: ${listaPedido[index].observacion}")
+
                 dialog.hide()
             }
 
+
         }
 
+        println("Observacion: ${datos.observacion}")
     }
 
 

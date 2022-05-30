@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 
-class AdapterUsuario(val usuario: List<DataClassUsuario>):RecyclerView.Adapter<AdapterUsuario.holderUsuario>(){
+class AdapterUsuario(val usuario: List<DataClassUsuario>,private val onClickListener: (DataClassUsuario) -> Unit):RecyclerView.Adapter<AdapterUsuario.holderUsuario>(){
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): holderUsuario {
@@ -15,7 +15,7 @@ class AdapterUsuario(val usuario: List<DataClassUsuario>):RecyclerView.Adapter<A
     }
 
     override fun onBindViewHolder(holder: holderUsuario, position: Int) {
-        holder.render(usuario[position])
+        holder.render(usuario[position],onClickListener)
     }
 
     override fun getItemCount(): Int {
@@ -24,13 +24,10 @@ class AdapterUsuario(val usuario: List<DataClassUsuario>):RecyclerView.Adapter<A
 
 
     class holderUsuario(private val view: View):RecyclerView.ViewHolder(view){
-        fun render (usuario: DataClassUsuario){
+        fun render (usuario: DataClassUsuario,onClickListener: (DataClassUsuario) -> Unit){
             val btn_usuario = view.findViewById<Button>(R.id.tx_Nombre)
             btn_usuario.text = usuario.name
+            btn_usuario.setOnClickListener { onClickListener(usuario) }
         }
     }
-
-
-
-
 }

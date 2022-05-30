@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/RV_PP_Pedido_Width"
-    android:layout_height="@dimen/TV_PP_Pedido_TextoHeight"
-    android:layout_margin="5dp"
+    android:layout_width="420dp"
+    android:layout_height="35dp"
+    android:paddingTop="3dp"
+    android:paddingLeft="8dp"
+    android:layout_margin="0dp"
     android:orientation="horizontal"
-    android:dividerPadding="2dp">
+    android:background="@drawable/efecto_clic"
+    >
 
-    <TextView
-        android:id="@+id/tv_cantidad"
-        android:layout_width="@dimen/TV_PP_Pedido_TextoWidht_C_O"
-        android:layout_height="match_parent"
-        android:layout_margin="1dp"
-        android:textColor="#757575"
-        android:textSize="@dimen/TV_PP_Pedido_TextoSize"
-        android:textStyle="bold"
-        tools:text="10" />
+
 
     <TextView
         android:id="@+id/tv_nombrePlato"
@@ -27,6 +22,7 @@
         tools:text="Pollo a la brasa"
          />
 
+
     <TextView
         android:id="@+id/tv_precio"
         android:layout_width="@dimen/TV_PP_Pedido_TextoWidht_P_PT"
@@ -37,6 +33,17 @@
         android:textAlignment="viewStart"
         tools:text="S/.25.36"
          />
+
+    <TextView
+        android:id="@+id/tv_cantidad"
+        android:layout_width="@dimen/TV_PP_Pedido_TextoWidht_C_O"
+        android:layout_height="match_parent"
+        android:layout_margin="1dp"
+        android:textColor="#757575"
+        android:textSize="@dimen/TV_PP_Pedido_TextoSize"
+        android:textStyle="bold"
+        tools:text="10" />
+
 
     <TextView
         android:id="@+id/tv_precioTotal"

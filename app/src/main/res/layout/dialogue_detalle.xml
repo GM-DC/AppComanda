@@ -19,14 +19,23 @@
             android:textStyle="bold">
         </TextView>
 
+        <TextView
+            android:id="@+id/tv_AlerObservacion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Obs:"
+            android:textSize="15sp">
+        </TextView>
+
         <EditText
             android:id="@+id/et_detalle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
+            android:textAlignment="textStart"
             android:hint="Ingresar el detalle del pedido"
             android:textSize="15sp"
-            android:lines="8"
+            android:lines="2"
             android:inputType="textMultiLine">
         </EditText>
 

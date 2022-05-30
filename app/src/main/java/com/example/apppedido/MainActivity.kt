@@ -1,4 +1,5 @@
 package com.example.apppedido
+import android.content.ClipData
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -16,29 +17,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityInicioBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         initUsuario()
-        botonSiguiente()
-
-        val layoutmanager = LinearLayoutManager(this , LinearLayoutManager.VERTICAL,false)
-
     }
 
-    fun botonSiguiente(){
-        /////BOTON SIGUIENTE ////
-        binding.btnSiguiente2.setOnClickListener {
-            val intent = Intent(this, activityPasscode::class.java)
-            startActivity(intent)
-        }
-        ///
-    }
-
+    //***********************************
     fun initUsuario(){
         val rviUsuario = findViewById<RecyclerView>(R.id.rvUsuarios)
-
         rviUsuario.layoutManager = GridLayoutManager(this,2,RecyclerView.VERTICAL,false)
-        val adapter = AdapterUsuario(listaUsuario)
+        val adapter = AdapterUsuario(listaUsuario) {dataClassUsuario -> onItemSelected(dataClassUsuario)}
         rviUsuario.adapter = adapter
+    }
+
+    fun onItemSelected(dataClassUsuario: DataClassUsuario) {
+        val intent = Intent(this, activityPasscode::class.java)
+        val nombre: String = dataClassUsuario.name.uppercase()
+        intent.putExtra("USUARIO",nombre)
+        startActivity(intent)
     }
 
     val listaUsuario = listOf<DataClassUsuario>(
