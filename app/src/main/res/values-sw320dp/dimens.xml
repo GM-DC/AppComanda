@@ -1,26 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- ******* PATALLA DE INICIO ********* -->
-    <dimen name="TitulosSize">26sp</dimen>
-    <dimen name="RVWidth">300dp</dimen>
-    <dimen name="RVHeight">440dp</dimen>
-    <dimen name="BTWidth_Usuario">150dp</dimen>
-    <dimen name="BTHeight_Usuario">80dp</dimen>
+    <!-- ******* Activity_Inicio ********* -->
+    <dimen name="TitulosSize">20sp</dimen>
+    <dimen name="RVWidth">290dp</dimen>
+    <dimen name="RVHeight">500dp</dimen>
+    <dimen name="AInicio_IvWidth_logo">100dp</dimen>
+    <dimen name="AInicio_IvHeight_logo">40dp</dimen>
+
+    <!-- ******* Item_Usuarios ********* -->
+    <dimen name="IT_Usuario_CVWeight">150dp</dimen>
+    <dimen name="IT_Usuario_CVHeidht">80dp</dimen>
+    <dimen name="IT_Usuario_IVWeight">40dp</dimen>
+    <dimen name="IT_Usuario_Tv_Usuario_Margin">8dp</dimen>
     <dimen name="Tv_Usuario">12sp</dimen>
+
+    <!-- ******* *********************** ********* -->
+
 
     <!-- ******* PATALLA DE PASSCODE ********* -->
     <dimen name="TLWidth_Passcode">250dp</dimen>
-    <dimen name="TLHeight_Passcode">480dp</dimen>
-    <dimen name="BTWidht_Passcode_Numero">70dp</dimen>
+    <dimen name="TLHeight_Passcode">500dp</dimen>
+
+    <dimen name="APasscore_TvBienvenida_size">20sp</dimen>
+    <dimen name="APasscore_TvCodigo_size">90sp</dimen>
+    <dimen name="APasscore_TvCodigo_height">90dp</dimen>
+    <dimen name="BTWidht_Passcode_Numero">65dp</dimen>
     <dimen name="BTHeight_Passcode_Numero">80dp</dimen>
-    <dimen name="BTRadius_PC_Numero">60dp</dimen>
-    <dimen name="BTTexto">29sp</dimen>
+    <dimen name="BTRadius_PC_Numero">90dp</dimen>
+    <dimen name="BTTexto">24sp</dimen>
     <dimen name="TVPasscode">80sp</dimen>
-    <dimen name="LLTVPasscodeWidht">220dp</dimen>
-    <dimen name="LLTVPasscodeHeight">140dp</dimen>
+
+
+
+
+    <!-- ******* PANEL DE PEDIDO ********* -->
+    <!-- ******* Ancho y largo de RV de Zona-Mesa-Categiria-Plato ********* -->
+    <dimen name="APP_RV_PP_Width">250dp</dimen>
+    <dimen name="APP_RV_PP_Height">35dp</dimen>
+    <dimen name="APP_RV_PP_Height_Categoria">70dp</dimen>
+    <dimen name="APP_RV_PP_Height_Plato">105dp</dimen>
+
+    <dimen name="APP_RV_PP_Width_Pedido">200dp</dimen>
+    <dimen name="APP_RV_PP_Height_Pedido">200dp</dimen>
+
+    <!-- ******* A y L de Botones ********* -->
+    <dimen name="BT_PP_Windth">50dp</dimen>
+    <dimen name="BT_PP_Height">25dp</dimen>
+
+    <!-- ******* ItemPedido: A y L de Pedido Area ********* -->
+    
+    <dimen name="ItemPedido_TVPedido_Windth">90dp</dimen>
+    <dimen name="ItemPedido_TVPrecioyPT_Windth">55dp</dimen>
+    <dimen name="ItemPedido_TVCantidadObs_Windth">30dp</dimen>
+    <dimen name="ItemPedido_TVObservaciones_Windth">25dp</dimen>
+    <dimen name="TV_PP_Pedido_TextoSize">9sp</dimen>
+
+
+
 
     <!-- ******* PATALLA PANEL DE PEDIDO ********* -->
+
     <dimen name="RV_PP_Zona_Width">290dp</dimen>
     <dimen name="RV_PP_Zona_Height">40dp</dimen>
     <dimen name="RV_PP_Mesa_Width">290dp</dimen>
@@ -51,15 +91,12 @@
     <dimen name="RV_PP_Pedido_Height">200dp</dimen>
     <dimen name="RV_PP_Pedido_Margin">3dp</dimen>
 
-    <dimen name="TV_PP_Pedido_TextoSize">9sp</dimen>
+
     <dimen name="TV_PP_Pedido_TextoHeight">15dp</dimen>
     <dimen name="TV_PP_Pedido_TextoWidht_C_O">16dp</dimen>
     <dimen name="TV_PP_Pedido_TextoWidht_P_PT">32dp</dimen>
     <dimen name="TV_PP_Pedido_TextoWidht_NP">110dp</dimen>
 
-    <!-- ******* PATALLA DE PEDIDO - BUTTON ********* -->
-    <dimen name="BT_PP_Windth">40dp</dimen>
-    <dimen name="BT_PP_Height">40dp</dimen>
 
 
 </resources>

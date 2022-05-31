@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="470dp"
-    android:layout_height="35dp"
+    android:layout_width="@dimen/APP_RV_PP_Width_Pedido"
+    android:layout_height="@"
     android:paddingTop="3dp"
     android:paddingLeft="8dp"
     android:layout_margin="0dp"
@@ -14,7 +14,7 @@
 
     <TextView
         android:id="@+id/tv_nombrePlato"
-        android:layout_width="@dimen/TV_PP_Pedido_TextoWidht_NP"
+        android:layout_width="@dimen/ItemPedido_TVPedido_Windth"
         android:layout_height="match_parent"
         android:layout_margin="1dp"
         android:textSize="@dimen/TV_PP_Pedido_TextoSize"
@@ -26,7 +26,7 @@
 
     <TextView
         android:id="@+id/tv_precio"
-        android:layout_width="85dp"
+        android:layout_width="@dimen/ItemPedido_TVPrecioyPT_Windth"
         android:layout_height="match_parent"
         android:layout_margin="1dp"
         android:textSize="@dimen/TV_PP_Pedido_TextoSize"
@@ -39,7 +39,7 @@
 
     <TextView
         android:id="@+id/tv_cantidad"
-        android:layout_width="50dp"
+        android:layout_width="@dimen/ItemPedido_TVCantidadObs_Windth"
         android:layout_height="match_parent"
         android:layout_margin="1dp"
         android:textColor="@color/white"
@@ -51,7 +51,7 @@
 
     <TextView
         android:id="@+id/tv_precioTotal"
-        android:layout_width="85dp"
+        android:layout_width="@dimen/ItemPedido_TVPrecioyPT_Windth"
         android:layout_height="match_parent"
         android:layout_margin="1dp"
         android:textSize="@dimen/TV_PP_Pedido_TextoSize"
@@ -62,7 +62,7 @@
 
     <TextView
         android:id="@+id/tv_observacion"
-        android:layout_width="@dimen/TV_PP_Pedido_TextoWidht_C_O"
+        android:layout_width="@dimen/ItemPedido_TVObservaciones_Windth"
         android:layout_height="match_parent"
         android:layout_margin="1dp"
         android:textSize="@dimen/TV_PP_Pedido_TextoSize"
