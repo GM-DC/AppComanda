@@ -8,7 +8,9 @@
     android:animateLayoutChanges="true"
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="true"
+    android:outlineSpotShadowColor="#3F51B5">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -17,6 +19,7 @@
             android:background="@drawable/efecto_clic">
 
             <ImageView
+                android:id="@+id/iv_iconUsuario"
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
@@ -30,6 +33,7 @@
                 android:layout_margin="15dp"
                 android:textSize="@dimen/Tv_Usuario"
                 tools:text="Alexsandre"
+                android:textStyle="bold"
                 android:layout_gravity="center"/>
 
         </LinearLayout>

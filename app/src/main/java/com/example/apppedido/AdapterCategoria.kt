@@ -1,9 +1,12 @@
 package com.example.apppedido
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class AdapterCategoria(private val data: List<DataClassCategoria>): RecyclerView.Adapter<AdapterCategoria.holderCategoria>() {
@@ -23,8 +26,11 @@ class AdapterCategoria(private val data: List<DataClassCategoria>): RecyclerView
 
     class holderCategoria(private val view: View): RecyclerView.ViewHolder(view){
         fun render (data: DataClassCategoria){
-            val btn_categoria = view.findViewById<Button>(R.id.tx_categoria)
-            btn_categoria.text = data.name
+            val tx_categoria = view.findViewById<TextView>(R.id.tx_categoria)
+            val iv_categoria = view.findViewById<ImageView>(R.id.iv_iconCategoria)
+            tx_categoria.text = data.name
+            tx_categoria.setTextColor(Color.parseColor("#0E83C9"))
+            iv_categoria.setColorFilter(Color.parseColor("#0E83C9"))
         }
     }
 }

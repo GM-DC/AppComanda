@@ -1,9 +1,12 @@
 package com.example.apppedido
 
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -26,8 +29,13 @@ class AdapterUsuario(val usuario: List<DataClassUsuario>,private val onClickList
 
     class holderUsuario(private val view: View):RecyclerView.ViewHolder(view){
         fun render (usuario: DataClassUsuario,onClickListener: (DataClassUsuario) -> Unit){
-            val btn_usuario = view.findViewById<TextView>(R.id.tx_Nombre)
-            btn_usuario.text = usuario.name
+            val tv_usuario = view.findViewById<TextView>(R.id.tx_Nombre)
+            val cv_usuario = view.findViewById<ImageView>(R.id.iv_iconUsuario)
+
+            tv_usuario.text = usuario.name
+            tv_usuario.setTextColor(Color.parseColor("#0E83C9"))
+            cv_usuario.setColorFilter(Color.parseColor("#0E83C9"))
+
             itemView.setOnClickListener { onClickListener(usuario) }
         }
     }

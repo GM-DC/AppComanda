@@ -1,9 +1,12 @@
 package com.example.apppedido
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class AdapterPlato(private val data: List<DataClassPlato>, private val onClickListener: (DataClassPlato) -> Unit): RecyclerView.Adapter<AdapterPlato.holderPlato>() {
@@ -23,17 +26,15 @@ class AdapterPlato(private val data: List<DataClassPlato>, private val onClickLi
 
     class holderPlato(private val view: View): RecyclerView.ViewHolder(view){
         fun render (data: DataClassPlato, onClickListener: (DataClassPlato) -> Unit){
-            val btn_plato = view.findViewById<Button>(R.id.tx_plato)
+            val tx_plato = view.findViewById<TextView>(R.id.tx_plato)
+            val iv_iconPlato = view.findViewById<ImageView>(R.id.iv_iconPlato)
 
-            btn_plato.text = data.name
-            println("hola")
+            tx_plato.text = data.name
+            tx_plato.setTextColor(Color.parseColor("#0E83C9"))
+            iv_iconPlato.setColorFilter(Color.parseColor("#0E83C9"))
 
-            btn_plato.setOnClickListener {
-                println("hola 2")
-                onClickListener(data)
-            }
+
+            itemView.setOnClickListener {onClickListener(data)}
         }
-
-
     }
 }
