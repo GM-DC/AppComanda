@@ -52,6 +52,8 @@
     <dimen name="BT_PP_Height">50dp</dimen>
 
     <!-- ******* ItemPedido: A y L de Pedido Area ********* -->
+    <dimen name="ItemPedido_Pedido_Height">35dp</dimen>
+
     <dimen name="ItemPedido_TVPedido_Windth">190dp</dimen>
     <dimen name="ItemPedido_TVPrecioyPT_Windth">85dp</dimen>
     <dimen name="ItemPedido_TVCantidadObs_Windth">50dp</dimen>

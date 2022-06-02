@@ -49,11 +49,12 @@
     <dimen name="BT_PP_Height">25dp</dimen>
 
     <!-- ******* ItemPedido: A y L de Pedido Area ********* -->
-    
-    <dimen name="ItemPedido_TVPedido_Windth">90dp</dimen>
-    <dimen name="ItemPedido_TVPrecioyPT_Windth">55dp</dimen>
-    <dimen name="ItemPedido_TVCantidadObs_Windth">30dp</dimen>
-    <dimen name="ItemPedido_TVObservaciones_Windth">25dp</dimen>
+    <dimen name="ItemPedido_Pedido_Height">20dp</dimen>
+    <dimen name="ItemPedido_TVPedido_Windth">80dp</dimen>
+
+    <dimen name="ItemPedido_TVPrecioyPT_Windth">35dp</dimen>
+    <dimen name="ItemPedido_TVCantidadObs_Windth">15dp</dimen>
+    <dimen name="ItemPedido_TVObservaciones_Windth">10dp</dimen>
     <dimen name="TV_PP_Pedido_TextoSize">9sp</dimen>
 
 

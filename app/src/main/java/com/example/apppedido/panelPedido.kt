@@ -12,32 +12,65 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apppedido.databinding.ActivityPanelPedidoBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.text.DecimalFormat
 
 
 class panelPedido : AppCompatActivity() {
 
     private lateinit var comp : ActivityPanelPedidoBinding
+    private lateinit var adapter: AdapterZona
+
+    //Listas:
+    val listaZona = ArrayList<DCZonaItem>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         comp = ActivityPanelPedidoBinding.inflate(layoutInflater)
         setContentView(comp.root)
+
         initZona()
+        getDataZona()
         initMesa()
         initCategoria()
         initPlato()
+
         initPedido()
     }
-
 
 
     fun initZona(){
         val rv_zona = findViewById<RecyclerView>(R.id.rv_zona)
         rv_zona.layoutManager = LinearLayoutManager(this,RecyclerView.HORIZONTAL,false)
-        val adapter = AdapterZona(listaZona)
+        adapter = AdapterZona(listaZona)
         rv_zona.adapter = adapter
     }
+
+
+    // Obtiene la informacion del API
+    private fun getDataZona() {
+        val call: Call<List<DCZonaItem>> = getRetrofit().getZonas()
+        call.enqueue(object : Callback<List<DCZonaItem>> {
+            override fun onResponse(call: Call<List<DCZonaItem>>?, response: Response<List<DCZonaItem>>?) {
+                listaZona.addAll(response!!.body()!!)
+                adapter.notifyDataSetChanged()
+            }
+            override fun onFailure(call: Call<List<DCZonaItem>>?, t: Throwable?) {
+                println("Error ${t?.message}")
+            }
+        })
+    }
+
+
+
+
+
+
 
     fun initMesa(){
         val rv_mesa = findViewById<RecyclerView>(R.id.rv_mesa)
@@ -63,7 +96,6 @@ class panelPedido : AppCompatActivity() {
     fun initPedido(){
         val rv_pedido = findViewById<RecyclerView>(R.id.rv_pedido)
         rv_pedido.layoutManager = LinearLayoutManager(this)
-        agregarPlatos()
         val adapter = AdapterPedido(listaPedido, {dataclassPedido -> onIntemDatosPlatos(dataclassPedido)})
         rv_pedido.adapter = adapter
 
@@ -242,21 +274,6 @@ class panelPedido : AppCompatActivity() {
 
 
 
-    val listaZona = listOf<DataClassZona>(
-        DataClassZona("1","Zona01"),
-        DataClassZona("2","Zona02"),
-        DataClassZona("3","Zona03"),
-        DataClassZona("4","Zona04"),
-        DataClassZona("5","Zona05"),
-        DataClassZona("6","Zona06"),
-        DataClassZona("7","Zona07"),
-        DataClassZona("8","Zona08"),
-        DataClassZona("9","Zona09"),
-        DataClassZona("10","Zona10"),
-        DataClassZona("11","Zona11"),
-        DataClassZona("10","Zona12"),
-        DataClassZona("11","Zona13")
-    )
 
     val listaMesa = listOf<DataClassMesa>(
         DataClassMesa("1","M 01"),
@@ -308,10 +325,15 @@ class panelPedido : AppCompatActivity() {
 
     val listaPedido = ArrayList<DataClassPedido>()
 
-    fun agregarPlatos(){
 
-        //listaPedido.add(DataClassPedido(1,"Salchipapa","Pollos",25.3f),)
-        //listaPedido.add(DataClassPedido(1,"Pollito","Pollos",15.5f))
+
+    // Devuelve un Retrofit
+    fun getRetrofit(): APIService {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://heyeldevs-001-site1.gtempurl.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        return  retrofit.create(APIService::class.java)
     }
 
 }

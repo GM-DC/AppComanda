@@ -10,11 +10,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import java.util.ArrayList
 
-class AdapterZona(private val data: List<DataClassZona>): RecyclerView.Adapter<AdapterZona.holderZona>() {
+class AdapterZona(private val data: List<DCZonaItem>): RecyclerView.Adapter<AdapterZona.holderZona>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterZona.holderZona {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): holderZona {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return AdapterZona.holderZona(layoutInflater.inflate(R.layout.item_zona,parent,false))
+        return holderZona(layoutInflater.inflate(R.layout.item_zona,parent,false))
     }
 
     override fun onBindViewHolder(holder: holderZona, position: Int) {
@@ -26,7 +26,7 @@ class AdapterZona(private val data: List<DataClassZona>): RecyclerView.Adapter<A
     }
 
     class holderZona(private val view: View):RecyclerView.ViewHolder(view){
-        fun render (data: DataClassZona){
+        fun render (data: DCZonaItem){
             val tx_zona = view.findViewById<TextView>(R.id.tx_zona)
             val iv_zona = view.findViewById<ImageView>(R.id.iv_iconZona)
 

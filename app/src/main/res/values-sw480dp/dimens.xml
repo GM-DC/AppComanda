@@ -45,6 +45,7 @@
     <dimen name="APP_RV_PP_Height_Pedido">350dp</dimen>
 
     <!-- ******* ItemPedido: A y L de Pedido Area ********* -->
+    <dimen name="ItemPedido_Pedido_Height">20dp</dimen>
     <dimen name="ItemPedido_TVPedido_Windth">190dp</dimen>
     <dimen name="ItemPedido_TVPrecioyPT_Windth">85dp</dimen>
     <dimen name="ItemPedido_TVCantidadObs_Windth">50dp</dimen>

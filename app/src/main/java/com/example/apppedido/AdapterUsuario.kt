@@ -10,7 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class AdapterUsuario(val usuario: List<DataClassUsuario>,private val onClickListener: (DataClassUsuario) -> Unit):RecyclerView.Adapter<AdapterUsuario.holderUsuario>(){
+class AdapterUsuario(val usuario: MutableList<DCUsuarioItem>, private val onClickListener: (DCUsuarioItem) -> Unit):RecyclerView.Adapter<AdapterUsuario.holderUsuario>(){
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): holderUsuario {
@@ -28,11 +28,12 @@ class AdapterUsuario(val usuario: List<DataClassUsuario>,private val onClickList
 
 
     class holderUsuario(private val view: View):RecyclerView.ViewHolder(view){
-        fun render (usuario: DataClassUsuario,onClickListener: (DataClassUsuario) -> Unit){
+
+        fun render (usuario: DCUsuarioItem,onClickListener: (DCUsuarioItem) -> Unit){
             val tv_usuario = view.findViewById<TextView>(R.id.tx_Nombre)
             val cv_usuario = view.findViewById<ImageView>(R.id.iv_iconUsuario)
 
-            tv_usuario.text = usuario.name
+            tv_usuario.text = usuario.nombre
             tv_usuario.setTextColor(Color.parseColor("#0E83C9"))
             cv_usuario.setColorFilter(Color.parseColor("#0E83C9"))
 

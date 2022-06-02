@@ -74,7 +74,7 @@ class activityPasscode : AppCompatActivity() {
         val Passcode = binding2.txtCodigo.text.toString()
         if (binding2.txtCodigo.length()==5){
             println("Evalua")
-            if ( Usuario =="HEBERT" && Passcode == "12345" ){
+            if ( Usuario =="USUARIO ADMINISTRADOR" && Passcode == "12345" ){
                 val intent = Intent(this, panelPedido::class.java)
                 binding2.txtCodigo.text = ""
                 startActivity(intent)
