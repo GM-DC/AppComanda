@@ -1,4 +1,5 @@
 package com.example.apppedido
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -9,10 +10,7 @@ import com.example.apppedido.databinding.ActivityInicioBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
+import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
 
@@ -46,23 +44,51 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+
     // OBTERNER DATA
     private fun getData() {
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = getRetrofit().getUsuario()
+            runOnUiThread {
+                if(response.isSuccessful){
+                    listaUsuario.clear()
+                    listaUsuario.addAll(response.body()!!)
+                    //response.body()?.let { listaUsuario.addAll(it) }
+                    adapter.notifyDataSetChanged()
+                }else{
+                    Toast.makeText(this@MainActivity, "Error", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+/*
         val call: Call<List<DCUsuarioItem>> = getRetrofit().getUsuario()
         call.enqueue(object : Callback<List<DCUsuarioItem>> {
-
             override fun onResponse(call: Call<List<DCUsuarioItem>>?, response: Response<List<DCUsuarioItem>>?) {
                 listaUsuario.clear()
                 response!!.body()?.let { listaUsuario.addAll(it) }
                 adapter.notifyDataSetChanged()
             }
-
             override fun onFailure(call: Call<List<DCUsuarioItem>>?, t: Throwable?) {
                 println("Error ${t?.message}")
             }
-
         })
+*/
+
     }
+
+
+
+
 
     // RETROFIT
     fun getRetrofit(): APIService {

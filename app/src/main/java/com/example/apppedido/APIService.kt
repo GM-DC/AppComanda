@@ -1,15 +1,18 @@
 package com.example.apppedido
 
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.PATCH
-import retrofit2.http.Url
+import retrofit2.http.*
 
 interface APIService {
+
     @GET("api/Users/")
-    fun getUsuario(): Call<List<DCUsuarioItem>>
+    suspend fun getUsuario(): Response<List<DCUsuarioItem>>
 
     @GET("api/TablasBasicas/Detail?filter=codigo eq 'CDG_PISO'")
-    fun getZonas(): Call<List<DCZonaItem>>
+    suspend fun getZonas(): Response<List<DCZonaItem>>
+
+    @GET("api/Mesas")
+    suspend fun getMesa(@Query("filter") filter:String) : Response<List<DCMesaItem>>
 }

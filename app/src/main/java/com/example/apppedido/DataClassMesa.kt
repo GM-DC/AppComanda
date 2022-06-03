@@ -1,6 +1,6 @@
 package com.example.apppedido
 
-class DataClassMesa (
+data class DataClassMesa (
     val id:String,
     val name:String
     )

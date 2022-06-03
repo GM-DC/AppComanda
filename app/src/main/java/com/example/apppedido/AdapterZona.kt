@@ -30,7 +30,7 @@ class AdapterZona(private val data: List<DCZonaItem>, private val onClickListene
             val tx_zona = view.findViewById<TextView>(R.id.tx_zona)
             val iv_zona = view.findViewById<ImageView>(R.id.iv_iconZona)
 
-            tx_zona.text = data.name
+            tx_zona.text = data.nombreZonas
             tx_zona.setTextColor(Color.parseColor("#0E83C9"))
             iv_zona.setColorFilter(Color.parseColor("#0E83C9"))
 

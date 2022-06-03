@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apppedido.databinding.ActivityPanelPedidoBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,10 +26,16 @@ import java.text.DecimalFormat
 class panelPedido : AppCompatActivity() {
 
     private lateinit var comp : ActivityPanelPedidoBinding
-    private lateinit var adapter: AdapterZona
+
+    //Adapter:
+    private lateinit var adapterZona: AdapterZona
+    private lateinit var adapterMesa: AdapterMesa
+
 
     //Listas:
-    val listaZona = ArrayList<DCZonaItem>()
+    private val listaZona = ArrayList<DCZonaItem>()
+    private val listaMesa = ArrayList<DCMesaItem>()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,51 +49,106 @@ class panelPedido : AppCompatActivity() {
 
         //INICIAR MESAS
         initMesa()
+
+
         initCategoria()
         initPlato()
 
         initPedido()
+
+
     }
 
+
+
+    //**************** ZONAS **************************//
 
     fun initZona(){
         val rv_zona = findViewById<RecyclerView>(R.id.rv_zona)
         rv_zona.layoutManager = LinearLayoutManager(this,RecyclerView.HORIZONTAL,false)
-        adapter = AdapterZona(listaZona) { dataclassZonas -> onItemDatosZonas(dataclassZonas) }
-        rv_zona.adapter = adapter
+        adapterZona = AdapterZona(listaZona) { dataclassZonas -> onItemDatosZonas(dataclassZonas) }
+        rv_zona.adapter = adapterZona
     }
+
 
     private fun onItemDatosZonas(dataclassZonas: DCZonaItem) {
-
+        val idZona = dataclassZonas.idZona
+        Toast.makeText(this, "$idZona", Toast.LENGTH_SHORT).show()
+        getDataMesa(idZona)
     }
 
-
-    // Obtiene la informacion del API
+    // Obtiene la informacion del API Zona
     private fun getDataZona() {
-        val call: Call<List<DCZonaItem>> = getRetrofit().getZonas()
-        call.enqueue(object : Callback<List<DCZonaItem>> {
-            override fun onResponse(call: Call<List<DCZonaItem>>?, response: Response<List<DCZonaItem>>?) {
-                listaZona.addAll(response!!.body()!!)
-                adapter.notifyDataSetChanged()
+        CoroutineScope(Dispatchers.IO).launch {
+            val responseZona = getRetrofit().getZonas()
+
+            runOnUiThread {
+                if(responseZona.isSuccessful){
+                    listaZona.clear()
+                    listaZona.addAll(responseZona.body()!!)
+                    adapterZona.notifyDataSetChanged()
+                }
             }
-            override fun onFailure(call: Call<List<DCZonaItem>>?, t: Throwable?) {
-                println("Error ${t?.message}")
-            }
-        })
+        }
     }
 
 
-
-
-
-
+    //********************         MESA        ********************//
 
     fun initMesa(){
         val rv_mesa = findViewById<RecyclerView>(R.id.rv_mesa)
         rv_mesa.layoutManager = LinearLayoutManager(this,RecyclerView.HORIZONTAL,false)
-        val adapter = AdapterMesa(listaMesa)
-        rv_mesa.adapter = adapter
+        adapterMesa = AdapterMesa(listaMesa)
+        rv_mesa.adapter = adapterMesa
     }
+
+    // Obtiene la informacion del API Mesa
+    private fun getDataMesa(idZona:String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = getRetrofit().getMesa("piso eq '$idZona' and estadoTrans eq 'L'" )
+            runOnUiThread {
+                if(response.isSuccessful){
+                    listaMesa.clear()
+                    listaMesa.addAll(response.body()!!)
+                    adapterMesa.notifyDataSetChanged()
+                }else{
+                    Toast.makeText(this@panelPedido, "Error", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     fun initCategoria(){
         val rv_categoria = findViewById<RecyclerView>(R.id.rv_categoria)
@@ -282,22 +346,6 @@ class panelPedido : AppCompatActivity() {
 
 
 
-    val listaMesa = listOf<DataClassMesa>(
-        DataClassMesa("1","M 01"),
-        DataClassMesa("2","M 02"),
-        DataClassMesa("3","M 03"),
-        DataClassMesa("4","M 04"),
-        DataClassMesa("5","M 05"),
-        DataClassMesa("6","M 06"),
-        DataClassMesa("7","M 07"),
-        DataClassMesa("8","M 08"),
-        DataClassMesa("9","M 09"),
-        DataClassMesa("10","M 10"),
-        DataClassMesa("11","M 11"),
-        DataClassMesa("10","M 12"),
-        DataClassMesa("11","M 13")
-    )
-
     val listaCategoria = listOf<DataClassCategoria>(
         DataClassCategoria("1","Pizzas"),
         DataClassCategoria("2","Pollos"),
@@ -331,6 +379,7 @@ class panelPedido : AppCompatActivity() {
     )
 
     val listaPedido = ArrayList<DataClassPedido>()
+
 
 
 
