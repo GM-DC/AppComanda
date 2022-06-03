@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import java.util.ArrayList
 
-class AdapterZona(private val data: List<DCZonaItem>): RecyclerView.Adapter<AdapterZona.holderZona>() {
+class AdapterZona(private val data: List<DCZonaItem>, private val onClickListener: (DCZonaItem) -> Unit): RecyclerView.Adapter<AdapterZona.holderZona>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): holderZona {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -18,7 +18,7 @@ class AdapterZona(private val data: List<DCZonaItem>): RecyclerView.Adapter<Adap
     }
 
     override fun onBindViewHolder(holder: holderZona, position: Int) {
-        holder.render(data[position])
+        holder.render(data[position], onClickListener)
     }
 
     override fun getItemCount(): Int {
@@ -26,7 +26,7 @@ class AdapterZona(private val data: List<DCZonaItem>): RecyclerView.Adapter<Adap
     }
 
     class holderZona(private val view: View):RecyclerView.ViewHolder(view){
-        fun render (data: DCZonaItem){
+        fun render (data: DCZonaItem, onClickListener: (DCZonaItem) -> Unit){
             val tx_zona = view.findViewById<TextView>(R.id.tx_zona)
             val iv_zona = view.findViewById<ImageView>(R.id.iv_iconZona)
 
@@ -34,6 +34,7 @@ class AdapterZona(private val data: List<DCZonaItem>): RecyclerView.Adapter<Adap
             tx_zona.setTextColor(Color.parseColor("#0E83C9"))
             iv_zona.setColorFilter(Color.parseColor("#0E83C9"))
 
+            itemView.setOnClickListener { onClickListener(data) }
         }
     }
 }

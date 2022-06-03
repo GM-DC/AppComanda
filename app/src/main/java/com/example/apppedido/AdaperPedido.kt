@@ -10,9 +10,9 @@ import java.text.DecimalFormat
 
 class AdapterPedido(private val data: List<DataClassPedido>,private val onClickListener: (DataClassPedido) -> Unit): RecyclerView.Adapter<AdapterPedido.holderPedido>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterPedido.holderPedido {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): holderPedido {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return AdapterPedido.holderPedido(layoutInflater.inflate(R.layout.item_pedido,parent,false))
+        return holderPedido(layoutInflater.inflate(R.layout.item_pedido,parent,false))
     }
 
     override fun onBindViewHolder(holder: holderPedido, position: Int) {

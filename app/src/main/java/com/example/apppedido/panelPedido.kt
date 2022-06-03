@@ -34,8 +34,11 @@ class panelPedido : AppCompatActivity() {
         comp = ActivityPanelPedidoBinding.inflate(layoutInflater)
         setContentView(comp.root)
 
+        //INICIAR ZONAS
         initZona()
         getDataZona()
+
+        //INICIAR MESAS
         initMesa()
         initCategoria()
         initPlato()
@@ -47,8 +50,12 @@ class panelPedido : AppCompatActivity() {
     fun initZona(){
         val rv_zona = findViewById<RecyclerView>(R.id.rv_zona)
         rv_zona.layoutManager = LinearLayoutManager(this,RecyclerView.HORIZONTAL,false)
-        adapter = AdapterZona(listaZona)
+        adapter = AdapterZona(listaZona) { dataclassZonas -> onItemDatosZonas(dataclassZonas) }
         rv_zona.adapter = adapter
+    }
+
+    private fun onItemDatosZonas(dataclassZonas: DCZonaItem) {
+
     }
 
 

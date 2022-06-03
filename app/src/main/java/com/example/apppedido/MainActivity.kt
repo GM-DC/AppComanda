@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onResponse(call: Call<List<DCUsuarioItem>>?, response: Response<List<DCUsuarioItem>>?) {
                 listaUsuario.clear()
-                listaUsuario.addAll(response!!.body()!!)
+                response!!.body()?.let { listaUsuario.addAll(it) }
                 adapter.notifyDataSetChanged()
             }
 

@@ -251,15 +251,5 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="@dimen/AInicio_IvWidth_logo"
-        android:layout_height="@dimen/AInicio_IvHeight_logo"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="16dp"
-        android:src="@drawable/logo_unosoft_grande"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

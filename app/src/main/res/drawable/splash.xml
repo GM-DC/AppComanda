@@ -3,13 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@color/white" />
     <item
-        android:bottom="200dp"
-        android:gravity="center"
-        android:top="200dp"
-        >
+
+        android:right="10dp"
+        android:left="10dp">
+
         <bitmap
-            android:src="@drawable/image_logo" />
+            android:src="@drawable/unosoft_logo_grande" />
+
 
     </item>
+
 
 </layer-list>
