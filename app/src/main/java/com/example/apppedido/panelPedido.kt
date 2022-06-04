@@ -30,11 +30,13 @@ class panelPedido : AppCompatActivity() {
     //Adapter:
     private lateinit var adapterZona: AdapterZona
     private lateinit var adapterMesa: AdapterMesa
+    private lateinit var adapterCategoria : AdapterCategoria
 
 
     //Listas:
     private val listaZona = ArrayList<DCZonaItem>()
     private val listaMesa = ArrayList<DCMesaItem>()
+    private val listaCategoria = ArrayList<DCCategoriaItem>()
 
 
 
@@ -50,8 +52,11 @@ class panelPedido : AppCompatActivity() {
         //INICIAR MESAS
         initMesa()
 
-
+        //INICIAR CATEGORIA
         initCategoria()
+        getDataCategoria()
+
+
         initPlato()
 
         initPedido()
@@ -119,43 +124,73 @@ class panelPedido : AppCompatActivity() {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    //********************         CATEGORIA        ********************//
     fun initCategoria(){
         val rv_categoria = findViewById<RecyclerView>(R.id.rv_categoria)
         rv_categoria.layoutManager = GridLayoutManager(this,2,RecyclerView.HORIZONTAL,false)
-        val adapter = AdapterCategoria(listaCategoria)
-        rv_categoria.adapter = adapter
+        adapterCategoria = AdapterCategoria(listaCategoria) { dataclassCategoria -> onItemDatosCategoria(dataclassCategoria) }
+        rv_categoria.adapter = adapterCategoria
     }
+
+    private fun onItemDatosCategoria(dataclassCategoria: DCCategoriaItem) {
+        val idCategoria = dataclassCategoria.idCategoria
+        Toast.makeText(this, "$idCategoria", Toast.LENGTH_SHORT).show()
+
+        
+    }
+
+
+
+    // Obtiene la informacion del API Mesa
+    private fun getDataCategoria() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = getRetrofit().getCategoria()
+            runOnUiThread {
+                if(response.isSuccessful){
+                    listaCategoria.clear()
+                    listaCategoria.addAll(response.body()!!)
+                    adapterCategoria.notifyDataSetChanged()
+                }else{
+                    Toast.makeText(this@panelPedido, "Error", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+    //********************         PLATOS        ********************//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     fun initPlato(){
         val rv_plato = findViewById<RecyclerView>(R.id.rv_platillo)
@@ -343,24 +378,6 @@ class panelPedido : AppCompatActivity() {
     }
 
 
-
-
-
-    val listaCategoria = listOf<DataClassCategoria>(
-        DataClassCategoria("1","Pizzas"),
-        DataClassCategoria("2","Pollos"),
-        DataClassCategoria("3","Postres"),
-        DataClassCategoria("4","Sopas"),
-        DataClassCategoria("5","Vinos"),
-        DataClassCategoria("6","Promociones"),
-        DataClassCategoria("7","Parrilla"),
-        DataClassCategoria("8","Gaseora"),
-        DataClassCategoria("9","Guardicion"),
-        DataClassCategoria("10","Entrada"),
-        DataClassCategoria("11","Menu"),
-        DataClassCategoria("10","Oferta"),
-        DataClassCategoria("11","Promo")
-    )
 
     val listaPlato = listOf<DataClassPlato>(
         DataClassPlato("1","Salchipapa","Pollo",5.01f),
