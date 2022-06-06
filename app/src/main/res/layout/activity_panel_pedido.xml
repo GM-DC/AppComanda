@@ -160,9 +160,7 @@
                     android:background="@drawable/efecto_clic_pedido"
                     android:text="+"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/TV_PP_Pedido_TextoSize"
-
-                    />
+                    android:textSize="@dimen/TV_PP_Pedido_TextoSize"/>
 
                 <Button
                     android:id="@+id/bt_disminuir"

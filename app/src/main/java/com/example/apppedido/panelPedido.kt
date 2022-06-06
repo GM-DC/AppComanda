@@ -1,6 +1,5 @@
 package com.example.apppedido
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -272,59 +271,7 @@ class panelPedido : AppCompatActivity() {
 
     }
 
-    fun onItemDatosPedido(dataClassPlato: DataClassPlato){
-        val rv_pedido = findViewById<RecyclerView>(R.id.rv_pedido)
-        val datos = dataClassPlato.copy()
-        Toast.makeText(this, dataClassPlato.name, Toast.LENGTH_SHORT).show()
 
-        //-------------Evalua POSICION Y ACCION DE AGREGAR-------------------
-        //println("------- Evalua POSICION Y ACCION DE AGREGAR-------------")
-        var action = 0
-        var pos = -1
-        for (i in listaPedido.indices){
-            if(listaPedido[i].namePlato==datos.name){
-                action += 1
-            }
-            if (action == 1){
-                pos = i
-                println("posicion: $pos")
-                break
-            }
-        }
-        //println("-----------------  FIN  --------------------")
-        //--------------------------- FIN ------------------------------------
-
-
-        //----------------  AGREGA O AUMENTA LA CANTIDAD -------------------
-        if (action == 0){
-            listaPedido.add(DataClassPedido(1,dataClassPlato.name,dataClassPlato.categoria,dataClassPlato.precio,dataClassPlato.precio,""))
-            rv_pedido.adapter?.notifyDataSetChanged()
-            rv_pedido.scrollToPosition(listaPedido.size-1)
-        }else{
-            val lt = listaPedido.get(pos)
-            var cantidad = lt.cantidad+1
-            var precioTotal = dataClassPlato.precio*cantidad
-            println("El precio es: $precioTotal")
-            listaPedido.set(pos, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion))
-            rv_pedido.adapter?.notifyDataSetChanged()
-        }
-        //-------------------------------------------------------------------
-
-        //------------------  SUMA DE PRECIO DE LA LISTA---------------
-        var cantidadLista:Float = 0f
-        for (i in listaPedido.indices){
-            cantidadLista = cantidadLista + listaPedido[i].precioTotal
-        }
-        val tv_PTotal = findViewById<TextView>(R.id.tv_PTotal)
-        val formato= DecimalFormat()
-        formato.maximumFractionDigits = 2 //Numero maximo de decimales a mostrar
-        tv_PTotal.text = "S/. ${formato.format(cantidadLista)}"
-        //-------------------------------------------------------------
-
-
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
     fun onIntemDatosPlatos(dataclassPedido:DataClassPedido){
         val rv_pedido = findViewById<RecyclerView>(R.id.rv_pedido)
         val bt_eliminar = findViewById<Button>(R.id.bt_disminuir)
