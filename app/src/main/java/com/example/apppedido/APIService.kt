@@ -16,6 +16,9 @@ interface APIService {
     @GET("api/Mesas")
     suspend fun getMesa(@Query("filter") filter:String) : Response<List<DCMesaItem>>
 
-    @GET("http://heyeldevs-001-site1.gtempurl.com/api/TablasBasicas/Detail?filter=codigo eq 'CATE_PROD' and referencia4 eq 'R'&select=nombre,numero&orderby=nombre asc")
+    @GET("api/TablasBasicas/Detail?filter=codigo eq 'CATE_PROD' and referencia4 eq 'R'&select=nombre,numero&orderby=nombre asc")
     suspend fun getCategoria() : Response<List<DCCategoriaItem>>
+
+    @GET("http://heyeldevs-001-site1.gtempurl.com/api/Producto?select=nombre,codigo,idcategoria,precioVenta&orderby=nombre asc")
+    suspend fun getPlato(@Query("filter") filter:String) : Response<List<DCPlatoItem>>
 }

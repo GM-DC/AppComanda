@@ -15,9 +15,6 @@ import com.example.apppedido.databinding.ActivityPanelPedidoBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.text.DecimalFormat
@@ -31,12 +28,16 @@ class panelPedido : AppCompatActivity() {
     private lateinit var adapterZona: AdapterZona
     private lateinit var adapterMesa: AdapterMesa
     private lateinit var adapterCategoria : AdapterCategoria
+    private lateinit var adapterPlato : AdapterPlato
+
 
 
     //Listas:
     private val listaZona = ArrayList<DCZonaItem>()
     private val listaMesa = ArrayList<DCMesaItem>()
     private val listaCategoria = ArrayList<DCCategoriaItem>()
+    private val listaPlato = ArrayList<DCPlatoItem>()
+
 
 
 
@@ -135,10 +136,9 @@ class panelPedido : AppCompatActivity() {
     private fun onItemDatosCategoria(dataclassCategoria: DCCategoriaItem) {
         val idCategoria = dataclassCategoria.idCategoria
         Toast.makeText(this, "$idCategoria", Toast.LENGTH_SHORT).show()
-
+        getDataPlato(idCategoria)
         
     }
-
 
 
     // Obtiene la informacion del API Mesa
@@ -162,42 +162,107 @@ class panelPedido : AppCompatActivity() {
 
 
 
-
-
-
     //********************         PLATOS        ********************//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     fun initPlato(){
         val rv_plato = findViewById<RecyclerView>(R.id.rv_platillo)
         rv_plato.layoutManager = GridLayoutManager(this,3,RecyclerView.HORIZONTAL,false)
-        val adapter = AdapterPlato(listaPlato) { dataclassPlato -> onItemDatosPedido(dataclassPlato) }
-        rv_plato.adapter = adapter
+        adapterPlato = AdapterPlato(listaPlato) { dataClassPlato -> onItemDatosPlato(dataClassPlato) }
+        rv_plato.adapter = adapterPlato
     }
+
+
+    // Obtiene la informacion del API Mesa
+    private fun getDataPlato(idCat:String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = getRetrofit().getPlato("idcategoria eq '$idCat'")
+            runOnUiThread {
+                if(response.isSuccessful){
+                    listaPlato.clear()
+                    listaPlato.addAll(response.body()!!)
+                    adapterPlato.notifyDataSetChanged()
+                }else{
+                    Toast.makeText(this@panelPedido, "Error", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    fun onItemDatosPlato(dataClassPlato: DCPlatoItem){
+        val rv_pedido = findViewById<RecyclerView>(R.id.rv_pedido)
+        val datos = dataClassPlato.copy()
+        Toast.makeText(this, dataClassPlato.namePlato, Toast.LENGTH_SHORT).show()
+
+        //-------------Evalua POSICION Y ACCION DE AGREGAR-------------------
+        //println("------- Evalua POSICION Y ACCION DE AGREGAR-------------")
+        var action = 0
+        var pos = -1
+        for (i in listaPedido.indices){
+            if(listaPedido[i].namePlato==datos.namePlato){
+                action += 1
+            }
+            if (action == 1){
+                pos = i
+                println("posicion: $pos")
+                break
+            }
+        }
+        //println("-----------------  FIN  --------------------")
+        //--------------------------- FIN ------------------------------------
+
+
+        //----------------  AGREGA O AUMENTA LA CANTIDAD -------------------
+        if (action == 0){
+            listaPedido.add(DataClassPedido(1,dataClassPlato.namePlato,dataClassPlato.IdCategoria,dataClassPlato.PrecioVenta.toFloat(),dataClassPlato.PrecioVenta.toFloat(),""))
+            rv_pedido.adapter?.notifyDataSetChanged()
+            rv_pedido.scrollToPosition(listaPedido.size-1)
+        }else{
+            val lt = listaPedido.get(pos)
+            var cantidad = lt.cantidad+1
+            var precioTotal = dataClassPlato.PrecioVenta*cantidad
+            println("El precio es: $precioTotal")
+            listaPedido.set(pos, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal.toFloat(),lt.observacion))
+            rv_pedido.adapter?.notifyDataSetChanged()
+        }
+        //-------------------------------------------------------------------
+
+        //------------------  SUMA DE PRECIO DE LA LISTA---------------
+        var cantidadLista:Float = 0f
+        for (i in listaPedido.indices){
+            cantidadLista = cantidadLista + listaPedido[i].precioTotal
+        }
+        val tv_PTotal = findViewById<TextView>(R.id.tv_PTotal)
+        val formato= DecimalFormat()
+        formato.maximumFractionDigits = 2 //Numero maximo de decimales a mostrar
+        tv_PTotal.text = "S/. ${formato.format(cantidadLista)}"
+        //-------------------------------------------------------------
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     fun initPedido(){
         val rv_pedido = findViewById<RecyclerView>(R.id.rv_pedido)
@@ -379,21 +444,6 @@ class panelPedido : AppCompatActivity() {
 
 
 
-    val listaPlato = listOf<DataClassPlato>(
-        DataClassPlato("1","Salchipapa","Pollo",5.01f),
-        DataClassPlato("2","Pequeños","Pollo",7.30f),
-        DataClassPlato("3","Alitas","Pollo",4.56f),
-        DataClassPlato("4","Broschetas","Pollo",6.99f),
-        DataClassPlato("5","Anticucho","Pollo",8.69f),
-        DataClassPlato("6","Piqueo","Pollo",25.35f),
-        DataClassPlato("7","Porcino","Pollo",25.35f),
-        DataClassPlato("8","Parrila","Pollo",25.35f),
-        DataClassPlato("9","Coca-Cola","Pollo",25.35f),
-        DataClassPlato("10","Inka-Cola","Pollo",25.35f),
-        DataClassPlato("11","Pastel","Pollo",25.35f),
-        DataClassPlato("10","Torta","Pollo",25.35f),
-        DataClassPlato("11","Pan","Pollo",25.35f)
-    )
 
     val listaPedido = ArrayList<DataClassPedido>()
 
