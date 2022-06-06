@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 
 class AdapterCategoria(private val data: List<DCCategoriaItem>, private val onClickListener: (DCCategoriaItem) -> Unit): RecyclerView.Adapter<AdapterCategoria.holderCategoria>() {
@@ -28,6 +29,7 @@ class AdapterCategoria(private val data: List<DCCategoriaItem>, private val onCl
         fun render (data: DCCategoriaItem, onClickListener: (DCCategoriaItem) -> Unit){
             val tx_categoria = view.findViewById<TextView>(R.id.tx_categoria)
             val iv_categoria = view.findViewById<ImageView>(R.id.iv_iconCategoria)
+            val cv_zona = view.findViewById<CardView>(R.id.cv_zona)
 
             tx_categoria.text = data.nameCategoria
             tx_categoria.setTextColor(Color.parseColor("#0E83C9"))

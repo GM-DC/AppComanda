@@ -34,7 +34,7 @@ class AdapterPlato(private val data: ArrayList<DCPlatoItem>, private val onClick
             iv_iconPlato.setColorFilter(Color.parseColor("#0E83C9"))
 
 
-            itemView.setOnClickListener {onClickListener(data)}
+            itemView.setOnClickListener{onClickListener(data)}
         }
     }
 }

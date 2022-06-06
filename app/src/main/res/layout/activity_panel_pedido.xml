@@ -34,7 +34,7 @@
             app:layout_constraintHorizontal_bias="0.407"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.031"></androidx.recyclerview.widget.RecyclerView>
+            app:layout_constraintVertical_bias="0.031"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_mesa"
@@ -46,7 +46,7 @@
             app:layout_constraintHorizontal_bias="0.407"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.121"></androidx.recyclerview.widget.RecyclerView>
+            app:layout_constraintVertical_bias="0.121"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_categoria"
@@ -70,7 +70,7 @@
             app:layout_constraintHorizontal_bias="0.4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.467"></androidx.recyclerview.widget.RecyclerView>
+            app:layout_constraintVertical_bias="0.467"/>
 
         <LinearLayout
             android:layout_width="@dimen/APP_RV_PP_Width_Pedido"
@@ -88,7 +88,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/TV_PP_Pedido_TextoSize"
 
-                android:textStyle="bold"></TextView>
+                android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="85dp"
@@ -98,7 +98,7 @@
                 android:text="P. Unit"
                 android:textColor="@color/white"
                 android:textSize="@dimen/TV_PP_Pedido_TextoSize"
-                android:textStyle="bold"></TextView>
+                android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="65dp"
@@ -108,7 +108,7 @@
                 android:textAlignment="viewEnd"
                 android:textColor="@color/white"
                 android:textSize="@dimen/TV_PP_Pedido_TextoSize"
-                android:textStyle="bold"></TextView>
+                android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="85dp"
@@ -119,7 +119,7 @@
 
                 android:textColor="@color/white"
                 android:textSize="@dimen/TV_PP_Pedido_TextoSize"
-                android:textStyle="bold"></TextView>
+                android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="@dimen/TV_PP_Pedido_TextoWidht_C_O"
@@ -130,7 +130,7 @@
 
                 android:textColor="@color/white"
                 android:textSize="@dimen/TV_PP_Pedido_TextoSize"
-                android:textStyle="bold"></TextView>
+                android:textStyle="bold"/>
 
         </LinearLayout>
 
@@ -143,7 +143,7 @@
                 android:id="@+id/rv_pedido"
                 android:layout_width="@dimen/APP_RV_PP_Width_Pedido"
                 android:layout_height="@dimen/APP_RV_PP_Height_Pedido"
-                android:layout_margin="@dimen/RV_PP_Pedido_Margin"></androidx.recyclerview.widget.RecyclerView>
+                android:layout_margin="@dimen/RV_PP_Pedido_Margin"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"

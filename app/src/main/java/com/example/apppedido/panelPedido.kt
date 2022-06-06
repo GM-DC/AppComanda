@@ -1,5 +1,6 @@
 package com.example.apppedido
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -56,6 +57,10 @@ class panelPedido : AppCompatActivity() {
         initCategoria()
         getDataCategoria()
 
+        //Iniciar Datos
+        getDataMesa("0001")
+        getDataPlato("0001")
+
 
         initPlato()
 
@@ -69,8 +74,8 @@ class panelPedido : AppCompatActivity() {
     //**************** ZONAS **************************//
 
     fun initZona(){
-        val rv_zona = findViewById<RecyclerView>(R.id.rv_zona)
-        rv_zona.layoutManager = LinearLayoutManager(this,RecyclerView.HORIZONTAL,false)
+        val rv_zona = findViewById<RecyclerView>(R.id.rv_zona2)
+        rv_zona.layoutManager = LinearLayoutManager(baseContext,RecyclerView.HORIZONTAL,false)
         adapterZona = AdapterZona(listaZona) { dataclassZonas -> onItemDatosZonas(dataclassZonas) }
         rv_zona.adapter = adapterZona
     }
@@ -83,7 +88,7 @@ class panelPedido : AppCompatActivity() {
     }
 
     // Obtiene la informacion del API Zona
-    private fun getDataZona() {
+    private fun getDataZona(){
         CoroutineScope(Dispatchers.IO).launch {
             val responseZona = getRetrofit().getZonas()
 
@@ -136,7 +141,6 @@ class panelPedido : AppCompatActivity() {
         val idCategoria = dataclassCategoria.idCategoria
         Toast.makeText(this, "$idCategoria", Toast.LENGTH_SHORT).show()
         getDataPlato(idCategoria)
-        
     }
 
 
@@ -192,6 +196,8 @@ class panelPedido : AppCompatActivity() {
         val datos = dataClassPlato.copy()
         Toast.makeText(this, dataClassPlato.namePlato, Toast.LENGTH_SHORT).show()
 
+
+        /*
         //-------------Evalua POSICION Y ACCION DE AGREGAR-------------------
         //println("------- Evalua POSICION Y ACCION DE AGREGAR-------------")
         var action = 0
@@ -235,7 +241,7 @@ class panelPedido : AppCompatActivity() {
         formato.maximumFractionDigits = 2 //Numero maximo de decimales a mostrar
         tv_PTotal.text = "S/. ${formato.format(cantidadLista)}"
         //-------------------------------------------------------------
-
+*/
 
     }
 
