@@ -29,7 +29,6 @@ class FrgZonaPiso : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +44,9 @@ class FrgZonaPiso : Fragment() {
         initMesa()
         getDataZona()
         texto()
+
+        //Iniciar Datos
+        getDataMesa("0001")
     }
 
     fun initZona(){

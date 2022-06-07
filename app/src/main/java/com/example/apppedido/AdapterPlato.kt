@@ -13,7 +13,7 @@ class AdapterPlato(private val data: ArrayList<DCPlatoItem>, private val onClick
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterPlato.holderPlato {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return AdapterPlato.holderPlato(layoutInflater.inflate(R.layout.item_plato,parent,false))
+        return holderPlato(layoutInflater.inflate(R.layout.item_plato,parent,false))
     }
 
     override fun onBindViewHolder(holder: holderPlato, position: Int) {
@@ -32,7 +32,6 @@ class AdapterPlato(private val data: ArrayList<DCPlatoItem>, private val onClick
             tx_plato.text = data.namePlato
             tx_plato.setTextColor(Color.parseColor("#0E83C9"))
             iv_iconPlato.setColorFilter(Color.parseColor("#0E83C9"))
-
 
             itemView.setOnClickListener{onClickListener(data)}
         }

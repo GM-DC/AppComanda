@@ -42,10 +42,14 @@
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/item_zona.xml" value="0.22" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.142" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.142" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/drawable/icon_categoria.xml" value="0.1995" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/drawable/usuario.xml" value="0.1995" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout-land/activity_panel_pedido.xml" value="0.16225749559082892" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout-land/activity_panel_pedidos.xml" value="0.16225749559082892" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/activity_panel_pedido.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/fragment_frg_cat_plat.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/fragment_frg_zona_piso.xml" value="0.19166666666666668" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/item_pedido.xml" value="1.0" />
       </map>
     </option>
   </component>

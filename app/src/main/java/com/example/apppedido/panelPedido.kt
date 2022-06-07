@@ -278,7 +278,6 @@ class panelPedido : AppCompatActivity() {
         rv_pedido.layoutManager = LinearLayoutManager(this)
         val adapter = AdapterPedido(listaPedido, {dataclassPedido -> onIntemDatosPlatos(dataclassPedido)})
         rv_pedido.adapter = adapter
-
     }
 
 
@@ -377,7 +376,7 @@ class panelPedido : AppCompatActivity() {
             //***********Declara elementos *****************
             var et_detalle = vista.findViewById<EditText>(R.id.et_detalle)
             val bt_guardarDetalle = vista.findViewById<Button>(R.id.bt_guardarDetalle)
-            val tv_observacion = findViewById<TextView>(R.id.tv_observacion)
+            //val tv_observacion = findViewById<TextView>(R.id.tv_observacion)
             println("El index es: $index   ------------------------")
 
 
