@@ -308,22 +308,18 @@ class panelPedido : AppCompatActivity() {
             if (datos.namePlato==listaPedido.get(index).namePlato && listaPedido.get(index).cantidad>1){
                 val lt = listaPedido.get(index)
                 var cantidad = lt.cantidad-1
-                var precioTotal = lt.precio*cantidad
+                var precioTotal = lt.precio*cantidad.toBigDecimal()
                 listaPedido.set(index, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion))
                 rv_pedido.adapter?.notifyDataSetChanged()
                 println("Ya no cumple")
             }else if(datos.namePlato==listaPedido.get(index).namePlato && listaPedido.get(index).cantidad==1){
-                listaPedido.remove(datos)
-                rv_pedido.adapter?.notifyDataSetChanged()
-                println("Removido y actualizado")
-                datos = DataClassPedido(0,"","",0f,0f,"")
-                println(datos)
+
             }
 
             //------------------  SUMA DE PRECIO DE LA LISTA---------------
             var cantidadLista:Float = 0f
             for (i in listaPedido.indices){
-                cantidadLista = cantidadLista + listaPedido[i].precioTotal
+        //        cantidadLista = cantidadLista + listaPedido[i].precioTotal
 
             }
             val tv_PTotal = findViewById<TextView>(R.id.tv_PTotal)
@@ -341,7 +337,7 @@ class panelPedido : AppCompatActivity() {
             val lt = listaPedido[index]
             println("Boton aumentar $index")
             var cantidad = lt.cantidad+1
-            var precioTotal = lt.precio*cantidad
+            var precioTotal = lt.precio*cantidad.toBigDecimal()
             listaPedido.set(index, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion))
             rv_pedido.adapter?.notifyDataSetChanged()
 
@@ -349,7 +345,7 @@ class panelPedido : AppCompatActivity() {
             //------------------  SUMA DE PRECIO DE LA LISTA---------------
             var cantidadLista:Float = 0.0f
             for (i in listaPedido.indices){
-                cantidadLista += listaPedido[i].precioTotal
+               // cantidadLista += listaPedido[i].precioTotal
             }
 
             val tv_PTotal = findViewById<TextView>(R.id.tv_PTotal)

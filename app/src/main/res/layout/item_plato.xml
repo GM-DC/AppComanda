@@ -2,14 +2,14 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/BT_PP_Plato_Width"
-    android:layout_height="@dimen/BT_PP_Plato_Height"
+    android:layout_width="200dp"
+    android:layout_height="100dp"
     android:orientation="horizontal"
     android:animateLayoutChanges="true"
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp"
     app:cardUseCompatPadding="true"
-    android:outlineSpotShadowColor="#3F51B5">
+    android:id="@+id/cv_plato">
 
     <LinearLayout
 
@@ -21,21 +21,40 @@
 
         <ImageView
             android:id="@+id/iv_iconPlato"
-            android:layout_width="45dp"
-            android:layout_height="match_parent"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/icon_platillo"
             />
 
 
-        <TextView
-            android:id="@+id/tx_plato"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="1dp"
-            android:textSize="@dimen/BT_PP_Plato_TextoSize"
-            android:gravity="center_vertical"
-            tools:text="Salchipapa S/.25"
-            android:textStyle="bold"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tx_plato"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:textSize="@dimen/BT_PP_Plato_TextoSize"
+                android:gravity="center_vertical"
+                tools:text="Salchipapa"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tx_platoPrecio"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:textSize="@dimen/BT_PP_Plato_TextoSize"
+                android:gravity="center_vertical"
+                tools:text="S/.25"
+                android:textStyle="bold"/>
+
+
+        </LinearLayout>
+
 
 
 

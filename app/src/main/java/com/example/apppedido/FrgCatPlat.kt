@@ -1,10 +1,13 @@
 package com.example.apppedido
 
+import android.content.ClipData
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -15,9 +18,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.text.DecimalFormat
 
 
-class FrgCatPlat : Fragment() {
+class FrgCatPlat() : Fragment() {
 
     private lateinit var adapterCategoria: AdapterCategoria
     private lateinit var adapterPlato: AdapterPlato
@@ -27,6 +31,7 @@ class FrgCatPlat : Fragment() {
     private val listaCategoria = ArrayList<DCCategoriaItem>()
     private val listaPlato = ArrayList<DCPlatoItem>()
     private val listaPedido = ArrayList<DataClassPedido>()
+
 
     val rv_pedido = view?.findViewById<RecyclerView>(R.id.rv_pedido)
 
@@ -60,6 +65,10 @@ class FrgCatPlat : Fragment() {
 
         //Iniciar Datos
         getDataPlato("0001")
+
+
+
+
     }
 
 
@@ -99,7 +108,7 @@ class FrgCatPlat : Fragment() {
 
     fun initPlato(){
         val rv_plato = view?.findViewById<RecyclerView>(R.id.rv_platillo)
-        rv_plato?.layoutManager = GridLayoutManager(activity,3, RecyclerView.HORIZONTAL,false)
+        rv_plato?.layoutManager = GridLayoutManager(activity,3, RecyclerView.VERTICAL,false)
         adapterPlato = AdapterPlato(listaPlato) { dataClassPlato -> onItemDatosPlato(dataClassPlato) }
         rv_plato?.adapter = adapterPlato
     }
@@ -125,13 +134,15 @@ class FrgCatPlat : Fragment() {
         val rv_pedido = view?.findViewById<RecyclerView>(R.id.rv_pedido)
         val datos = dataClassPlato
 
+        Toast.makeText(activity, "${dataClassPlato.namePlato}", Toast.LENGTH_SHORT).show()
+
 
         //-------------Evalua POSICION Y ACCION DE AGREGAR-------------------
         //println("------- Evalua POSICION Y ACCION DE AGREGAR-------------")
         var action = 0
         var pos = -1
         for (i in listaPedido.indices){
-            if(listaPedido[i].namePlato==datos.idPlato){
+            if(listaPedido[i].namePlato==datos.namePlato){
                 action += 1
             }
             if (action == 1){
@@ -142,8 +153,10 @@ class FrgCatPlat : Fragment() {
         }
 
         //----------------  AGREGA O AUMENTA LA CANTIDAD -------------------
-        if (action == 0){
-            listaPedido.add(DataClassPedido(1,dataClassPlato.namePlato,dataClassPlato.IdCategoria,dataClassPlato.PrecioVenta.toFloat(),dataClassPlato.PrecioVenta.toFloat(),""))
+        if (action.equals(0)){
+
+
+            listaPedido.add(DataClassPedido(1,dataClassPlato.namePlato,dataClassPlato.IdCategoria,dataClassPlato.PrecioVenta.toBigDecimal(),dataClassPlato.PrecioVenta.toBigDecimal(),""))
             rv_pedido?.adapter?.notifyDataSetChanged()
             rv_pedido?.scrollToPosition(listaPedido.size-1)
         }else{
@@ -151,7 +164,7 @@ class FrgCatPlat : Fragment() {
             var cantidad = lt.cantidad+1
             var precioTotal = dataClassPlato.PrecioVenta*cantidad
             println("El precio es: $precioTotal")
-            listaPedido.set(pos, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal.toFloat(),lt.observacion))
+            listaPedido.set(pos, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal.toBigDecimal(),lt.observacion))
             rv_pedido?.adapter?.notifyDataSetChanged()
         }
         //-------------------------------------------------------------------
@@ -160,9 +173,37 @@ class FrgCatPlat : Fragment() {
     }
 
     fun initPedido(){
+        val rv_pedido = view?.findViewById<RecyclerView>(R.id.rv_pedido)
         rv_pedido?.layoutManager = LinearLayoutManager(activity)
         adapterPedido = AdapterPedido(listaPedido) {dataclassPedido -> onIntemDatosPedido(dataclassPedido)}
         rv_pedido?.adapter = adapterPedido
+
+        /////*/////////////////////////////////////////////////////////
+        val itemswipe = object : ItemTouchHelper.SimpleCallback(0,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                listaPedido.removeAt(viewHolder.bindingAdapterPosition)
+                rv_pedido?.adapter?.notifyDataSetChanged()
+            }
+        }
+        val swap =  ItemTouchHelper(itemswipe)
+        swap.attachToRecyclerView(rv_pedido)
+
+
+
+
+
+
+
     }
 
     fun onIntemDatosPedido(dataclassPedido: DataClassPedido) {
@@ -179,17 +220,7 @@ class FrgCatPlat : Fragment() {
 
 
 
-    val swipeGesture = object : SwipeGesture(activity){
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
-            listaPedido.removeAt(viewHolder.bindingAdapterPosition)
-            adapterPedido.notifyItemRemoved(viewHolder.bindingAdapterPosition)
-
-            super.onSwiped(viewHolder, direction)
-        }
-    }
-
-    val itemTouchHelper = ItemTouchHelper(swipeGesture)
 
 
 

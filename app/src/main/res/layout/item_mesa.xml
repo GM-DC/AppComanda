@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="@dimen/BT_PP_Mesa_Width"
-    android:layout_height="70dp"
+    android:layout_width="200dp"
+    android:layout_height="120dp"
     android:layout_margin="1dp"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:animateLayoutChanges="true"
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp"
-    app:cardUseCompatPadding="true"
-    android:outlineSpotShadowColor="#3F51B5">
+    app:cardUseCompatPadding="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,8 +19,8 @@
 
         <ImageView
             android:id="@+id/iv_iconMesa"
-            android:layout_width="50dp"
-            android:layout_height="40dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:layout_gravity="center"
             android:src="@drawable/icon_mesa"/>
 

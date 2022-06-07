@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="450dp"
+    android:layout_width="550dp"
     android:layout_height="100dp"
     android:paddingTop="3dp"
     android:paddingLeft="8dp"
@@ -18,7 +18,7 @@
 
         <TextView
             android:id="@+id/tv_nombrePlato"
-            android:layout_width="250dp"
+            android:layout_width="350dp"
             android:layout_height="30dp"
             android:textColor="@color/white"
             android:textSize="19sp"
@@ -54,9 +54,9 @@
         >
 
         <Button
+            android:id="@+id/bt_aumentar"
             android:padding="0dp"
             android:layout_margin="0.5dp"
-            android:id="@+id/bt_aumentar"
             android:layout_width="40dp"
             android:layout_height="50dp"
             android:text="+"
@@ -74,9 +74,9 @@
             tools:text="10" />
 
         <Button
+            android:id="@+id/bt_disminuir"
             android:padding="0dp"
             android:layout_margin="0.5dp"
-            android:id="@+id/bt_disminuir"
             android:layout_width="40dp"
             android:layout_height="50dp"
             android:text="-"
@@ -84,9 +84,9 @@
             />
 
         <Button
+            android:id="@+id/bt_nota"
             android:padding="0dp"
             android:layout_margin="0.5dp"
-            android:id="@+id/bt_nota"
             android:layout_width="40dp"
             android:layout_height="50dp"
             android:text="N"

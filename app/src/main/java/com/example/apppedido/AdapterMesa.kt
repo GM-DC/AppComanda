@@ -32,7 +32,7 @@ class AdapterMesa(private val data: ArrayList<DCMesaItem>,private val onClickLis
             val tx_mesa = view.findViewById<TextView>(R.id.tx_mesa)
             val iv_mesa = view.findViewById<ImageView>(R.id.iv_iconMesa)
 
-                tx_mesa.text = data.idMesa.toString()
+                tx_mesa.text = "Mesa ${data.idMesa}"
                 tx_mesa.setTextColor(Color.parseColor("#0E83C9"))
                 iv_mesa.setColorFilter(Color.parseColor("#0E83C9"))
 

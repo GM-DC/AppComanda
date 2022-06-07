@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
@@ -43,7 +45,6 @@ class FrgZonaPiso : Fragment() {
         initZona()
         initMesa()
         getDataZona()
-        texto()
 
         //Iniciar Datos
         getDataMesa("0001")
@@ -59,11 +60,6 @@ class FrgZonaPiso : Fragment() {
     private fun onItemDatosZonas(dataclassZonas: DCZonaItem) {
         val idZona = dataclassZonas.idZona
         getDataMesa(idZona)
-    }
-
-    fun texto(){
-        val tx_texto = view?.findViewById<TextView>(R.id.tx_textoas)
-        tx_texto?.text = "como estas"
     }
 
 
@@ -86,7 +82,7 @@ class FrgZonaPiso : Fragment() {
 
     fun initMesa(){
         val rv_mesa = view?.findViewById<RecyclerView>(R.id.rv_mesa2)
-        rv_mesa?.layoutManager = LinearLayoutManager(activity,RecyclerView.HORIZONTAL,false)
+        rv_mesa?.layoutManager = GridLayoutManager(activity,4, RecyclerView.HORIZONTAL,false)
         adapterMesa = AdapterMesa(listaMesa) { dataclassMesa -> onItemDatosMesa(dataclassMesa) }
         rv_mesa?.adapter = adapterMesa
     }
@@ -94,6 +90,7 @@ class FrgZonaPiso : Fragment() {
     private fun onItemDatosMesa(dataclassMesa: DCMesaItem) {
         val transaction = fragmentManager?.beginTransaction()
         transaction?.replace(R.id.frm_panel,FrgCatPlat())?.commit()
+
     }
 
     // Obtiene la informacion del API Mesa
@@ -111,7 +108,6 @@ class FrgZonaPiso : Fragment() {
             }
         }
     }
-
 
 
 

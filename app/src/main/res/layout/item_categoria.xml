@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/BT_PP_Categoria_Width"
-    android:layout_height="@dimen/BT_PP_Categoria_Height"
+    android:layout_width="200dp"
+    android:layout_height="80dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:animateLayoutChanges="true"
@@ -18,8 +18,8 @@
 
         <ImageView
             android:id="@+id/iv_iconCategoria"
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/icon_categoria"/>
 
         <TextView

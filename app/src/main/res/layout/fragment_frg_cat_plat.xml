@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     tools:context=".FrgCatPlat">
 
 
@@ -19,15 +19,15 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_categoria"
-                android:layout_width="@dimen/APP_RV_PP_Width"
-                android:layout_height="@dimen/APP_RV_PP_Height_Categoria"
+                android:layout_width="600dp"
+                android:layout_height="200dp"
                 android:layout_margin="@dimen/RV_PP_Pedido_Margin"
                 />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_platillo"
-                android:layout_width="@dimen/APP_RV_PP_Width"
-                android:layout_height="@dimen/APP_RV_PP_Height_Plato"
+                android:layout_width="600dp"
+                android:layout_height="400dp"
                 android:layout_margin="@dimen/RV_PP_Pedido_Margin"
                 />
 
@@ -36,13 +36,31 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             >
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_pedido"
-                android:layout_width="@dimen/APP_RV_PP_Width_Pedido"
-                android:layout_height="@dimen/APP_RV_PP_Height_Pedido"
-                android:layout_margin="@dimen/RV_PP_Pedido_Margin"/>
+                android:layout_width="550dp"
+                android:layout_height="500dp"
+                android:layout_margin="@dimen/RV_PP_Pedido_Margin"
+                />
+
+            <TextView
+                android:id="@+id/tv_PTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_gravity="end"
+                android:text="S/. 0.0"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Enviar"
+                android:textSize="20sp"/>
 
         </LinearLayout>
     </LinearLayout>

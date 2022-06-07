@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
 class AdapterPlato(private val data: ArrayList<DCPlatoItem>, private val onClickListener: (DCPlatoItem) -> Unit): RecyclerView.Adapter<AdapterPlato.holderPlato>() {
@@ -27,9 +29,13 @@ class AdapterPlato(private val data: ArrayList<DCPlatoItem>, private val onClick
     class holderPlato(private val view: View): RecyclerView.ViewHolder(view){
         fun render (data: DCPlatoItem, onClickListener: (DCPlatoItem) -> Unit){
             val tx_plato = view.findViewById<TextView>(R.id.tx_plato)
+            val tx_platoPrecio = view.findViewById<TextView>(R.id.tx_platoPrecio)
+
             val iv_iconPlato = view.findViewById<ImageView>(R.id.iv_iconPlato)
 
+            tx_platoPrecio.text = "S/. ${data.PrecioVenta}"
             tx_plato.text = data.namePlato
+            tx_platoPrecio.setTextColor(Color.parseColor("#0E83C9"))
             tx_plato.setTextColor(Color.parseColor("#0E83C9"))
             iv_iconPlato.setColorFilter(Color.parseColor("#0E83C9"))
 

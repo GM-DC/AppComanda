@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apppedido.databinding.ActivityInicioBinding
 import kotlinx.coroutines.CoroutineScope
@@ -14,7 +15,7 @@ import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity(swipeDirs: Int) : AppCompatActivity() {
 
     private lateinit var binding: ActivityInicioBinding
     private lateinit var adapter: AdapterUsuario
@@ -54,7 +55,6 @@ class MainActivity : AppCompatActivity() {
                 if(response.isSuccessful){
                     listaUsuario.clear()
                     listaUsuario.addAll(response.body()!!)
-                    //response.body()?.let { listaUsuario.addAll(it) }
                     adapter.notifyDataSetChanged()
                 }else{
                     Toast.makeText(this@MainActivity, "Error", Toast.LENGTH_SHORT).show()
@@ -85,6 +85,7 @@ class MainActivity : AppCompatActivity() {
 */
 
     }
+
 
 
 

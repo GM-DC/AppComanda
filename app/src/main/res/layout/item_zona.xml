@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/BT_PP_Zonas_Width"
-    android:layout_height="70dp"
+    android:layout_width="250dp"
+    android:layout_height="150dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:animateLayoutChanges="true"
@@ -10,7 +10,8 @@
     app:cardElevation="4dp"
     app:cardUseCompatPadding="true"
     android:outlineSpotShadowColor="#3F51B5"
-    android:id="@+id/cv_zona">
+    android:id="@+id/cv_zona"
+    android:background="@drawable/efecto_clic_zona">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,8 +22,8 @@
 
         <ImageView
             android:id="@+id/iv_iconZona"
-            android:layout_width="40dp"
-            android:layout_height="39dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_gravity="center"
             android:src="@drawable/icon_zona" />
 
@@ -32,8 +33,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0.5dp"
-            android:textSize="@dimen/BT_PP_Zomas_TextoSize"
+            android:textSize="20sp"
             tools:text="Zona 01"
+            android:paddingLeft="15dp"
             android:gravity="center_vertical"
             android:textStyle="bold"
             />

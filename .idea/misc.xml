@@ -7,7 +7,9 @@
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/Usuario.xml" value="0.1" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/boton_redondo.xml" value="0.14" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/efecto_clic.xml" value="0.261" />
+        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/efecto_clic_mesa.xml" value="0.1295" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/efecto_clic_pedido.xml" value="0.1" />
+        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/efecto_clic_zona.xml" value="0.1295" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/ic_anyconv_com__camp_table.xml" value="0.1" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/ic_generated__2_.xml" value="0.1" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/ic_icons8_mesa_100__1___3_.xml" value="0.1" />
@@ -39,7 +41,7 @@
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/item_platillos.xml" value="0.1707193515704154" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/item_plato.xml" value="0.5" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/item_usuarios.xml" value="0.4331395348837209" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/item_zona.xml" value="0.22" />
+        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/item_zona.xml" value="1.0" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.142" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.142" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/drawable/icon_categoria.xml" value="0.1995" />
