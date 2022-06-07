@@ -108,8 +108,12 @@ class panelPedido : AppCompatActivity() {
     fun initMesa(){
         val rv_mesa = findViewById<RecyclerView>(R.id.rv_mesa)
         rv_mesa.layoutManager = LinearLayoutManager(this,RecyclerView.HORIZONTAL,false)
-        adapterMesa = AdapterMesa(listaMesa)
+        adapterMesa = AdapterMesa(listaMesa){ dataclassMesa -> onItemDatosMesa(dataclassMesa) }
         rv_mesa.adapter = adapterMesa
+    }
+
+    private fun onItemDatosMesa(dataclassMesa: DCMesaItem) {
+
     }
 
     // Obtiene la informacion del API Mesa

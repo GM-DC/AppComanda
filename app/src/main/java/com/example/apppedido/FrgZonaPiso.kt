@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.concurrent.fixedRateTimer
 
 
 class FrgZonaPiso : Fragment() {
@@ -84,8 +85,13 @@ class FrgZonaPiso : Fragment() {
     fun initMesa(){
         val rv_mesa = view?.findViewById<RecyclerView>(R.id.rv_mesa2)
         rv_mesa?.layoutManager = LinearLayoutManager(activity,RecyclerView.HORIZONTAL,false)
-        adapterMesa = AdapterMesa(listaMesa)
+        adapterMesa = AdapterMesa(listaMesa) { dataclassMesa -> onItemDatosMesa(dataclassMesa) }
         rv_mesa?.adapter = adapterMesa
+    }
+
+    private fun onItemDatosMesa(dataclassMesa: DCMesaItem) {
+        val transaction = fragmentManager?.beginTransaction()
+        transaction?.replace(R.id.frm_panel,FrgCatPlat())?.commit()
     }
 
     // Obtiene la informacion del API Mesa

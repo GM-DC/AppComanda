@@ -10,7 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
-class AdapterMesa(private val data: ArrayList<DCMesaItem>): RecyclerView.Adapter<AdapterMesa.holderMesa>() {
+class AdapterMesa(private val data: ArrayList<DCMesaItem>,private val onClickListener: (DCMesaItem) -> Unit): RecyclerView.Adapter<AdapterMesa.holderMesa>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): holderMesa {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -19,7 +19,7 @@ class AdapterMesa(private val data: ArrayList<DCMesaItem>): RecyclerView.Adapter
 
     override fun onBindViewHolder(holder: holderMesa, position: Int) {
 
-        holder.render(data[position])
+        holder.render(data[position],onClickListener)
     }
 
     override fun getItemCount(): Int {
@@ -28,7 +28,7 @@ class AdapterMesa(private val data: ArrayList<DCMesaItem>): RecyclerView.Adapter
     }
 
     class holderMesa(private val view: View): RecyclerView.ViewHolder(view){
-        fun render (data: DCMesaItem){
+        fun render (data: DCMesaItem,onClickListener: (DCMesaItem) -> Unit){
             val tx_mesa = view.findViewById<TextView>(R.id.tx_mesa)
             val iv_mesa = view.findViewById<ImageView>(R.id.iv_iconMesa)
 
@@ -36,6 +36,7 @@ class AdapterMesa(private val data: ArrayList<DCMesaItem>): RecyclerView.Adapter
                 tx_mesa.setTextColor(Color.parseColor("#0E83C9"))
                 iv_mesa.setColorFilter(Color.parseColor("#0E83C9"))
 
+            itemView.setOnClickListener { onClickListener(data) }
         }
 
     }

@@ -8,5 +8,7 @@ class PanelPedidos : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_panel_pedidos)
+
+        supportFragmentManager.beginTransaction().replace(R.id.frm_panel,FrgZonaPiso()).commit()
     }
 }

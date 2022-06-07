@@ -8,5 +8,4 @@ data class DataClassPedido (
     val precio:Float,
     var precioTotal:Float,
     var observacion:String
-
-        )
+    )
