@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.math.BigDecimal
 import java.text.DecimalFormat
 
 
@@ -31,6 +32,8 @@ class FrgCatPlat() : Fragment() {
     private val listaCategoria = ArrayList<DCCategoriaItem>()
     private val listaPlato = ArrayList<DCPlatoItem>()
     private val listaPedido = ArrayList<DataClassPedido>()
+
+    val bt_aumentar = view?.findViewById<Button>(R.id.bt_aumentar)
 
 
     val rv_pedido = view?.findViewById<RecyclerView>(R.id.rv_pedido)
@@ -65,9 +68,6 @@ class FrgCatPlat() : Fragment() {
 
         //Iniciar Datos
         getDataPlato("0001")
-
-
-
 
     }
 
@@ -134,9 +134,6 @@ class FrgCatPlat() : Fragment() {
         val rv_pedido = view?.findViewById<RecyclerView>(R.id.rv_pedido)
         val datos = dataClassPlato
 
-        Toast.makeText(activity, "${dataClassPlato.namePlato}", Toast.LENGTH_SHORT).show()
-
-
         //-------------Evalua POSICION Y ACCION DE AGREGAR-------------------
         //println("------- Evalua POSICION Y ACCION DE AGREGAR-------------")
         var action = 0
@@ -154,8 +151,6 @@ class FrgCatPlat() : Fragment() {
 
         //----------------  AGREGA O AUMENTA LA CANTIDAD -------------------
         if (action.equals(0)){
-
-
             listaPedido.add(DataClassPedido(1,dataClassPlato.namePlato,dataClassPlato.IdCategoria,dataClassPlato.PrecioVenta.toBigDecimal(),dataClassPlato.PrecioVenta.toBigDecimal(),""))
             rv_pedido?.adapter?.notifyDataSetChanged()
             rv_pedido?.scrollToPosition(listaPedido.size-1)
@@ -169,10 +164,18 @@ class FrgCatPlat() : Fragment() {
         }
         //-------------------------------------------------------------------
 
+        fun sumaTotalPrecio(): Int {
+            println("Sumando")
+            var sumaTotal = listaPedido.sumOf { it.cantidad }
+            println("$sumaTotal")
+            return sumaTotal
+        }
 
+        sumaTotalPrecio()
     }
 
     fun initPedido(){
+        sumaTotalPrecio()
         val rv_pedido = view?.findViewById<RecyclerView>(R.id.rv_pedido)
         rv_pedido?.layoutManager = LinearLayoutManager(activity)
         adapterPedido = AdapterPedido(listaPedido) {dataclassPedido -> onIntemDatosPedido(dataclassPedido)}
@@ -198,16 +201,19 @@ class FrgCatPlat() : Fragment() {
         val swap =  ItemTouchHelper(itemswipe)
         swap.attachToRecyclerView(rv_pedido)
 
-
-
-
-
-
-
     }
 
     fun onIntemDatosPedido(dataclassPedido: DataClassPedido) {
 
+
+    }
+
+
+    fun sumaTotalPrecio(): Int {
+        println("Sumando")
+            var sumaTotal = listaPedido.sumOf { it.cantidad }
+            println("$sumaTotal")
+        return sumaTotal
     }
 
 

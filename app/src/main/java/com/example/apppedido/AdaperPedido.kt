@@ -16,9 +16,7 @@ import java.lang.StringBuilder
 import java.math.BigDecimal
 import java.text.DecimalFormat
 
-class AdapterPedido(private val data: List<DataClassPedido>,private val onClickListener: (DataClassPedido) -> Unit): RecyclerView.Adapter<AdapterPedido.holderPedido>() {
-
-    val listaPedido = ArrayList<DataClassPedido>()
+class AdapterPedido(private val data: ArrayList<DataClassPedido>,private val onClickListener: (DataClassPedido) -> Unit): RecyclerView.Adapter<AdapterPedido.holderPedido>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): holderPedido {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -27,6 +25,7 @@ class AdapterPedido(private val data: List<DataClassPedido>,private val onClickL
 
     override fun onBindViewHolder(holder: holderPedido, position: Int) {
         holder.render(data[position],onClickListener)
+        println(data[position].cantidad)
     }
 
     override fun getItemCount(): Int {
@@ -34,7 +33,7 @@ class AdapterPedido(private val data: List<DataClassPedido>,private val onClickL
 
     }
 
-    inner class holderPedido(private val view: View): RecyclerView.ViewHolder(view){
+    class holderPedido(private val view: View): RecyclerView.ViewHolder(view){
         fun render (data: DataClassPedido, onClickListener: (DataClassPedido) -> Unit){
 
             //******* DECLARANDO COMPONENTES *****
@@ -45,6 +44,8 @@ class AdapterPedido(private val data: List<DataClassPedido>,private val onClickL
             val tv_cantidad = view.findViewById<TextView>(R.id.tv_cantidad)
 
             val lbl_preciototal = view.findViewById<TextView>(R.id.tv_PTotal)
+
+            val sumaToria = FrgCatPlat()
 
 
             //************ ASIGNANDO COMPONENTES ********
@@ -58,6 +59,9 @@ class AdapterPedido(private val data: List<DataClassPedido>,private val onClickL
                 data.precioTotal = data.precio*data.cantidad.toBigDecimal()
                 tv_cantidad.text = data.cantidad.toString()
                 tv_precioTotal.text = data.precioTotal.toString()
+                //lbl_preciototal.text = sumaToria.sumaTotalPrecio().toString()
+                println("${sumaToria.sumaTotalPrecio()}")
+
             }
 
             bt_disminuir.setOnClickListener{
@@ -66,19 +70,13 @@ class AdapterPedido(private val data: List<DataClassPedido>,private val onClickL
                     data.precioTotal = data.precio*data.cantidad.toBigDecimal()
                     tv_cantidad.text = data.cantidad.toString()
                     tv_precioTotal.text = data.precioTotal.toString()
-
+                    //lbl_preciototal.text = sumaToria.sumaTotalPrecio().toString()
+                    println("${sumaToria.sumaTotalPrecio()}")
                 }
             }
 
-
         }
     }
-    fun TotalSumaDos (x: BigDecimal, y:BigDecimal): String {
-        return (x*y).toString();
-    }
-
-
-
 
 
 }
