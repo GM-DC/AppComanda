@@ -34,8 +34,6 @@ class FrgCatPlat: Fragment() {
     private val listaPlato = ArrayList<DCPlatoItem>()
     private val listaPedido = ArrayList<DataClassPedido>()
 
-    val bt_enviar_comanda = view?.findViewById<Button>(R.id.bt_enviarComanda)
-
     val datosRecuperados = arguments
 
 
@@ -58,10 +56,10 @@ class FrgCatPlat: Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        //++++++++++++++++++    DECLARA COMPONENTE     +++++++++++++++++
+        val bt_enviar_comanda = view?.findViewById<Button>(R.id.bt_enviarComanda)
 
-        //INICIAR TITULO DE ZONA Y MESA
-        //iniZonaMesa()
-
+        //++++++++++++++++++   INICIA LAS FUNCIONES    +++++++++++++++++
         //INICIAR CATEGORIA
         initCategoria()
         getDataCategoria()
@@ -91,10 +89,9 @@ class FrgCatPlat: Fragment() {
 
 
     fun enviarComanda(){
+        println("Hola")
         val transaction = fragmentManager?.beginTransaction()
         transaction?.replace(R.id.frm_panel,FrgZonaPiso())?.commit()
-
-        
     }
 
 
