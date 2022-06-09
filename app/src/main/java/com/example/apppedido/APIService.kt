@@ -1,7 +1,8 @@
 package com.example.apppedido
 
-import retrofit2.Call
-import retrofit2.Callback
+import DCLoginDatosExito
+import DCLoginUser
+import DCRespuestaLogin
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -21,4 +22,7 @@ interface APIService {
 
     @GET("api/Producto?select=nombre,codigo,idcategoria,precioVenta&orderby=nombre asc")
     suspend fun getPlato(@Query("filter") filter:String) : Response<List<DCPlatoItem>>
+
+    @POST("api/Users/Login")
+    suspend fun checkLoginComanda(@Body loginMozo: DCLoginUser) : Response<DCLoginDatosExito>
 }

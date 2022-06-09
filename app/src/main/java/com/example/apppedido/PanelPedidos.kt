@@ -3,6 +3,7 @@ package com.example.apppedido
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import androidx.core.os.bundleOf
 
 class PanelPedidos : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

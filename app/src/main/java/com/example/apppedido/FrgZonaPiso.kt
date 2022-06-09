@@ -1,14 +1,12 @@
 package com.example.apppedido
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
@@ -16,7 +14,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import kotlin.concurrent.fixedRateTimer
 
 
 class FrgZonaPiso : Fragment() {
@@ -24,18 +21,24 @@ class FrgZonaPiso : Fragment() {
     private lateinit var adapterZona: AdapterZona
     private lateinit var adapterMesa: AdapterMesa
 
+
     private val listaZona = ArrayList<DCZonaItem>()
     private val listaMesa = ArrayList<DCMesaItem>()
 
 
-
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
+
+
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_frg_zona_piso, container, false)
+
+
+
         return view
     }
 
@@ -48,7 +51,14 @@ class FrgZonaPiso : Fragment() {
 
         //Iniciar Datos
         getDataMesa("0001")
+
+
+
+
     }
+
+
+
 
     fun initZona(){
         val rv_zona = view?.findViewById<RecyclerView>(R.id.rv_zona2)
@@ -88,10 +98,20 @@ class FrgZonaPiso : Fragment() {
     }
 
     private fun onItemDatosMesa(dataclassMesa: DCMesaItem) {
+
+        //val idZona = "dataclassMesa.idZona"
+
+        //val enviarDatos = Bundle()
+        //enviarDatos.putString("MESA",idZona)
+
+        //FrgCatPlat().arguments = enviarDatos
+        //
+        val fragmentManager = activity?.supportFragmentManager
         val transaction = fragmentManager?.beginTransaction()
         transaction?.replace(R.id.frm_panel,FrgCatPlat())?.commit()
 
     }
+
 
     // Obtiene la informacion del API Mesa
     private fun getDataMesa(idZona:String) {

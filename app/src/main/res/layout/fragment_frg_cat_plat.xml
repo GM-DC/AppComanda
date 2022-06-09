@@ -17,6 +17,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/tv_TitleZona"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Zona"/>
+            <TextView
+                android:id="@+id/tv_TitleMesa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mesa"/>
+
+
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_categoria"
                 android:layout_width="600dp"
@@ -39,12 +52,51 @@
             android:orientation="vertical"
             >
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_pedido"
-                android:layout_width="550dp"
-                android:layout_height="500dp"
-                android:layout_margin="@dimen/RV_PP_Pedido_Margin"
-                />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_pedido"
+                    android:layout_width="500dp"
+                    android:layout_height="500dp"
+                    android:layout_margin="@dimen/RV_PP_Pedido_Margin"
+                    />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="50dp">
+
+                    <Button
+                        android:id="@+id/bt_aumentar"
+                        android:padding="0dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="+"
+                        />
+                    <Button
+                        android:id="@+id/bt_disminuir"
+                        android:padding="0dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-"
+                        />
+                    <Button
+                        android:id="@+id/bt_detalle"
+                        android:padding="0dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="N"
+                        />
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_PTotal"
@@ -56,6 +108,7 @@
                 />
 
             <Button
+                android:id="@+id/bt_enviarComanda"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

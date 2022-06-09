@@ -1,5 +1,7 @@
 package com.example.apppedido
 
+import DCLoginDatosExito
+import DCLoginUser
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +9,11 @@ import android.os.Debug
 import android.util.Log
 import android.widget.Toast
 import com.example.apppedido.databinding.ActivityPasscodeBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import kotlin.random.Random
 import java.lang.*
 import java.time.temporal.TemporalAccessor
@@ -14,7 +21,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class activityPasscode : AppCompatActivity() {
+class activityPasscode : AppCompatActivity()  {
 
     private lateinit var binding2 : ActivityPasscodeBinding
 
@@ -64,25 +71,73 @@ class activityPasscode : AppCompatActivity() {
     }
 
     fun recibirDatos(): String {
-        val nombre = intent.getStringExtra("USUARIO")
+        val nombre = intent.getStringExtra("USUARIOMOZO")
         binding2.tvBienvenidaNombre.text = "BIENVENIDO $nombre"
         return nombre.toString()
     }
 
     fun validarDatos (){
-        val Usuario = intent.getStringExtra("USUARIO")
-        val Passcode = binding2.txtCodigo.text.toString()
-        if (binding2.txtCodigo.length()==5){
-            println("Evalua")
-            if ( Usuario =="USUARIO ADMINISTRADOR" && Passcode == "12345" ){
-                val intent = Intent(this, PanelPedidos::class.java)
-                binding2.txtCodigo.text = ""
-                startActivity(intent)
-            }else{
-                binding2.txtCodigo.text=""
-                Toast.makeText(this, "INCORRECTO", Toast.LENGTH_SHORT).show()
+
+        val idMozo = intent.getStringExtra("IDMOZO")
+        val passMozo = binding2.txtCodigo.text.toString()
+
+        if (binding2.txtCodigo.length()==6){
+            println("Llega aca 1")
+            getDataLogin(idMozo!!,passMozo)
+            binding2.txtCodigo.text = ""
+        }
+    }
+
+
+    // Obtiene la informacion del API Mesa
+    private fun getDataLogin(usuarioMozo:String,passMozo:String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = getRetrofit().checkLoginComanda(DCLoginUser("$usuarioMozo","$passMozo"))
+            runOnUiThread {
+                println("Llega aca 2")
+                if(response.isSuccessful){
+                    val intent = Intent(applicationContext, PanelPedidos::class.java)
+
+                    val datosMozo: DCLoginDatosExito? = response.body()
+                    val enviarDatosMozo = Bundle()
+                    
+                    val nameMozo = response.body()?.nameMozo
+
+
+
+
+                    intent.putExtra("NAMEMOZO",nameMozo)
+                    println(nameMozo)
+                    binding2.txtCodigo.text = ""
+                    startActivity(intent)
+                }else{
+                    println("falla")
+                    //binding2.txtCodigo.text=""
+                    //Toast.makeText(applicationContext, "INCORRECTO", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
 
+
+
+
+
+    // Devuelve un Retrofit
+    fun getRetrofit(): APIService {
+
+
+
+
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://heyeldevs-001-site1.gtempurl.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        return  retrofit.create(APIService::class.java)
+    }
+
+
+
 }
+

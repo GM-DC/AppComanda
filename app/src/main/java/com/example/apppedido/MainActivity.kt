@@ -15,7 +15,7 @@ import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-class MainActivity(swipeDirs: Int) : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityInicioBinding
     private lateinit var adapter: AdapterUsuario
@@ -40,8 +40,11 @@ class MainActivity(swipeDirs: Int) : AppCompatActivity() {
     // FUNCION SELECCIONAR USUARIO
     fun onItemSelected(dataClassUsuario: DCUsuarioItem) {
         val intent = Intent(this, activityPasscode::class.java)
-        val nombre: String = dataClassUsuario.nombre.uppercase()
-        intent.putExtra("USUARIO",nombre)
+        val usuarioMozo: String = dataClassUsuario.nombre.uppercase()
+        val idMozo: String = dataClassUsuario.codigo
+        intent.putExtra("USUARIOMOZO",usuarioMozo)
+        intent.putExtra("IDMOZO",idMozo)
+
         startActivity(intent)
     }
 

@@ -2,8 +2,6 @@ package com.example.apppedido
 
 import com.google.gson.annotations.SerializedName
 
-class DCZona : ArrayList<DCZonaItem>()
-
 data class DCZonaItem(
     val codigo: String,
     val estado: String,

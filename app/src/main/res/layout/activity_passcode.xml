@@ -43,7 +43,7 @@
                 android:inputType="text|textPassword"
                 android:gravity="center"
                 android:layout_marginTop="12dp"
-                android:maxLength="5"
+                android:maxLength="6"
                 android:layout_marginBottom="30dp"
                 android:textSize="@dimen/APasscore_TvCodigo_size"
                 tools:text="12346"

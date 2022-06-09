@@ -7,7 +7,7 @@ data class DCMesaItem(
     @SerializedName("idMesa") val idMesa: Int,
     val estado: String,
     val estadoTrans: String,
-    val piso: String,
+    @SerializedName("piso") val idZona: String,
     val secuencia: Int,
     val tipo: String
 )
