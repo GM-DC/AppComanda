@@ -33,8 +33,6 @@ class FrgCatPlat: Fragment() {
     private val listaCategoria = ArrayList<DCCategoriaItem>()
     private val listaPlato = ArrayList<DCPlatoItem>()
     private val listaPedido = ArrayList<DataClassPedido>()
-    private val datosPrecuenta = ArrayList<DCPrecuenta>()
-    private val listaDetallePrecuenta = ArrayList<Detalle>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +73,7 @@ class FrgCatPlat: Fragment() {
 
         //Iniciar Datos
         getDataPlato("0001")
+        getPrecuenta()
 
         //Enviar Comanda
         bt_enviar_comanda?.setOnClickListener {enviarComanda()}
@@ -83,6 +82,8 @@ class FrgCatPlat: Fragment() {
 
         //Recibir datos de mesa y Zona
         iniZonaMesa()
+
+
     }
 
     private fun iniZonaMesa() {
@@ -107,14 +108,16 @@ class FrgCatPlat: Fragment() {
 
         fun getDataPreCuenta() {
             CoroutineScope(Dispatchers.IO).launch {
-                val response = getRetrofit().getPrecuenta("10000")
+                val response = getRetrofit().getPrecuenta("10012")
                 activity?.runOnUiThread {
                     if(response.isSuccessful){
-                        response.body()?.detalle
-
-                        Toast.makeText(activity,"Se envio precuenta",Toast.LENGTH_SHORT)
+                        var data = response.body()
+                        for (i in data?.detalle!!.indices)
+                        listaPedido.add(DataClassPedido(data?.detalle?.get(i).cantidad,data?.detalle?.get(i).nombre, "",data?.detalle?.get(i).precio.toBigDecimal(),data?.detalle?.get(i).importe.toBigDecimal(),""))
+                        adapterPedido.notifyDataSetChanged()
+                        actualizarPrecioTotal()
                     }else{
-                        Toast.makeText(activity, "Error", Toast.LENGTH_SHORT)
+                        println("Fallo2")
                     }
                 }
             }
@@ -358,6 +361,15 @@ class FrgCatPlat: Fragment() {
         tv_PTotal?.text = "S/. ${formato.format(cantidadLista)}"
         //-------------------------------------------------------------
     }
+
+
+    // Obtiene la precuenta en pantalla
+    fun getPrecuenta() {
+
+
+
+    }
+
 
     // DEVUELVE UN RETROFIT
     fun getRetrofit(): APIService {
