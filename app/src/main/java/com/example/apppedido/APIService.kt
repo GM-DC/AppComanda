@@ -26,6 +26,6 @@ interface APIService {
     @POST("api/Users/Login")
     suspend fun checkLoginComanda(@Body loginMozo: DCLoginUser) : Response<DCLoginDatosExito>
 
-    @POST("api/Pedido/Precuenta?idPedido=10012")
-    suspend fun getPrecuenta() : Response<DCLoginDatosExito>
+    @GET("api/Pedido/Precuenta")
+    suspend fun getPrecuenta(@Query("idPedido") idPedido:String) : Response<DCPrecuenta>
 }

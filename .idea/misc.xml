@@ -6,7 +6,7 @@
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/Usuario.xml" value="0.1" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/boton_redondo.xml" value="0.14" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/efecto_clic.xml" value="0.261" />
+        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/efecto_clic.xml" value="0.12" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/efecto_clic_mesa.xml" value="0.1295" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/efecto_clic_pedido.xml" value="0.1" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/efecto_clic_zona.xml" value="0.1295" />
@@ -33,7 +33,8 @@
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/activity_panel_pedidos.xml" value="0.25262368815592207" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/activity_passcode.xml" value="0.20026881720430106" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/dialogue_detalle.xml" value="0.5" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/fragment_frg_cat_plat.xml" value="0.25262368815592207" />
+        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/fragment_dialogue_precuenta.xml" value="0.9" />
+        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/fragment_frg_cat_plat.xml" value="0.5" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/fragment_frg_zona_piso.xml" value="0.25262368815592207" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/item_categoria.xml" value="0.33" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/item_mesa.xml" value="0.5637860082304527" />

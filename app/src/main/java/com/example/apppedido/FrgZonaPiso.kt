@@ -21,15 +21,11 @@ class FrgZonaPiso : Fragment() {
     private lateinit var adapterZona: AdapterZona
     private lateinit var adapterMesa: AdapterMesa
 
-
     private val listaZona = ArrayList<DCZonaItem>()
     private val listaMesa = ArrayList<DCMesaItem>()
 
-
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
-
-
 
     }
 
@@ -58,8 +54,6 @@ class FrgZonaPiso : Fragment() {
     }
 
 
-
-
     fun initZona(){
         val rv_zona = view?.findViewById<RecyclerView>(R.id.rv_zona2)
         rv_zona?.layoutManager = LinearLayoutManager(activity,RecyclerView.HORIZONTAL,false)
@@ -75,7 +69,6 @@ class FrgZonaPiso : Fragment() {
 
     // Obtiene la informacion del API Zona
     private fun getDataZona(){
-
         CoroutineScope(Dispatchers.IO).launch {
             val responseZona = getRetrofit().getZonas()
                 activity?.runOnUiThread {
@@ -98,17 +91,28 @@ class FrgZonaPiso : Fragment() {
     }
 
     private fun onItemDatosMesa(dataclassMesa: DCMesaItem) {
+        val idZona = dataclassMesa.idZona
+        var nameZona:String = ""
 
-        //val idZona = "dataclassMesa.idZona"
+        for (i in listaZona.indices){
+            if(listaZona[i].idZona==idZona){
+                nameZona = listaZona[i].nombreZonas
+                break
+            }
+        }
 
-        //val enviarDatos = Bundle()
-        //enviarDatos.putString("MESA",idZona)
+        val idMesa = dataclassMesa.idMesa
 
-        //FrgCatPlat().arguments = enviarDatos
-        //
+        val enviarDatos = Bundle()
+        enviarDatos.putString("ZONA",nameZona)
+        enviarDatos.putString("MESA",idMesa.toString())
+
+
+        val fragment = FrgCatPlat()
         val fragmentManager = activity?.supportFragmentManager
         val transaction = fragmentManager?.beginTransaction()
-        transaction?.replace(R.id.frm_panel,FrgCatPlat())?.commit()
+        fragment.arguments = enviarDatos
+        transaction!!.replace(R.id.frm_panel, fragment).addToBackStack(null).commit()
 
     }
 
@@ -128,6 +132,8 @@ class FrgZonaPiso : Fragment() {
             }
         }
     }
+
+
 
 
 

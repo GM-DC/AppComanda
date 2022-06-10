@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                     listaUsuario.addAll(response.body()!!)
                     adapter.notifyDataSetChanged()
                 }else{
-                    Toast.makeText(this@MainActivity, "Error", Toast.LENGTH_SHORT).show()
+                    println("error de internet")
                 }
             }
         }

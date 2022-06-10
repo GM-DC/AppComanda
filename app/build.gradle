@@ -62,8 +62,10 @@ dependencies {
 
     //IMPLEMENTACION DE COROUTINES
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.6'
-   // IMPLEMENTACION LOMBOOK
+
+    // IMPLEMENTACION LOMBOOK
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
 
 }

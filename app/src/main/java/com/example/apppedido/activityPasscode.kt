@@ -102,13 +102,9 @@ class activityPasscode : AppCompatActivity()  {
                     val enviarDatosMozo = Bundle()
                     
                     val nameMozo = response.body()?.nameMozo
-
-
-
-
                     intent.putExtra("NAMEMOZO",nameMozo)
-                    println(nameMozo)
-                    binding2.txtCodigo.text = ""
+
+                    //binding2.txtCodigo.text = ""
                     startActivity(intent)
                 }else{
                     println("falla")

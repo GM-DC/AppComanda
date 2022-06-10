@@ -11,7 +11,5 @@ data class DataClassPedido (
     var precioTotal:BigDecimal,
     var observacion:String
 
-
-
     )
 

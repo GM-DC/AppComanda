@@ -33,14 +33,12 @@ class FrgCatPlat: Fragment() {
     private val listaCategoria = ArrayList<DCCategoriaItem>()
     private val listaPlato = ArrayList<DCPlatoItem>()
     private val listaPedido = ArrayList<DataClassPedido>()
-
-    val datosRecuperados = arguments
+    private val datosPrecuenta = ArrayList<DCPrecuenta>()
+    private val listaDetallePrecuenta = ArrayList<Detalle>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
     }
 
     override fun onCreateView(
@@ -50,6 +48,9 @@ class FrgCatPlat: Fragment() {
         //INICIAR TITULO DE ZONA Y MESA
         //iniZonaMesa()
 
+        //val datosRecuperados = arguments
+        //println(datosRecuperados!!.get("MESA"))
+
         return view
 
     }
@@ -58,6 +59,8 @@ class FrgCatPlat: Fragment() {
         super.onActivityCreated(savedInstanceState)
         //++++++++++++++++++    DECLARA COMPONENTE     +++++++++++++++++
         val bt_enviar_comanda = view?.findViewById<Button>(R.id.bt_enviarComanda)
+        val bt_precuenta = view?.findViewById<Button>(R.id.bt_precuenta)
+
 
         //++++++++++++++++++   INICIA LAS FUNCIONES    +++++++++++++++++
         //INICIAR CATEGORIA
@@ -75,23 +78,52 @@ class FrgCatPlat: Fragment() {
 
         //Enviar Comanda
         bt_enviar_comanda?.setOnClickListener {enviarComanda()}
+        bt_precuenta?.setOnClickListener {consultaPrecuenta()}
 
-        println(datosRecuperados?.getString("MESA"))
+
+        //Recibir datos de mesa y Zona
+        iniZonaMesa()
     }
 
     private fun iniZonaMesa() {
+        val datosRecuperados = arguments
 
-        //val recivirDatos = this.arguments
-        //val datoMesa = recivirDatos?.getString("MESA")
+        val iniZona=view?.findViewById<TextView>(R.id.tv_TitleZona)
+        val iniMesa=view?.findViewById<TextView>(R.id.tv_TitleMesa)
 
-        //println("$datoMesa")
+        iniZona?.text = "${ datosRecuperados?.get("ZONA") as CharSequence? }"
+        iniMesa?.text = "MESA ${ datosRecuperados?.get("MESA") as CharSequence? }"
+
     }
 
-
+    //ENVIAR COMANDA
     fun enviarComanda(){
-        println("Hola")
         val transaction = fragmentManager?.beginTransaction()
         transaction?.replace(R.id.frm_panel,FrgZonaPiso())?.commit()
+    }
+
+    //LISTAR PRECUENTA
+    fun consultaPrecuenta(){
+
+        fun getDataPreCuenta() {
+            CoroutineScope(Dispatchers.IO).launch {
+                val response = getRetrofit().getPrecuenta("10000")
+                activity?.runOnUiThread {
+                    if(response.isSuccessful){
+                        response.body()?.detalle
+
+                        Toast.makeText(activity,"Se envio precuenta",Toast.LENGTH_SHORT)
+                    }else{
+                        Toast.makeText(activity, "Error", Toast.LENGTH_SHORT)
+                    }
+                }
+            }
+        }
+
+        getDataPreCuenta()
+
+
+
     }
 
 
@@ -215,7 +247,6 @@ class FrgCatPlat: Fragment() {
                 listaPedido.removeAt(viewHolder.bindingAdapterPosition)
 
                 actualizarPrecioTotal()
-
 
                 rv_pedido?.adapter?.notifyDataSetChanged()
             }
