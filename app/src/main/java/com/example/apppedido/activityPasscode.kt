@@ -98,7 +98,7 @@ class activityPasscode : AppCompatActivity()  {
                 if(response.isSuccessful){
                     val intent = Intent(applicationContext, PanelPedidos::class.java)
 
-                    val datosMozo: DCLoginDatosExito? = response.body()
+    //                DCLoginDatosExito(). = response.body()!!
                     val enviarDatosMozo = Bundle()
                     
                     val nameMozo = response.body()?.nameMozo

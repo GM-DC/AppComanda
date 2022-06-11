@@ -1,7 +1,7 @@
 package com.example.apppedido
 
 data class DCPrecuenta(
-    val detalle: List<Detalle>,
+    val detalle: List<ListDetalle>,
     val fechayhora: String,
     val mesa: String,
     val mesero: String,
@@ -10,7 +10,7 @@ data class DCPrecuenta(
     val zona: String
 )
 
-data class Detalle(
+data class ListDetalle(
     val cantidad: Int,
     val importe: Int,
     val nombre: String,

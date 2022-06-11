@@ -2,7 +2,9 @@ package com.example.apppedido
 
 import DCLoginDatosExito
 import DCLoginUser
+import DCOrdenPedido
 import DCRespuestaLogin
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -26,6 +28,11 @@ interface APIService {
     @POST("api/Users/Login")
     suspend fun checkLoginComanda(@Body loginMozo: DCLoginUser) : Response<DCLoginDatosExito>
 
+    @POST("api/Pedido/CreateOrder")
+    fun postOrdenPedido(@Body ordenPedido: DCOrdenPedido) : Call<DCOrdenPedido>
+
     @GET("api/Pedido/Precuenta")
     suspend fun getPrecuenta(@Query("idPedido") idPedido:String) : Response<DCPrecuenta>
+
+
 }

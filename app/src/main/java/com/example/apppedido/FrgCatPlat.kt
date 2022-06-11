@@ -1,7 +1,8 @@
 package com.example.apppedido
 
+import DCOrdenPedido
+import Detalle
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,9 +19,13 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.text.DecimalFormat
+
 
 
 class FrgCatPlat: Fragment() {
@@ -33,6 +38,8 @@ class FrgCatPlat: Fragment() {
     private val listaCategoria = ArrayList<DCCategoriaItem>()
     private val listaPlato = ArrayList<DCPlatoItem>()
     private val listaPedido = ArrayList<DataClassPedido>()
+    private val listaDetalle = ArrayList<Detalle>()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,7 +90,6 @@ class FrgCatPlat: Fragment() {
         //Recibir datos de mesa y Zona
         iniZonaMesa()
 
-
     }
 
     private fun iniZonaMesa() {
@@ -99,9 +105,144 @@ class FrgCatPlat: Fragment() {
 
     //ENVIAR COMANDA
     fun enviarComanda(){
+
+        //****************************************************************
+
+
+        getDataOrdenPedido()
+
+
+
+
+        //****************************************************************
         val transaction = fragmentManager?.beginTransaction()
         transaction?.replace(R.id.frm_panel,FrgZonaPiso())?.commit()
     }
+
+    //ENVIAR ORDEN PEDIDO API
+    fun getDataOrdenPedido() {
+        val call: Call<DCOrdenPedido> = getRetrofit().postOrdenPedido(DCOrdenPedido(
+            "",
+            "0001",
+            "",
+            "0001",
+            "0001",
+            "",
+            "",
+            0,
+            "",
+            "",
+            "",
+            Detalle(
+                "18",
+                0,
+                0,
+                0,
+                0,
+                "",
+                "",
+                "",
+                "",
+                0,
+                0,
+                0,
+                0,
+                0,
+                "",
+                "",
+                "",
+                "",
+                "",
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                "",
+                "",
+                "",
+                "",
+                "",
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                0,
+                ),
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            0,
+            18,
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            0,
+            "USER1",
+            "USER1",
+            "0001",
+            0,
+            )
+        )
+        call.enqueue(object  : Callback<DCOrdenPedido>{
+            override fun onResponse(call: Call<DCOrdenPedido>, response: Response<DCOrdenPedido>) {
+                println("Exito")
+            }
+
+            override fun onFailure(call: Call<DCOrdenPedido>, t: Throwable) {
+                println("Error")
+
+            }
+
+        })
+
+
+
+    }
+
+
+
+
+
 
     //LISTAR PRECUENTA
     fun consultaPrecuenta(){
