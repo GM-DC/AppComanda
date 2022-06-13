@@ -1,5 +1,6 @@
 package com.example.apppedido
 
+import DCLoginDatosExito
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.Serializable
+import java.sql.DatabaseMetaData
 
 
 class FrgZonaPiso : Fragment() {
@@ -23,6 +26,7 @@ class FrgZonaPiso : Fragment() {
 
     private val listaZona = ArrayList<DCZonaItem>()
     private val listaMesa = ArrayList<DCMesaItem>()
+
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
@@ -48,10 +52,13 @@ class FrgZonaPiso : Fragment() {
         //Iniciar Datos
         getDataMesa("0001")
 
+        //Iniciar Megadato
+
 
 
 
     }
+
 
 
     fun initZona(){
@@ -91,8 +98,15 @@ class FrgZonaPiso : Fragment() {
     }
 
     private fun onItemDatosMesa(dataclassMesa: DCMesaItem) {
+
+        val datosRecuperados = arguments
+        val recibeDatos:DCLoginDatosExito = datosRecuperados?.getSerializable("DATOUSUARIO") as DCLoginDatosExito
+
+        println("Datos en Zona y pmesas: ${recibeDatos}")
+
+
         val idZona = dataclassMesa.idZona
-        var nameZona:String = ""
+        var nameZona = ""
 
         for (i in listaZona.indices){
             if(listaZona[i].idZona==idZona){
@@ -103,15 +117,19 @@ class FrgZonaPiso : Fragment() {
 
         val idMesa = dataclassMesa.idMesa
 
+        //ENVIAR DATOS
         val enviarDatos = Bundle()
         enviarDatos.putString("ZONA",nameZona)
         enviarDatos.putString("MESA",idMesa.toString())
+        enviarDatos.putSerializable("DatosUsuario",recibeDatos)
 
 
         val fragment = FrgCatPlat()
         val fragmentManager = activity?.supportFragmentManager
         val transaction = fragmentManager?.beginTransaction()
         fragment.arguments = enviarDatos
+
+        //CAMBIAR FRAMENT
         transaction!!.replace(R.id.frm_panel, fragment).addToBackStack(null).commit()
 
     }
@@ -132,8 +150,6 @@ class FrgZonaPiso : Fragment() {
             }
         }
     }
-
-
 
 
 

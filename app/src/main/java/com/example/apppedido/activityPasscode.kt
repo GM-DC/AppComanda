@@ -1,24 +1,16 @@
 package com.example.apppedido
 
-import DCLoginDatosExito
 import DCLoginUser
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Debug
-import android.util.Log
-import android.widget.Toast
 import com.example.apppedido.databinding.ActivityPasscodeBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import kotlin.random.Random
-import java.lang.*
-import java.time.temporal.TemporalAccessor
-import java.util.*
-import kotlin.collections.ArrayList
+
 
 
 class activityPasscode : AppCompatActivity()  {
@@ -98,18 +90,16 @@ class activityPasscode : AppCompatActivity()  {
                 if(response.isSuccessful){
                     val intent = Intent(applicationContext, PanelPedidos::class.java)
 
-    //                DCLoginDatosExito(). = response.body()!!
-                    val enviarDatosMozo = Bundle()
-                    
-                    val nameMozo = response.body()?.nameMozo
-                    intent.putExtra("NAMEMOZO",nameMozo)
+                    //ENVIAR DATOS
+                    val bundle = Bundle()
+                    bundle.putSerializable("DATOSUSUARIO", response!!.body())
+                    intent.putExtras(bundle)
 
-                    //binding2.txtCodigo.text = ""
                     startActivity(intent)
+
                 }else{
                     println("falla")
-                    //binding2.txtCodigo.text=""
-                    //Toast.makeText(applicationContext, "INCORRECTO", Toast.LENGTH_SHORT).show()
+
                 }
             }
         }

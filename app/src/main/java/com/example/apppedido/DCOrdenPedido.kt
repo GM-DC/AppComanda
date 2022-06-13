@@ -1,3 +1,5 @@
+import java.math.BigDecimal
+
 //import com.example.apppedido.Detalle
 
 data class DCOrdenPedido(
@@ -78,7 +80,7 @@ data class Detalle(
     val igv: Int,
     val importE_DSCTO: Int,
     val importE_MARGEN: Int,
-    val importe: Int,
+    val importe: Int,   // ----------- DUDA
     val margen: Int,
     val mozo: String,
     val noM_IMP: String,
@@ -89,7 +91,7 @@ data class Detalle(
     val poR_DETRACCION: Int,
     val poR_PERCEPCION: Int,
     val preciO_ORIGINAL: Int,
-    val precio: Int,
+    val precio: Int,    // ----------- DUDA
     val seC_PROD: Int,
     val secuencia: Int,
     val swT_DCOM: String,
