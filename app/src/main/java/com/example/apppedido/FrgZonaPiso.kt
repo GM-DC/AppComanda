@@ -130,7 +130,7 @@ class FrgZonaPiso : Fragment() {
         fragment.arguments = enviarDatos
 
         //CAMBIAR FRAMENT
-        transaction!!.replace(R.id.frm_panel, fragment).addToBackStack(null).commit()
+        transaction!!.replace(R.id.frm_panel, fragment).commit()
 
     }
 
@@ -138,7 +138,7 @@ class FrgZonaPiso : Fragment() {
     // Obtiene la informacion del API Mesa
     private fun getDataMesa(idZona:String) {
         CoroutineScope(Dispatchers.IO).launch {
-            val response = getRetrofit().getMesa("piso eq '$idZona' and estadoTrans eq 'L'" )
+            val response = getRetrofit().getMesa("piso eq '$idZona'" )
             activity?.runOnUiThread{
                 if(response.isSuccessful){
                     listaMesa.clear()

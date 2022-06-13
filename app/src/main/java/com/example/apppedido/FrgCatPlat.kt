@@ -64,6 +64,7 @@ class FrgCatPlat: Fragment() {
         //++++++++++++++++++    DECLARA COMPONENTE     +++++++++++++++++
         val bt_enviar_comanda = view?.findViewById<Button>(R.id.bt_enviarComanda)
         val bt_precuenta = view?.findViewById<Button>(R.id.bt_precuenta)
+        val bt_cancelar = view?.findViewById<Button>(R.id.bt_cancelar)
 
 
         //++++++++++++++++++   INICIA LAS FUNCIONES    +++++++++++++++++
@@ -82,13 +83,30 @@ class FrgCatPlat: Fragment() {
         getPrecuenta()
 
         //Enviar Comanda
-        bt_enviar_comanda?.setOnClickListener {enviarComanda()}
-        bt_precuenta?.setOnClickListener {consultaPrecuenta()}
+        bt_enviar_comanda?.setOnClickListener { enviarComanda() }
+        bt_precuenta?.setOnClickListener { consultaPrecuenta() }
+        bt_cancelar?.setOnClickListener { regregarZonaPiso() }
 
         //Recibir datos de mesa y Zona
         iniZonaMesa()
 
 
+
+
+    }
+
+    private fun regregarZonaPiso() {
+        val datosRecuperados = arguments
+        val DatosUsuario:DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
+
+        val reenviar = Bundle()
+        reenviar.putSerializable("DATOUSUARIO",DatosUsuario)
+
+        val fragment = FrgZonaPiso()
+        fragment.arguments = reenviar
+
+        val transaction = fragmentManager?.beginTransaction()
+        transaction?.replace(R.id.frm_panel,fragment)?.commit()
     }
 
     private fun iniZonaMesa() {
@@ -128,6 +146,8 @@ class FrgCatPlat: Fragment() {
         //****************************************************************
         val transaction = fragmentManager?.beginTransaction()
         transaction?.replace(R.id.frm_panel,fragment)?.commit()
+        //.addToBackStack(null)
+        //transaction?.replace(R.id.frm_panel,fragment)?.show(fragment)?.hide(FrgCatPlat())?.commit()
     }
 
     //ENVIAR ORDEN PEDIDO API
@@ -295,33 +315,22 @@ class FrgCatPlat: Fragment() {
                 DatosUsuario.validez,
                 0,
             )
-
         )
-
-
         call.enqueue(object  : Callback<DCOrdenPedido>{
             override fun onResponse(call: Call<DCOrdenPedido>, response: Response<DCOrdenPedido>) {
                 println("Exito")
             }
-
             override fun onFailure(call: Call<DCOrdenPedido>, t: Throwable) {
                 println("Error")
-
             }
-
         })
 
 
     }
 
 
-
-
-
-
     //LISTAR PRECUENTA
     fun consultaPrecuenta(){
-
         fun getDataPreCuenta() {
             CoroutineScope(Dispatchers.IO).launch {
                 val response = getRetrofit().getPrecuenta("10012")
@@ -338,7 +347,6 @@ class FrgCatPlat: Fragment() {
                 }
             }
         }
-
         getDataPreCuenta()
 
     }
@@ -386,7 +394,6 @@ class FrgCatPlat: Fragment() {
         adapterPlato = AdapterPlato(listaPlato) { dataClassPlato -> onItemDatosPlato(dataClassPlato) }
         rv_plato?.adapter = adapterPlato
     }
-
 
     // Obtiene la informacion del API Mesa
     private fun getDataPlato(idCat:String) {
@@ -576,14 +583,12 @@ class FrgCatPlat: Fragment() {
         //-------------------------------------------------------------
     }
 
-
     // Obtiene la precuenta en pantalla
     fun getPrecuenta() {
 
 
 
     }
-
 
     // DEVUELVE UN RETROFIT
     fun getRetrofit(): APIService {
