@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:ignore="MissingDefaultResource"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="#0E83C9">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/frm_panel"
@@ -12,8 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="20dp"
-        android:background="@color/white"
         />
-
 
 </LinearLayout>

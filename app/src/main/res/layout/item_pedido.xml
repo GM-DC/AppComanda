@@ -22,7 +22,7 @@
                 android:id="@+id/tv_nombrePlato"
                 android:layout_width="350dp"
                 android:layout_height="30dp"
-                android:textColor="@color/white"
+                android:textColor="#FF0E83C9"
                 android:textSize="19sp"
                 android:textStyle="bold"
                 tools:text="Pollo a la brasa" />
@@ -33,7 +33,7 @@
                 android:layout_height="match_parent"
                 android:textSize="@dimen/TV_PP_Pedido_TextoSize"
                 tools:text="S/.25.36"
-                android:textColor="@color/white"
+                android:textColor="#FF0E83C9"
                 />
 
 
@@ -43,7 +43,7 @@
                 android:layout_height="match_parent"
                 android:textSize="@dimen/TV_PP_Pedido_TextoSize"
                 android:textStyle="bold"
-                android:textColor="@color/white"
+                android:textColor="#FF0E83C9"
                 tools:text="S/.2'000.00" />
         </LinearLayout>
 
@@ -60,7 +60,7 @@
                 android:layout_width="@dimen/ItemPedido_TVCantidadObs_Windth"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
-                android:textColor="@color/white"
+                android:textColor="#FF0E83C9"
                 android:textSize="@dimen/TV_PP_Pedido_TextoSize"
                 android:textStyle="bold"
                 android:gravity="center"

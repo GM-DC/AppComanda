@@ -2,11 +2,11 @@
     <!-- Base application theme. -->
     <style name="Theme.AppPedido" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#3F51B5</item>
-        <item name="colorPrimaryVariant">#03A9F4</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">#FCFDFF</item>
+        <item name="colorPrimaryVariant">#06548F</item>
+        <item name="colorOnPrimary">@color/purple_700</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondary">@color/purple_700</item>
         <item name="colorSecondaryVariant">@color/purple_500</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->

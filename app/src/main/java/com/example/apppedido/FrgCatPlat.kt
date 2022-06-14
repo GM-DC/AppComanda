@@ -12,8 +12,10 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
+import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,44 +30,36 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.Exception
 import java.text.DecimalFormat
-
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class FrgCatPlat: Fragment() {
 
+    //*************      INSTANCIAR DATOS     ****************
     private lateinit var adapterCategoria: AdapterCategoria
     private lateinit var adapterPlato: AdapterPlato
     private lateinit var adapterPedido: AdapterPedido
 
-
     private val listaCategoria = ArrayList<DCCategoriaItem>()
     private val listaPlato = ArrayList<DCPlatoItem>()
+    private val listaPlatoFiltrado = ArrayList<DCPlatoItem>()
     private val listaPedido = ArrayList<DataClassPedido>()
-
-    private val OrdenPedido = ArrayList<DCOrdenPedido>()
     private val listaDetalleOrdenPedido = ArrayList<Detalle>()
 
+    val sv_buscarPlato = view?.findViewById<SearchView>(R.id.sv_buscarPlato)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_frg_cat_plat, container, false)
-
         return view
-
     }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         //++++++++++++++++++    DECLARA COMPONENTE     +++++++++++++++++
         val bt_enviar_comanda = view?.findViewById<Button>(R.id.bt_enviarComanda)
         val bt_precuenta = view?.findViewById<Button>(R.id.bt_precuenta)
         val bt_cancelar = view?.findViewById<Button>(R.id.bt_cancelar)
-
 
         //++++++++++++++++++   INICIA LAS FUNCIONES    +++++++++++++++++
         //INICIAR CATEGORIA
@@ -87,12 +81,30 @@ class FrgCatPlat: Fragment() {
         bt_precuenta?.setOnClickListener { consultaPrecuenta() }
         bt_cancelar?.setOnClickListener { regregarZonaPiso() }
 
+        //BUSCAR PLATOS
+        buscarPlatosTotal()
+
+
         //Recibir datos de mesa y Zona
         iniZonaMesa()
+    }
 
-
-
-
+    fun buscarPlatosTotal() {
+        val sv_buscarPlato = view?.findViewById<SearchView>(R.id.sv_buscarPlato)
+        sv_buscarPlato?.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (!query.isNullOrEmpty()) {
+                    buscarPlato(query.lowercase())
+                }
+                return true
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null) {
+                    adapterPlato.filter(newText)
+                }
+                return true
+            }
+        })
     }
 
     private fun regregarZonaPiso() {
@@ -108,9 +120,7 @@ class FrgCatPlat: Fragment() {
         val transaction = fragmentManager?.beginTransaction()
         transaction?.replace(R.id.frm_panel,fragment)?.commit()
     }
-
     private fun iniZonaMesa() {
-
         val iniZona=view?.findViewById<TextView>(R.id.tv_TitleZona)
         val iniMesa=view?.findViewById<TextView>(R.id.tv_TitleMesa)
 
@@ -118,7 +128,6 @@ class FrgCatPlat: Fragment() {
         val datosRecuperados = arguments
         iniZona?.text = "${ datosRecuperados?.getString("ZONA") }"
         iniMesa?.text = "MESA ${ datosRecuperados?.getString("MESA") }"
-
     }
 
     //ENVIAR COMANDA
@@ -149,7 +158,6 @@ class FrgCatPlat: Fragment() {
         //.addToBackStack(null)
         //transaction?.replace(R.id.frm_panel,fragment)?.show(fragment)?.hide(FrgCatPlat())?.commit()
     }
-
     //ENVIAR ORDEN PEDIDO API
     fun getDataOrdenPedido() {
 
@@ -327,8 +335,6 @@ class FrgCatPlat: Fragment() {
 
 
     }
-
-
     //LISTAR PRECUENTA
     fun consultaPrecuenta(){
         fun getDataPreCuenta() {
@@ -352,24 +358,18 @@ class FrgCatPlat: Fragment() {
     }
 
 
-
-
-    //********************         CATEGORIA        ********************//
+    //********************       CATEGORIA        ********************//
     fun initCategoria(){
         val rv_categoria = view?.findViewById<RecyclerView>(R.id.rv_categoria)
         rv_categoria?.layoutManager = GridLayoutManager(activity,2, RecyclerView.HORIZONTAL,false)
         adapterCategoria = AdapterCategoria(listaCategoria) { dataclassCategoria -> onItemDatosCategoria(dataclassCategoria) }
         rv_categoria?.adapter = adapterCategoria
     }
-
-    private fun onItemDatosCategoria(dataclassCategoria: DCCategoriaItem) {
+    fun onItemDatosCategoria(dataclassCategoria: DCCategoriaItem) {
         val idCategoria = dataclassCategoria.idCategoria
         getDataPlato(idCategoria)
     }
-
-
-    // Obtiene la informacion del API Mesa
-    private fun getDataCategoria() {
+    fun getDataCategoria() {
         CoroutineScope(Dispatchers.IO).launch {
             val response = getRetrofit().getCategoria()
             activity?.runOnUiThread {
@@ -384,19 +384,14 @@ class FrgCatPlat: Fragment() {
         }
     }
 
-
-
-    //********************         PLATOS        ********************//
-
+    //********************        PLATOS        ********************//
     fun initPlato(){
         val rv_plato = view?.findViewById<RecyclerView>(R.id.rv_platillo)
         rv_plato?.layoutManager = GridLayoutManager(activity,3, RecyclerView.VERTICAL,false)
         adapterPlato = AdapterPlato(listaPlato) { dataClassPlato -> onItemDatosPlato(dataClassPlato) }
         rv_plato?.adapter = adapterPlato
     }
-
-    // Obtiene la informacion del API Mesa
-    private fun getDataPlato(idCat:String) {
+    fun getDataPlato(idCat:String) {
         CoroutineScope(Dispatchers.IO).launch {
             val response = getRetrofit().getPlato("idcategoria eq '$idCat'")
             activity?.runOnUiThread {
@@ -410,7 +405,6 @@ class FrgCatPlat: Fragment() {
             }
         }
     }
-
     fun onItemDatosPlato(dataClassPlato: DCPlatoItem) {
         val rv_pedido = view?.findViewById<RecyclerView>(R.id.rv_pedido)
         val datos = dataClassPlato
@@ -448,7 +442,7 @@ class FrgCatPlat: Fragment() {
         actualizarPrecioTotal()
     }
 
-    //---------------   INICIAR PEDIDO  -----------------------
+    //*********************   INICIAR PEDIDO  ***********************
     fun initPedido(){
         val rv_pedido = view?.findViewById<RecyclerView>(R.id.rv_pedido)
         rv_pedido?.layoutManager = LinearLayoutManager(activity)
@@ -479,7 +473,6 @@ class FrgCatPlat: Fragment() {
         swap.attachToRecyclerView(rv_pedido)
 
     }
-
     fun onIntemDatosPedido(dataclassPedido: DataClassPedido) {
         val rv_pedido = view?.findViewById<RecyclerView>(R.id.rv_pedido)
         val bt_eliminar = view?.findViewById<Button>(R.id.bt_disminuir)
@@ -568,6 +561,29 @@ class FrgCatPlat: Fragment() {
 
     }
 
+    //*********************   OTRAS FUNCIONES  **************************
+    // BUSQUEDA DE PEDIDO
+    fun buscarPlato(query: String?){
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = getRetrofit().getPlatoNombre("filter=nombe eq '$query'")
+            activity?.runOnUiThread {
+                if(response.isSuccessful){
+                    var nombrePlatosBuscados : ArrayList<DCPlatoItem>? = null
+                    for (i in response.body()?.indices!!){
+                        nombrePlatosBuscados = response.body()!![i] as ArrayList<DCPlatoItem>
+                    }
+                    listaPlato.clear()
+                    if (nombrePlatosBuscados != null) {
+                        listaPlato.addAll(nombrePlatosBuscados)
+                    }
+                    adapterPlato.notifyDataSetChanged()
+                }else{
+
+                }
+            }
+        }
+    }
+
     // ACTUALIZA EL PRECIO TOTAL A PAGAR
     fun actualizarPrecioTotal(){
         //------------------  SUMA DE PRECIO DE LA LISTA---------------
@@ -582,14 +598,12 @@ class FrgCatPlat: Fragment() {
         tv_PTotal?.text = "S/. ${formato.format(cantidadLista)}"
         //-------------------------------------------------------------
     }
-
-    // Obtiene la precuenta en pantalla
+    // OBTIENE LA PRECUENTA EN PANTALLA
     fun getPrecuenta() {
 
 
 
     }
-
     // DEVUELVE UN RETROFIT
     fun getRetrofit(): APIService {
         val retrofit = Retrofit.Builder()
@@ -598,5 +612,5 @@ class FrgCatPlat: Fragment() {
             .build()
         return  retrofit.create(APIService::class.java)
     }
-
 }
+

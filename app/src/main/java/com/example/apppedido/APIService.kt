@@ -25,6 +25,9 @@ interface APIService {
     @GET("api/Producto?select=nombre,codigo,idcategoria,precioVenta&orderby=nombre asc")
     suspend fun getPlato(@Query("filter") filter:String) : Response<List<DCPlatoItem>>
 
+    @GET("api/Producto?select=nombre,codigo,idcategoria,precioVenta&orderby=nombre asc")
+    suspend fun getPlatoNombre(@Query("filter") filter:String) : Response<List<DCPlatoItem>>
+
     @POST("api/Users/Login")
     suspend fun checkLoginComanda(@Body loginMozo: DCLoginUser) : Response<DCLoginDatosExito>
 

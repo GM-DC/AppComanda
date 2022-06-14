@@ -66,7 +66,6 @@ class activityPasscode : AppCompatActivity()  {
         binding2.btn00.setOnClickListener { numeroPresionado(binding2.btn00.text.toString()) }
 
         binding2.btnLimpiar.setOnClickListener { binding2.txtCodigo.text = "" }
-
     }
 
     private fun numeroPresionado(digito:String){
