@@ -2,6 +2,7 @@ package com.example.apppedido
 
 import DCLoginDatosExito
 import DCOrdenPedido
+import DCPedidoXMesa
 import Detalle
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,8 +15,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentResultListener
-import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,7 +29,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.Exception
 import java.text.DecimalFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -47,7 +45,7 @@ class FrgCatPlat: Fragment() {
     private val listaPedido = ArrayList<DataClassPedido>()
     private val listaDetalleOrdenPedido = ArrayList<Detalle>()
 
-    val sv_buscarPlato = view?.findViewById<SearchView>(R.id.sv_buscarPlato)
+
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
@@ -60,6 +58,7 @@ class FrgCatPlat: Fragment() {
         val bt_enviar_comanda = view?.findViewById<Button>(R.id.bt_enviarComanda)
         val bt_precuenta = view?.findViewById<Button>(R.id.bt_precuenta)
         val bt_cancelar = view?.findViewById<Button>(R.id.bt_cancelar)
+        val sv_buscarPlato = view?.findViewById<SearchView>(R.id.sv_buscarPlato)
 
         //++++++++++++++++++   INICIA LAS FUNCIONES    +++++++++++++++++
         //INICIAR CATEGORIA
@@ -74,35 +73,37 @@ class FrgCatPlat: Fragment() {
 
         //Iniciar Datos
         getDataPlato("0001")
-        getPrecuenta()
 
         //Enviar Comanda
         bt_enviar_comanda?.setOnClickListener { enviarComanda() }
-        bt_precuenta?.setOnClickListener { consultaPrecuenta() }
         bt_cancelar?.setOnClickListener { regregarZonaPiso() }
+        //bt_precuenta?.setOnClickListener{ consultaPrecuenta()}
+
+        buscarPlatosTotal()
 
         //BUSCAR PLATOS
-        buscarPlatosTotal()
+        consultaPrecuenta()
 
 
         //Recibir datos de mesa y Zona
+        //consultaPrecuenta()
         iniZonaMesa()
     }
 
     fun buscarPlatosTotal() {
+        println("Llegoooooooooooo2222222222222222")
         val sv_buscarPlato = view?.findViewById<SearchView>(R.id.sv_buscarPlato)
         sv_buscarPlato?.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if (!query.isNullOrEmpty()) {
-                    buscarPlato(query.lowercase())
-                }
                 return true
             }
+
             override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText != null) {
-                    adapterPlato.filter(newText)
+                if (!newText.isNullOrEmpty()){
+                    println("2: $newText")
+                    adapterPlato.filtrado(newText)
                 }
-                return true
+                return false
             }
         })
     }
@@ -126,8 +127,8 @@ class FrgCatPlat: Fragment() {
 
         //RECIBE DATOS Y USA DATOS
         val datosRecuperados = arguments
-        iniZona?.text = "${ datosRecuperados?.getString("ZONA") }"
-        iniMesa?.text = "MESA ${ datosRecuperados?.getString("MESA") }"
+        iniZona?.text = "${ datosRecuperados?.getString("NAMEZONA") }"
+        iniMesa?.text = "MESA ${ datosRecuperados?.getString("IDMESA") }"
     }
 
     //ENVIAR COMANDA
@@ -337,9 +338,14 @@ class FrgCatPlat: Fragment() {
     }
     //LISTAR PRECUENTA
     fun consultaPrecuenta(){
-        fun getDataPreCuenta() {
+        //RECIBE DATOS Y USA DATOS
+        val datosRecuperados = arguments
+        val datoZona = datosRecuperados?.getString("IDZONA")
+        val datoMesa = datosRecuperados?.getString("IDMESA")
+
+        fun getDataPreCuenta(idPedido: String) {
             CoroutineScope(Dispatchers.IO).launch {
-                val response = getRetrofit().getPrecuenta("10012")
+                val response = getRetrofit().getPrecuenta("$idPedido")
                 activity?.runOnUiThread {
                     if(response.isSuccessful){
                         var data = response.body()
@@ -353,8 +359,29 @@ class FrgCatPlat: Fragment() {
                 }
             }
         }
-        getDataPreCuenta()
 
+        //Informacion de la Mesa
+        fun getInfoMesa(mesa:String,piso:String){
+            CoroutineScope(Dispatchers.IO).launch {
+                val response = getRetrofit().getPedidoZonaMesa("mesa eq '$mesa' and piso eq '$piso'" )
+                activity?.runOnUiThread {
+                    if(response.isSuccessful){
+                        println(response.body())
+                        if (!response.body()!!.isEmpty()){
+                            getDataPreCuenta(response.body()?.get(0)?.idPedido.toString())
+                        }
+                    }else{
+                        println("Fracaso")
+                    }
+                }
+            }
+        }
+
+        println("*********  ANALISIS DE CARGAR PEDIDO ***********")
+        println("Zona: ${datoZona} ${datoZona?.javaClass}")
+        println("Mesa: ${datoMesa} ${datoMesa?.javaClass}")
+        println("Segunda evaluacion: " + getInfoMesa(datoMesa!!,datoZona!!))
+        println("*********  ************************* ***********")
     }
 
 
@@ -457,21 +484,19 @@ class FrgCatPlat: Fragment() {
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
-            ): Boolean {
-                return false
-            }
+            ): Boolean { return false }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 listaPedido.removeAt(viewHolder.bindingAdapterPosition)
-
                 actualizarPrecioTotal()
-
                 rv_pedido?.adapter?.notifyDataSetChanged()
+                if (listaPedido.indices.contains(viewHolder.bindingAdapterPosition)){
+                    println("Paso aqui?")
+                }
             }
         }
         val swap =  ItemTouchHelper(itemswipe)
         swap.attachToRecyclerView(rv_pedido)
-
     }
     fun onIntemDatosPedido(dataclassPedido: DataClassPedido) {
         val rv_pedido = view?.findViewById<RecyclerView>(R.id.rv_pedido)
@@ -563,27 +588,24 @@ class FrgCatPlat: Fragment() {
 
     //*********************   OTRAS FUNCIONES  **************************
     // BUSQUEDA DE PEDIDO
-    fun buscarPlato(query: String?){
+    /*fun buscarPlato(query: String?){
         CoroutineScope(Dispatchers.IO).launch {
             val response = getRetrofit().getPlatoNombre("filter=nombe eq '$query'")
+            val busqueda = response.body()
             activity?.runOnUiThread {
                 if(response.isSuccessful){
-                    var nombrePlatosBuscados : ArrayList<DCPlatoItem>? = null
-                    for (i in response.body()?.indices!!){
-                        nombrePlatosBuscados = response.body()!![i] as ArrayList<DCPlatoItem>
+                    if (busqueda != null) {
+                        listaPlato.clear()
+                        listaPlato.addAll(busqueda)
+                        adapterPlato.notifyDataSetChanged()
                     }
-                    listaPlato.clear()
-                    if (nombrePlatosBuscados != null) {
-                        listaPlato.addAll(nombrePlatosBuscados)
-                    }
-                    adapterPlato.notifyDataSetChanged()
+
                 }else{
 
                 }
             }
         }
-    }
-
+    }*/
     // ACTUALIZA EL PRECIO TOTAL A PAGAR
     fun actualizarPrecioTotal(){
         //------------------  SUMA DE PRECIO DE LA LISTA---------------
@@ -597,12 +619,6 @@ class FrgCatPlat: Fragment() {
         formato.maximumFractionDigits = 2 //Numero maximo de decimales a mostrar
         tv_PTotal?.text = "S/. ${formato.format(cantidadLista)}"
         //-------------------------------------------------------------
-    }
-    // OBTIENE LA PRECUENTA EN PANTALLA
-    fun getPrecuenta() {
-
-
-
     }
     // DEVUELVE UN RETROFIT
     fun getRetrofit(): APIService {

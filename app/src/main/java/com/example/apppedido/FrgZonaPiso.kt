@@ -27,12 +27,6 @@ class FrgZonaPiso : Fragment() {
     private val listaZona = ArrayList<DCZonaItem>()
     private val listaMesa = ArrayList<DCMesaItem>()
 
-
-    override fun onCreate(savedInstanceState: Bundle?){
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_frg_zona_piso, container, false)
@@ -59,21 +53,19 @@ class FrgZonaPiso : Fragment() {
 
     }
 
-
-
+    //********************         ZONA        ********************//
+    //INICIAR MESA
     fun initZona(){
         val rv_zona = view?.findViewById<RecyclerView>(R.id.rv_zona2)
         rv_zona?.layoutManager = LinearLayoutManager(activity,RecyclerView.HORIZONTAL,false)
         adapterZona = AdapterZona(listaZona) { dataclassZonas -> onItemDatosZonas(dataclassZonas) }
         rv_zona?.adapter = adapterZona
     }
-
+    //SELECCIONAR MESA
     private fun onItemDatosZonas(dataclassZonas: DCZonaItem) {
         val idZona = dataclassZonas.idZona
         getDataMesa(idZona)
     }
-
-
     // Obtiene la informacion del API Zona
     private fun getDataZona(){
         CoroutineScope(Dispatchers.IO).launch {
@@ -89,14 +81,14 @@ class FrgZonaPiso : Fragment() {
     }
 
     //********************         MESA        ********************//
-
+    //INICIAR MESA
     fun initMesa(){
         val rv_mesa = view?.findViewById<RecyclerView>(R.id.rv_mesa2)
         rv_mesa?.layoutManager = GridLayoutManager(activity,4, RecyclerView.HORIZONTAL,false)
         adapterMesa = AdapterMesa(listaMesa) { dataclassMesa -> onItemDatosMesa(dataclassMesa) }
         rv_mesa?.adapter = adapterMesa
     }
-
+    //SELECCIONAR MESA
     private fun onItemDatosMesa(dataclassMesa: DCMesaItem) {
 
         val datosRecuperados = arguments
@@ -119,10 +111,10 @@ class FrgZonaPiso : Fragment() {
 
         //ENVIAR DATOS
         val enviarDatos = Bundle()
-        enviarDatos.putString("ZONA",nameZona)
-        enviarDatos.putString("MESA",idMesa.toString())
+        enviarDatos.putString("NAMEZONA",nameZona)
+        enviarDatos.putString("IDMESA",idMesa.toString())
+        enviarDatos.putString("IDZONA",idZona)
         enviarDatos.putSerializable("DatosUsuario",recibeDatos)
-
 
         val fragment = FrgCatPlat()
         val fragmentManager = activity?.supportFragmentManager
@@ -133,7 +125,6 @@ class FrgZonaPiso : Fragment() {
         transaction!!.replace(R.id.frm_panel, fragment).commit()
 
     }
-
 
     // Obtiene la informacion del API Mesa
     private fun getDataMesa(idZona:String) {
@@ -150,6 +141,8 @@ class FrgZonaPiso : Fragment() {
             }
         }
     }
+
+
 
 
 

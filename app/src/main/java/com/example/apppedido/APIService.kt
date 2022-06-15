@@ -3,12 +3,14 @@ package com.example.apppedido
 import DCLoginDatosExito
 import DCLoginUser
 import DCOrdenPedido
-import DCRespuestaLogin
+import DCPedidoXMesa
+import DCPedidoXMesaItem
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
 interface APIService {
+
 
     @GET("api/Users/")
     suspend fun getUsuario(): Response<List<DCUsuarioItem>>
@@ -30,6 +32,10 @@ interface APIService {
 
     @POST("api/Users/Login")
     suspend fun checkLoginComanda(@Body loginMozo: DCLoginUser) : Response<DCLoginDatosExito>
+
+    //PEDIDOS
+    @GET("api/Pedido?top=1&orderby=fechaPedido desc ")
+    suspend fun getPedidoZonaMesa(@Query("filter") filter:String) : Response<DCPedidoXMesa>
 
     @POST("api/Pedido/CreateOrder")
     fun postOrdenPedido(@Body ordenPedido: DCOrdenPedido) : Call<DCOrdenPedido>

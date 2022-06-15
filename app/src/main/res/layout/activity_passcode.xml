@@ -227,6 +227,7 @@
 
             <Button
                 android:id="@+id/btn_Limpiar"
+                android:backgroundTint="@color/white"
                 android:textColor="#0E83C9"
                 android:layout_width="@dimen/BTWidht_Passcode_Numero"
                 android:layout_height="@dimen/BTHeight_Passcode_Numero"

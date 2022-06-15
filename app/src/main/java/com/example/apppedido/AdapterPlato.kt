@@ -4,15 +4,21 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 import kotlin.collections.ArrayList
 
-class AdapterPlato(private val data: ArrayList<DCPlatoItem>, private val onClickListener: (DCPlatoItem) -> Unit): RecyclerView.Adapter<AdapterPlato.holderPlato>() {
+class AdapterPlato(val data: ArrayList<DCPlatoItem>, private val onClickListener: (DCPlatoItem) -> Unit): RecyclerView.Adapter<AdapterPlato.holderPlato>() {
 
+    var countryFilterList = ArrayList<DCPlatoItem>()
 
+    init {
+        countryFilterList = data
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterPlato.holderPlato {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -27,31 +33,6 @@ class AdapterPlato(private val data: ArrayList<DCPlatoItem>, private val onClick
         return data.size
     }
 
-    //-------  PRUEBA ------------
-    open fun filter(text: String) {
-        println("hola 22")
-        var text = text
-        if (text.isEmpty()) {
-            println("hola 333")
-            data.clear()
-            data.addAll(data)
-        } else {
-            val result: java.util.ArrayList<DCPlatoItem> = java.util.ArrayList()
-            text = text.lowercase(Locale.getDefault())
-            for (i in data.indices) {
-                //match by name or phone
-                if (data[i].namePlato.lowercase().contains(text) || data[i].namePlato.lowercase().contains(text)) {
-                    result.add(data[i])
-                }
-            }
-            data.clear()
-            data.addAll(result)
-        }
-        notifyDataSetChanged()
-    }
-
-
-
     class holderPlato(private val view: View): RecyclerView.ViewHolder(view){
         fun render (data: DCPlatoItem, onClickListener: (DCPlatoItem) -> Unit){
             val tx_plato = view.findViewById<TextView>(R.id.tx_plato)
@@ -61,11 +42,28 @@ class AdapterPlato(private val data: ArrayList<DCPlatoItem>, private val onClick
 
             tx_platoPrecio.text = "S/. ${data.PrecioVenta}"
             tx_plato.text = data.namePlato
-            tx_platoPrecio.setTextColor(Color.parseColor("#FF041C9E"))
-            tx_plato.setTextColor(Color.parseColor("#FF041C9E"))
-            iv_iconPlato.setColorFilter(Color.parseColor("#FF041C9E"))
+            tx_platoPrecio.setTextColor(Color.parseColor("#0E83C9"))
+            tx_plato.setTextColor(Color.parseColor("#0E83C9"))
+            iv_iconPlato.setColorFilter(Color.parseColor("#0E83C9"))
 
             itemView.setOnClickListener{onClickListener(data)}
         }
     }
+
+    fun filtrado(tx_buscar:String){
+        var longitud = tx_buscar.length
+        if (longitud == 0){
+            data.clear()
+            data.addAll(data)
+        }else{
+            for(i in data.indices){
+                if(data[i].namePlato.lowercase().contains(tx_buscar.lowercase())){
+                    data.add(data[i])
+                }
+            }
+        }
+        notifyDataSetChanged()
+    }
+
+
 }
