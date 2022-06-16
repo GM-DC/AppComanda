@@ -3,12 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.apppedido">
 
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- PRUEBA POR EL ERROR -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".ValidarConfiguracion"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -20,39 +18,34 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".PanelPedidos"
-            android:exported="false"
-            android:screenOrientation="landscape">
-        </activity>
-        <activity
-            android:name=".SplashActivity"
+            android:name=".application.View.ActyLogin"
             android:exported="true"
-            android:theme="@style/SplashTheme"
             android:screenOrientation="portrait">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".application.View.ActyPanelPedidos"
+            android:exported="false"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".application.View.ActySplash"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
 
         </activity>
         <activity
-            android:name=".activity_Login"
+            android:name=".application.View.activityPasscode"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".panelPedido"
-            android:exported="false" />
-        <activity
-            android:name=".activityPasscode"
+            android:name=".application.View.ActyUsuario"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            />
     </application>
 
 </manifest>

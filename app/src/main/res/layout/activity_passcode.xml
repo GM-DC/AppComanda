@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activityPasscode"
+    tools:context=".application.View.activityPasscode"
     android:background="#0E83C9">
 
     <LinearLayout

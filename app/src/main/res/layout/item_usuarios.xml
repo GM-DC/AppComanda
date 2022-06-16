@@ -16,14 +16,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:background="@drawable/efecto_clic">
+            android:background="@drawable/effect_clic">
 
             <ImageView
                 android:id="@+id/iv_iconUsuario"
                 android:layout_width="@dimen/IT_Usuario_IVWeight"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/IT_Usuario_Tv_Usuario_Margin"
-                android:src="@drawable/usuario"
+                android:src="@drawable/icon_usuario"
                 />
 
             <TextView

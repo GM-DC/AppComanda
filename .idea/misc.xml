@@ -11,7 +11,9 @@
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/efecto_clic_mesa.xml" value="0.1295" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/efecto_clic_pedido.xml" value="0.1" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/efecto_clic_zona.xml" value="0.1295" />
+        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/effect_clic_zona.xml" value="0.204" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/ic_anyconv_com__camp_table.xml" value="0.1" />
+        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.204" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/ic_generated__2_.xml" value="0.1" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/ic_icons8_mesa_100__1___3_.xml" value="0.1" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/ic_icons8_tablecloth_100__2_.xml" value="0.1" />
@@ -19,8 +21,11 @@
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/icon_categoria.xml" value="0.1" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/icon_mesa.xml" value="0.1" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/icon_platillo.xml" value="0.1755" />
+        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/icon_setting.xml" value="0.1925" />
+        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/icon_usuario.xml" value="0.2415" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/icon_zona.xml" value="0.1" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/image_logo.xml" value="0.1" />
+        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/input.xml" value="0.1915" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/input_buscardor.xml" value="0.2415" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/person-48px.xml" value="0.193" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/splash.xml" value="0.1" />
@@ -28,12 +33,16 @@
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout-land/activity_panel_pedido.xml" value="0.25" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout-land/activity_panel_pedidos.xml" value="0.2109375" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout-v28/item_usuarios.xml" value="0.16757246376811594" />
+        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.41217798594847777" />
+        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout-w936dp/activity_login.xml" value="0.15616681455190773" />
+        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/activity_acty_login.xml" value="0.47148058252427183" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/activity_inicio.xml" value="0.22" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/activity_panel_pedido.xml" value="0.33" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/activity_panel_pedidos.xml" value="0.25262368815592207" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/activity_passcode.xml" value="0.20026881720430106" />
+        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/dialogue_configuracion.xml" value="0.47148058252427183" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/dialogue_detalle.xml" value="0.5" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/fragment_dialogue_precuenta.xml" value="0.9" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/fragment_frg_cat_plat.xml" value="0.5" />

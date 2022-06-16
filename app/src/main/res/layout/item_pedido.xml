@@ -7,7 +7,7 @@
     android:paddingLeft="8dp"
     android:layout_margin="0.5dp"
     android:orientation="horizontal"
-    android:background="@drawable/efecto_clic_pedido"
+    android:background="@drawable/effect_clic_pedido"
     >
 
 

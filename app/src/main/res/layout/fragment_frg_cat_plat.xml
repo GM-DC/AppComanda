@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".FrgCatPlat"
+    tools:context=".application.View.FrgCatPlat"
     android:background="#0E83C9">
 
 

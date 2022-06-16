@@ -8,7 +8,7 @@
         android:left="10dp">
 
         <bitmap
-            android:src="@drawable/unosoft_logo_grande" />
+            android:src="@drawable/img_unosoft_logo_grande" />
 
 
     </item>

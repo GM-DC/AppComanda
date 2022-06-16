@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:background="@drawable/efecto_clic_mesa">
+        android:background="@drawable/effect_clic_mesa">
 
         <ImageView
             android:id="@+id/iv_iconCategoria"

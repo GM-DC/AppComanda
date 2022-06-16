@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:background="@drawable/efecto_clic">
+        android:background="@drawable/effect_clic">
 
 
         <ImageView

@@ -1,0 +1,13 @@
+if(Constantes.SERVER =="" || Constantes.BD ==""){
+                    AlertMessage("Debe configurar la aplicación");
+                    return;
+                }
+
+
+
+
+if (String.valueOf(user.getText()).length()==0 || String.valueOf(pass.getText()).length()==0)
+                {
+                    AlertMessage("Datos inválidos");
+                    return;
+                }

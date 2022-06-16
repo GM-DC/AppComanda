@@ -14,6 +14,9 @@
     <color name="azul20">#8994FF</color>
     <color name="azul10">#AAB2FF</color>
     <color name="azul00">#D6DAFF</color>
+    <color name="plomo_claro">#D6D6D6</color>
+    <color name="plomo">#25262E</color>
+
 
 
 </resources>
