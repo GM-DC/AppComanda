@@ -54,7 +54,6 @@ class ActyUsuario : AppCompatActivity() {
         startActivity(intent)
     }
     private fun getData() {
-
         CoroutineScope(Dispatchers.IO).launch {
             val response = apiInterface!!.getUsuario()
         //        getRetrofit().getUsuario()
@@ -68,7 +67,7 @@ class ActyUsuario : AppCompatActivity() {
                 }
             }
         }
-
+    }
 
 
 
@@ -91,6 +90,6 @@ class ActyUsuario : AppCompatActivity() {
         })
 */
 
-    }
+
 
 }

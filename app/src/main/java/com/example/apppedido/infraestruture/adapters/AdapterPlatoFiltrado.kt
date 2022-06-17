@@ -11,13 +11,11 @@ import com.example.apppedido.R
 import com.example.apppedido.domain.Model.DCPlatoItem
 import java.util.*
 
-class AdapterPlatoFiltrado(private val data: ArrayList<DCPlatoItem>, private val onClickListener: (DCPlatoItem) -> Unit): RecyclerView.Adapter<AdapterPlatoFiltrado.holderPlatoFiltrado>() {
-
-    private var listaPlatoFiltados = ArrayList<String>()
+class AdapterPlatoFiltrado(var data: ArrayList<DCPlatoItem>, private val onClickListener: (DCPlatoItem) -> Unit): RecyclerView.Adapter<AdapterPlatoFiltrado.holderPlatoFiltrado>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): holderPlatoFiltrado {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return holderPlatoFiltrado(layoutInflater.inflate(R.layout.item_plato,parent,false))
+        return holderPlatoFiltrado(layoutInflater.inflate(R.layout.item_platobuscado,parent,false))
     }
 
     override fun onBindViewHolder(holder: holderPlatoFiltrado, position: Int) {
@@ -33,15 +31,19 @@ class AdapterPlatoFiltrado(private val data: ArrayList<DCPlatoItem>, private val
             val tx_plato = view.findViewById<TextView>(R.id.tx_plato)
             val tx_platoPrecio = view.findViewById<TextView>(R.id.tx_platoPrecio)
 
-            val iv_iconPlato = view.findViewById<ImageView>(R.id.iv_iconPlato)
-
             tx_platoPrecio.text = "S/. ${data.PrecioVenta}"
             tx_plato.text = data.namePlato
-            tx_platoPrecio.setTextColor(Color.parseColor("#FF041C9E"))
-            tx_plato.setTextColor(Color.parseColor("#FF041C9E"))
-            iv_iconPlato.setColorFilter(Color.parseColor("#FF041C9E"))
+            //tx_platoPrecio.setTextColor(Color.parseColor("#0E83C9"))
+            //tx_plato.setTextColor(Color.parseColor("#0E83C9"))
 
             itemView.setOnClickListener{onClickListener(data)}
         }
     }
+
+    //to filter the list
+    fun filterList(namePlatos: ArrayList<DCPlatoItem>) {
+        data = namePlatos
+        notifyDataSetChanged()
+    }
+
 }

@@ -1,11 +1,15 @@
 package com.example.apppedido.application.View
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -21,6 +25,7 @@ import com.example.apppedido.infraestruture.network.APIService
 import com.example.apppedido.infraestruture.adapters.AdapterCategoria
 import com.example.apppedido.infraestruture.adapters.AdapterPedido
 import com.example.apppedido.infraestruture.adapters.AdapterPlato
+import com.example.apppedido.infraestruture.adapters.AdapterPlatoFiltrado
 import com.example.apppedido.infraestruture.network.RetrofitCall
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,8 +33,6 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.Exception
 import java.text.DecimalFormat
 import kotlin.collections.ArrayList
@@ -40,9 +43,11 @@ class FrgCatPlat: Fragment() {
     //***************INICIO ATRIBUTOS********************
     private lateinit var adapterCategoria: AdapterCategoria
     private lateinit var adapterPlato: AdapterPlato
+    private lateinit var adapterPlatoFiltrado: AdapterPlatoFiltrado
     private lateinit var adapterPedido: AdapterPedido
     private val listaCategoria = ArrayList<DCCategoriaItem>()
     private val listaPlato = ArrayList<DCPlatoItem>()
+    private val listaPlatoBuscado = ArrayList<DCPlatoItem>()
     private val listaPedido = ArrayList<DataClassPedido>()
     private val listaDetalleOrdenPedido = ArrayList<Detalle>()
     var apiInterface: APIService? = null
@@ -59,9 +64,9 @@ class FrgCatPlat: Fragment() {
         apiInterface = RetrofitCall.client?.create(APIService::class.java) as APIService
 
         val bt_enviar_comanda = view?.findViewById<Button>(R.id.bt_enviarComanda)
-        val bt_precuenta = view?.findViewById<Button>(R.id.bt_precuenta)
         val bt_cancelar = view?.findViewById<Button>(R.id.bt_cancelar)
-        val sv_buscarPlato = view?.findViewById<SearchView>(R.id.sv_buscarPlato)
+        val iv_buscarPlato = view?.findViewById<ImageView>(R.id.iv_buscarPlato)
+0
 
         //++++++++++++++++++   INICIA LAS FUNCIONES    +++++++++++++++++
         //INICIAR CATEGORIA
@@ -76,39 +81,102 @@ class FrgCatPlat: Fragment() {
         //Enviar Comanda
         bt_enviar_comanda?.setOnClickListener { enviarComanda() }
         bt_cancelar?.setOnClickListener { regregarZonaPiso() }
-        //bt_precuenta?.setOnClickListener{ consultaPrecuenta()}
-
-        buscarPlatosTotal()
+        iv_buscarPlato?.setOnClickListener { iconbuscarPlato() }
 
         //BUSCAR PLATOS
         consultaPrecuenta()
 
 
         //Recibir datos de mesa y Zona
-        //consultaPrecuenta()
         iniZonaMesa()
     }
 
-    fun buscarPlatosTotal() {
-        println("Llegoooooooooooo2222222222222222")
-        val sv_buscarPlato = view?.findViewById<SearchView>(R.id.sv_buscarPlato)
-        sv_buscarPlato?.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                if (!query.isNullOrEmpty()){
-                    //buscarPlato(query.toString())
-                    //filter(query.toString())
-                }
-                return true
-            }
+    fun iconbuscarPlato() {
+        //Asignar Valores
+        val builder = AlertDialog.Builder(requireActivity())
+        val view = layoutInflater.inflate(R.layout.dialogue_buscador,null)
+        var sv_buscador = view.findViewById<SearchView>(R.id.sv_buscador)
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if (!newText.isNullOrEmpty()){
-                    buscarPlato(newText.toString())
-                    //filter(query.toString())
+
+        //Pasando la vista al builder
+        builder.setView(view)
+
+        //Creando dialog
+        val dialog = builder.create()
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window!!.setGravity(Gravity.TOP)
+        dialog.show()
+
+        //iniciar datos
+        val rv_platoBuscar = view?.findViewById<RecyclerView>(R.id.rv_platoBuscar)
+        rv_platoBuscar?.layoutManager = LinearLayoutManager(activity,RecyclerView.VERTICAL,false)
+        adapterPlatoFiltrado = AdapterPlatoFiltrado(listaPlatoBuscado) { dataClassPlatoBuscado -> onItemDatosPlatoBuscado(dataClassPlatoBuscado) }
+        rv_platoBuscar?.adapter = adapterPlatoFiltrado
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = apiInterface!!.getPlatoBuscado()
+            activity?.runOnUiThread {
+                if(response.isSuccessful){
+                    listaPlatoBuscado.clear()
+                    listaPlatoBuscado.addAll(response.body()!!)
+                    adapterPlatoFiltrado.notifyDataSetChanged()
+                }else{
+                    Toast.makeText(activity, "Error", Toast.LENGTH_SHORT).show()
                 }
+            }
+        }
+
+        sv_buscador?.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                println("$newText")
+                filter(newText.toString())
                 return false
             }
         })
+
+    }
+
+    fun onItemDatosPlatoBuscado(dataClassPlatoBuscado: DCPlatoItem){
+        val rv_pedido = view?.findViewById<RecyclerView>(R.id.rv_pedido)
+        val datos = dataClassPlatoBuscado
+
+        //-------------Evalua POSICION Y ACCION DE AGREGAR-------------------
+        //println("------- Evalua POSICION Y ACCION DE AGREGAR-------------")
+        var action = 0
+        var pos = -1
+        for (i in listaPedido.indices){
+            if(listaPedido[i].namePlato==datos.namePlato){
+                action += 1
+            }
+            if (action == 1){
+                pos = i
+                println("posicion: $pos")
+                break
+            }
+        }
+
+        //----------------  AGREGA O AUMENTA LA CANTIDAD -------------------
+        if (action.equals(0)){
+            listaPedido.add(DataClassPedido(1,dataClassPlatoBuscado.namePlato,dataClassPlatoBuscado.IdCategoria,dataClassPlatoBuscado.PrecioVenta.toBigDecimal(),dataClassPlatoBuscado.PrecioVenta.toBigDecimal(),""))
+            rv_pedido?.adapter?.notifyDataSetChanged()
+            rv_pedido?.scrollToPosition(listaPedido.size-1)
+        }else{
+            val lt = listaPedido.get(pos)
+            var cantidad = lt.cantidad+1
+            var precioTotal = dataClassPlatoBuscado.PrecioVenta*cantidad
+            println("El precio es: $precioTotal")
+            listaPedido.set(pos, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal.toBigDecimal(),lt.observacion))
+            rv_pedido?.adapter?.notifyDataSetChanged()
+        }
+        //-------------------------------------------------------------------
+
+        actualizarPrecioTotal()
+    }
+    fun buscarPlatosTotal() {
+
     }
 
     private fun regregarZonaPiso() {
@@ -471,7 +539,35 @@ class FrgCatPlat: Fragment() {
         }
         //-------------------------------------------------------------------
 
+        //----------------  CAMBIAR ESTADO  -------------------
+        val datosRecuperados = arguments
+        val IDZONA = datosRecuperados?.getString("IDZONA")
+        val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
+
+        if (action.equals(0)){
+            cambiarEstadoMesa(IDZONA!!,IDMESA!!,"L")
+        }else{
+            cambiarEstadoMesa(IDZONA!!,IDMESA!!,"O")
+        }
+
+
+        //-----------------------------------------------------
+
         actualizarPrecioTotal()
+    }
+
+    private fun cambiarEstadoMesa(idZona:String,idMesa:Int,estadoMesa:String) {
+        println("idZona: $idZona // idMesa: $idMesa  // estadoMesa: $estadoMesa")
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = apiInterface!!.putCambiarEstadoMesa(idZona,idMesa,estadoMesa)
+            activity?.runOnUiThread {
+                if(response.isSuccessful){
+                    Toast.makeText(activity, "Se cambio estado", Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(activity, "Error en cambio de estado", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     //*********************   INICIAR PEDIDO  ***********************
@@ -593,7 +689,7 @@ class FrgCatPlat: Fragment() {
 
     //*********************   OTRAS FUNCIONES  **************************
     // BUSQUEDA DE PEDIDO
-    fun buscarPlato(query: String?){
+    /*fun buscarPlato(query: String?){
         val filterdNamePlato: ArrayList<DCPlatoItem> = ArrayList()
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -614,21 +710,20 @@ class FrgCatPlat: Fragment() {
                 }
             }
         }
-    }
+    }*/
 
     private fun filter(text: String) {
         val filterdNamePlato: ArrayList<DCPlatoItem> = ArrayList()
-        //looping through existing elements
-        for (i in listaPlato.indices) {
-            //if the existing elements contains the search input
-            if (listaPlato[i].namePlato.lowercase().contains(text.lowercase())) {
-                //adding the element to filtered list
-                filterdNamePlato.add(listaPlato[i])
+        for (i in listaPlatoBuscado.indices) {
+            if (listaPlatoBuscado[i].namePlato.lowercase().contains(text.lowercase())) {
+                filterdNamePlato.add(listaPlatoBuscado[i])
             }
         }
-        //calling a method of the adapter class and passing the filtered list
-        adapterPlato.filterList(filterdNamePlato)
+        adapterPlatoFiltrado.filterList(filterdNamePlato)
     }
+
+
+
 
     // ACTUALIZA EL PRECIO TOTAL A PAGAR
     fun actualizarPrecioTotal(){

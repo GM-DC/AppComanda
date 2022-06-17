@@ -46,14 +46,14 @@
 
                 </LinearLayout>
 
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/sv_buscarPlato"
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/iv_buscarPlato"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/RV_PP_Pedido_Margin"
-                android:background="@drawable/input_buscardor"
-                android:iconifiedByDefault="true"
-                android:queryHint="Buscar Producto" />
+                android:layout_marginEnd="20dp"
+                android:queryHint="Buscar Producto"
+                android:src="@drawable/icon_search"
+                android:layout_gravity="end"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_categoria"
