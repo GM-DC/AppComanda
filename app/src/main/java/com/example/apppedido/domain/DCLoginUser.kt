@@ -15,8 +15,8 @@ data class DCRespuestaLogin(
 data class DCLoginDatosExito (
     val cdgmoneda: String,   //
     val cdgpago: String,     //
-    val codigO_EMPRESA: String,  //
-    val correlativo: Any,  //
+    val codigO_EMPRESA: String,  //**
+    val correlativo: Any,  //**
     val descuento: String,  //
     val estadopedido: String,
     val facturA_ADELANTADA: String,  //
@@ -33,7 +33,7 @@ data class DCLoginDatosExito (
     val sucursal: String,  //
     val tipocambio: String,
     val usuario: String,
-    val usuarioautoriza: String,
-    val usuariocreacion: String,
-    val validez: String
+    val usuarioautoriza: String, //**
+    val usuariocreacion: String, //**
+    val validez: String //**
 ) : Serializable

@@ -19,13 +19,18 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.apppedido.*
-import com.example.apppedido.domain.Model.*
-import com.example.apppedido.infraestruture.network.APIService
+import com.example.apppedido.R
+import com.example.apppedido.domain.Model.DCCategoriaItem
+import com.example.apppedido.domain.Model.DCLoginDatosExito
+import com.example.apppedido.domain.Model.DCOrdenPedido
+import com.example.apppedido.domain.Model.DCPlatoItem
+import com.example.apppedido.domain.Model.DataClassPedido
+import com.example.apppedido.domain.Model.Detalle
 import com.example.apppedido.infraestruture.adapters.AdapterCategoria
 import com.example.apppedido.infraestruture.adapters.AdapterPedido
 import com.example.apppedido.infraestruture.adapters.AdapterPlato
 import com.example.apppedido.infraestruture.adapters.AdapterPlatoFiltrado
+import com.example.apppedido.infraestruture.network.APIService
 import com.example.apppedido.infraestruture.network.RetrofitCall
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,9 +38,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.Exception
 import java.text.DecimalFormat
-import kotlin.collections.ArrayList
 
 
 class FrgCatPlat: Fragment() {
@@ -50,6 +53,7 @@ class FrgCatPlat: Fragment() {
     private val listaPlatoBuscado = ArrayList<DCPlatoItem>()
     private val listaPedido = ArrayList<DataClassPedido>()
     private val listaDetalleOrdenPedido = ArrayList<Detalle>()
+
     var apiInterface: APIService? = null
     //*************** FIN ATRIBUTOS ********************
 
@@ -85,7 +89,6 @@ class FrgCatPlat: Fragment() {
 
         //BUSCAR PLATOS
         consultaPrecuenta()
-
 
         //Recibir datos de mesa y Zona
         iniZonaMesa()
@@ -175,13 +178,24 @@ class FrgCatPlat: Fragment() {
 
         actualizarPrecioTotal()
     }
-    fun buscarPlatosTotal() {
-
-    }
 
     private fun regregarZonaPiso() {
         val datosRecuperados = arguments
         val DatosUsuario: DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
+        val IDZONA = datosRecuperados?.getString("IDZONA")
+        val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
+
+        //************** EVALUA SI HAY PEDIDOS ************
+        println("----------------------------${listaPedido.size}")
+
+        if (listaPedido.size > 0){
+            println()
+            println("Se cambio a O")
+            cambiarEstadoMesa(IDZONA!!,IDMESA!!,"O")
+        }else{
+            println("Se cambio a L")
+            cambiarEstadoMesa(IDZONA!!,IDMESA!!,"L")
+        }
 
         val reenviar = Bundle()
         reenviar.putSerializable("DATOUSUARIO",DatosUsuario)
@@ -205,171 +219,104 @@ class FrgCatPlat: Fragment() {
     //ENVIAR COMANDA
     fun enviarComanda(){
 
+
         val datosRecuperados = arguments
         val DatosUsuario: DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
-
         val reenviar = Bundle()
         reenviar.putSerializable("DATOUSUARIO",DatosUsuario)
-
         val fragment = FrgZonaPiso()
         fragment.arguments = reenviar
 
         //****************************************************************
 
-        try {
-            getDataOrdenPedido()
-        }catch (e:Exception){
-            println("Error : $e")
-        }finally {
-            println("Fin")
-        }
+        getDataOrdenPedido()
 
         //****************************************************************
-        val transaction = fragmentManager?.beginTransaction()
-        transaction?.replace(R.id.frm_panel,fragment)?.commit()
-        //.addToBackStack(null)
-        //transaction?.replace(R.id.frm_panel,fragment)?.show(fragment)?.hide(FrgCatPlat())?.commit()
+
     }
     //ENVIAR ORDEN PEDIDO API
     fun getDataOrdenPedido() {
 
-        //VOLVER A ENVIARLO LOS DATOS
-        //RECIVIR DATOS Y USARLO
+        //***********************
         val datosRecuperados = arguments
         val DatosUsuario: DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
-
+        val reenviar = Bundle()
+        reenviar.putSerializable("DATOUSUARIO",DatosUsuario)
+        val fragment = FrgZonaPiso()
+        fragment.arguments = reenviar
+        //***********************
 
         for (i in listaPedido.indices){
             listaDetalleOrdenPedido.add(
                 Detalle(
-                "18",
-                0,
-                0,
-                0,
-                0,
-                "",
-                "",
-                "",
-                "",
-                0,
-                0,
-                0, //---- Conflicto
-                0,
-                0,
-                "",
-                "",
-                "",
-                "",
-                "",
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                listaPedido[i].precioTotal.toInt(),     //// ACLARAR TEMA
-                0,
-                DatosUsuario.nameMozo,
-                "",
-                "",
-                listaPedido[i].namePlato,
-                listaPedido[i].observacion,
-                0,
-                0,
-                0,
-                0,
-                listaPedido[i].precio.toInt(),         //// ACLARAR TEMA
-                0,
-                0,
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                0,
+                    0,
+                    0,
+                    listaPedido[i].cantidad,
+                    listaPedido[i].namePlato,
+                    listaPedido[i].precio.toInt(),
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    listaPedido[i].observacion,
+                    0,
+                    0,
+                    "",
+                    0,
+                    "",
+                    0,
+                    0,
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    DatosUsuario.nameMozo,
+                    "",
+                    "",
+                    0,
+                    0,
+                    0,
+                    "",
+                    "2022-06-18T21:31:14.558Z",
+                    0,
+                    "",
+                    "",
+                    "",
+                    0,
+                    "",
+                    "",
+                    "",
+                    "",
+                    0,
+                    0,
+                    0,
+                    "",
+                    "2022-06-18T21:31:14.558Z",
+                    0,
+                    0,
+                    0)
             )
-            )
+
+
         }
 
         val call: Call<DCOrdenPedido> = apiInterface!!.postOrdenPedido(
-            DCOrdenPedido(
-                "",
-                "0001",
-                DatosUsuario.codigO_EMPRESA,
-                DatosUsuario.cdgmoneda,
-                "0001",
+            DCOrdenPedido(0,
                 "",
                 "",
-                0,
-                DatosUsuario.cdgpago,
                 "",
                 "",
-                Detalle(
-                    "18",
-                    0,
-                    0,
-                    0,
-                    0,
-                    "",
-                    "",
-                    "",
-                    "",
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,     //// ACLARAR TEMA
-                    0,
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,         //// ACLARAR TEMA
-                    0,
-                    0,
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    0,
-                ),
-                "",
-                "",
-                DatosUsuario.facturA_ADELANTADA,
+                DatosUsuario.nameMozo,
                 "",
                 "",
                 "",
                 "",
                 "",
-                0,
-                0,
-                DatosUsuario.iD_COTIZACION.toInt(),
+                "2022-06-18T21:31:14.558Z",
+                "",
                 0,
                 0,
                 0,
@@ -377,33 +324,68 @@ class FrgCatPlat: Fragment() {
                 0,
                 0,
                 "",
-                "", //------ problema
+                "",
+                "",
+                0,
+                0,
+                "",
+                "",
+                "2022-06-18T21:31:14.558Z",
+                "2022-06-18T21:31:14.558Z",
+                "",
+                "",
+                0,
+                0,
+                "",
+                "2022-06-18T21:31:14.558Z",
+                "string",
+                "",
+                "",
+                "",
+                0,
+                0,
+                "",
                 "",
                 "",
                 "",
                 "",
                 "",
                 0,
-                DatosUsuario.poR_IGV.toInt(),
-                DatosUsuario.puntO_VENTA,
-                DatosUsuario.redondeo,
                 "",
-                "",
-                "",
-                DatosUsuario.sucursal,
-                0,
-                "",
-                "",
-                DatosUsuario.validez,
-                0,
+                listaDetalleOrdenPedido
             )
         )
         call.enqueue(object  : Callback<DCOrdenPedido>{
             override fun onResponse(call: Call<DCOrdenPedido>, response: Response<DCOrdenPedido>) {
-                println("Exito")
+                println("*****************************************************")
+                println("****************      Exito          ****************")
+                println("*****************************************************")
+                println("*****************************************************")
+                println("${listaPedido}")
+                println("${listaDetalleOrdenPedido}")
+                println("${listaDetalleOrdenPedido.toList()}")
+
+
+
+                val IDZONA = datosRecuperados?.getString("IDZONA")
+                val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
+                if (listaPedido.size > 0){
+                    println()
+                    println("Se cambio a O")
+                    cambiarEstadoMesa(IDZONA!!,IDMESA!!,"O")
+                }else{
+                    println("Se cambio a L")
+                    cambiarEstadoMesa(IDZONA!!,IDMESA!!,"L")
+                }
+
+                val transaction = fragmentManager?.beginTransaction()
+                transaction?.replace(R.id.frm_panel,fragment)?.commit()
+
             }
             override fun onFailure(call: Call<DCOrdenPedido>, t: Throwable) {
-                println("Error")
+                println("*****************************************************")
+                println("****************      ERROR          ****************")
+                println("*****************************************************")
             }
         })
 
@@ -416,9 +398,10 @@ class FrgCatPlat: Fragment() {
         val datoZona = datosRecuperados?.getString("IDZONA")
         val datoMesa = datosRecuperados?.getString("IDMESA")
 
+
         fun getDataPreCuenta(idPedido: String) {
             CoroutineScope(Dispatchers.IO).launch {
-                val response = apiInterface!!.getPrecuenta("$idPedido")
+                val response = apiInterface!!.getPrePedidos("$idPedido")
                 activity?.runOnUiThread {
                     if(response.isSuccessful){
                         var data = response.body()
@@ -539,19 +522,7 @@ class FrgCatPlat: Fragment() {
         }
         //-------------------------------------------------------------------
 
-        //----------------  CAMBIAR ESTADO  -------------------
-        val datosRecuperados = arguments
-        val IDZONA = datosRecuperados?.getString("IDZONA")
-        val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
 
-        if (action.equals(0)){
-            cambiarEstadoMesa(IDZONA!!,IDMESA!!,"L")
-        }else{
-            cambiarEstadoMesa(IDZONA!!,IDMESA!!,"O")
-        }
-
-
-        //-----------------------------------------------------
 
         actualizarPrecioTotal()
     }

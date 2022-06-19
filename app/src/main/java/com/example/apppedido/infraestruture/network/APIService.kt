@@ -39,9 +39,9 @@ interface APIService {
     fun postOrdenPedido(@Body ordenPedido: DCOrdenPedido) : Call<DCOrdenPedido>
 
     @GET("api/Pedido/Precuenta")
-    suspend fun getPrecuenta(@Query("idPedido") idPedido:String) : Response<DCPrecuenta>
+    suspend fun getPrePedidos(@Query("idPedido") idPedido:String) : Response<DCPrecuenta>
 
     @PUT("/api/Mesas/EstadoMesa/{Piso}/{Mesa}/{Estado}")
-    suspend fun putCambiarEstadoMesa(@Path("Piso") idZona:String, @Path("Mesa") idMesa:Int, @Path("Estado") estadoMesa:String) : Response<*>
+    suspend fun putCambiarEstadoMesa(@Path("Piso") idZona:String, @Path("Mesa") idMesa:Int, @Path("Estado") estadoMesa:String) : Response<Void>
 
 }
