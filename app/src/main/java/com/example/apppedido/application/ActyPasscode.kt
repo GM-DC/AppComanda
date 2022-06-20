@@ -32,29 +32,16 @@ class activityPasscode : AppCompatActivity()  {
     //NUMERO ALEATORIO
     private fun numeroAleatorio(){
 
-        val positions = IntArray(10)
-        val rdr = java.util.Random()
-        for (i in 0..9) {
-            var toPos: Int = rdr.nextInt(10 - 1 + 1) + 1
-            var shouldContinue: Boolean = positions.contains(toPos)
-            while (shouldContinue) {
-                toPos = rdr.nextInt(10 - 1 + 1) + 1
-                shouldContinue = positions.contains(toPos)
-            }
-            when (toPos) {
-                1 -> binding2.btn01.text = i.toString()
-                2 -> binding2.btn02.text = i.toString()
-                3 -> binding2.btn03.text = i.toString()
-                4 -> binding2.btn04.text = i.toString()
-                5 -> binding2.btn05.text = i.toString()
-                6 -> binding2.btn06.text = i.toString()
-                7 -> binding2.btn07.text = i.toString()
-                8 -> binding2.btn08.text = i.toString()
-                9 -> binding2.btn09.text = i.toString()
-                10 -> binding2.btn00.text = i.toString()
-            }
-            positions[i] = toPos
-        }
+       binding2.btn01.text = "1"
+       binding2.btn02.text = "2"
+       binding2.btn03.text = "3"
+       binding2.btn04.text = "4"
+       binding2.btn05.text = "5"
+       binding2.btn06.text = "6"
+       binding2.btn07.text = "7"
+       binding2.btn08.text = "8"
+       binding2.btn09.text = "9"
+       binding2.btn00.text = "0"
 
         binding2.btn01.setOnClickListener { numeroPresionado(binding2.btn01.text.toString()) }
         binding2.btn02.setOnClickListener { numeroPresionado(binding2.btn02.text.toString()) }

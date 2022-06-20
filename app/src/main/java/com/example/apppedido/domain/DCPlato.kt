@@ -1,12 +1,14 @@
 package com.example.apppedido.domain.Model
 
-import com.google.gson.annotations.SerializedName
+class DCPlato : ArrayList<DCPlatoItem>()
 
 data class DCPlatoItem(
-    @SerializedName("Codigo")
-    val idPlato: String,
-    val IdCategoria: String,
-    @SerializedName("Nombre")
-    val namePlato: String,
-    val PrecioVenta: Double
+    val iD_PRODUCTO: Int,
+    val codigo: String,
+    val nombre: String,
+    val simbolo: String,
+    val preciO_VENTA: Double,
+    val receta: Int,
+    val adicional: String,
+    val comanda: Any
 )

@@ -6,8 +6,8 @@ data class DataClassPedido (
     var cantidad:Int,
     val namePlato:String,
     val categoria:String,
-    val precio:BigDecimal,
-    var precioTotal:BigDecimal,
+    val precio:Double,
+    var precioTotal:Double,
     var observacion:String
     )
 

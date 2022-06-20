@@ -29,11 +29,16 @@ class AdapterPedido(private val data: ArrayList<DataClassPedido>, private val on
             //******* DECLARANDO COMPONENTES *****
             val tv_nombrePlato = view.findViewById<TextView>(R.id.tv_nombrePlato)
             val tv_cantidad = view.findViewById<TextView>(R.id.tv_cantidad)
+            val tv_precio = view.findViewById<TextView>(R.id.tv_precio)
+            val tv_precioTotal = view.findViewById<TextView>(R.id.tv_precioTotal)
+
 
             //************ ASIGNANDO COMPONENTES ********
             tv_cantidad.text = data.cantidad.toString()
             tv_nombrePlato.text = data.namePlato
-
+            tv_precio.text = "S/. ${data.precio}"
+            data.precioTotal = data.precio*data.cantidad
+            tv_precioTotal.text = "S/. ${data.precioTotal}"
             itemView.setOnClickListener { onClickListener(data) }
 
         }

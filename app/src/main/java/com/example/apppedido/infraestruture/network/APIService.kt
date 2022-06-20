@@ -14,7 +14,7 @@ interface APIService {
     @GET("api/TablasBasicas/Detail?filter=codigo eq 'CDG_PISO'")
     suspend fun getZonas(): Response<List<DCZonaItem>>
 
-    @GET("api/Producto?select=nombre,codigo,idCategoria,precioVenta")
+    @GET("api/Producto")
     suspend fun getPlatoBuscado(): Response<List<DCPlatoItem>>
 
     @GET("api/Mesas")
@@ -23,8 +23,8 @@ interface APIService {
     @GET("api/TablasBasicas/Detail?filter=codigo eq 'CATE_PROD' and referencia4 eq 'R'&select=nombre,numero&orderby=nombre asc")
     suspend fun getCategoria() : Response<List<DCCategoriaItem>>
 
-    @GET("api/Producto?select=nombre,codigo,idcategoria,precioVenta&orderby=nombre asc")
-    suspend fun getPlato(@Query("filter") filter:String) : Response<List<DCPlatoItem>>
+    @GET("/{nombrecategoria},{moneda}")
+    suspend fun getPlato(@Path("nombrecategoria") nombrecategoria:String, @Path("moneda") moneda:String) : Response<List<DCPlatoItem>>
 
     @GET("api/Producto?select=nombre,codigo,idcategoria,precioVenta&orderby=nombre asc")
     suspend fun getPlatoNombre(@Query("filter") filter:String) : Response<List<DCPlatoItem>>

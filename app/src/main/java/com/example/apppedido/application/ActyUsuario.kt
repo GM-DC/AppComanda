@@ -1,6 +1,7 @@
 package com.example.apppedido.application.View
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,6 +36,7 @@ class ActyUsuario : AppCompatActivity() {
         apiInterface = RetrofitCall.client?.create(APIService::class.java) as APIService
         initUsuario()
         getData()
+
     }
 
     //**************   INICIAR DATOS    *********************

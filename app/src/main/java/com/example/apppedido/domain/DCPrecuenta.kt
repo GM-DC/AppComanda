@@ -12,7 +12,7 @@ data class DCPrecuenta(
 
 data class ListDetalle(
     val cantidad: Int,
-    val importe: Int,
+    val importe: Double,
     val nombre: String,
-    val precio: Int
+    val precio: Double
 )

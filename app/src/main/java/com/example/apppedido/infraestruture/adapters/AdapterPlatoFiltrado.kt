@@ -31,10 +31,8 @@ class AdapterPlatoFiltrado(var data: ArrayList<DCPlatoItem>, private val onClick
             val tx_plato = view.findViewById<TextView>(R.id.tx_plato)
             val tx_platoPrecio = view.findViewById<TextView>(R.id.tx_platoPrecio)
 
-            tx_platoPrecio.text = "S/. ${data.PrecioVenta}"
-            tx_plato.text = data.namePlato
-            //tx_platoPrecio.setTextColor(Color.parseColor("#0E83C9"))
-            //tx_plato.setTextColor(Color.parseColor("#0E83C9"))
+            tx_platoPrecio.text = "S/. ${data.preciO_VENTA}"
+            tx_plato.text = data.nombre
 
             itemView.setOnClickListener{onClickListener(data)}
         }
