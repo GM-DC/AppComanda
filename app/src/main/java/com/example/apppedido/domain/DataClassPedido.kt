@@ -8,6 +8,7 @@ data class DataClassPedido (
     val categoria:String,
     val precio:Double,
     var precioTotal:Double,
-    var observacion:String
+    var observacion:String,
+    var estadoPedido:String
     )
 

@@ -1,72 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cv_pedido"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="450dp"
-    android:layout_height="90dp"
-    android:paddingTop="3dp"
-    android:paddingLeft="8dp"
+    android:layout_height="100dp"
     android:layout_margin="0.5dp"
     android:orientation="horizontal"
-    android:background="@drawable/effect_clic_pedido"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="1dp"
+    app:cardUseCompatPadding="true"
+    android:background="@color/trans"
     >
 
-
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="3dp"
+            android:paddingLeft="8dp"
+            android:layout_margin="0.5dp"
+            android:background="@drawable/effect_clic"
             >
 
-
-            <TextView
-                android:id="@+id/tv_nombrePlato"
-                android:layout_width="350dp"
-                android:layout_height="30dp"
-                android:textColor="#FF0E83C9"
-                android:textSize="19sp"
-                android:textStyle="bold"
-                tools:text="Pollo a la brasa" />
-
-            <TextView
-                android:id="@+id/tv_precio"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:textSize="@dimen/TV_PP_Pedido_TextoSize"
-                tools:text="S/.25.36"
-                android:textColor="#FF0E83C9"
-                />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
 
 
-            <TextView
-                android:id="@+id/tv_precioTotal"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:textSize="@dimen/TV_PP_Pedido_TextoSize"
-                android:textStyle="bold"
-                android:textColor="#FF0E83C9"
-                tools:text="S/.2'000.00" />
+                <TextView
+                    android:id="@+id/tv_nombrePlato"
+                    android:layout_width="350dp"
+                    android:layout_height="30dp"
+                    android:textColor="#FF0E83C9"
+                    android:textSize="19sp"
+                    android:textStyle="bold"
+                    tools:text="Pollo a la brasa" />
+
+                <TextView
+                    android:id="@+id/tv_precio"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:textSize="@dimen/TV_PP_Pedido_TextoSize"
+                    tools:text="S/.25.36"
+                    android:textColor="#FF0E83C9"
+                    />
+
+
+                <TextView
+                    android:id="@+id/tv_precioTotal"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:textSize="@dimen/TV_PP_Pedido_TextoSize"
+                    android:textStyle="bold"
+                    android:textColor="#FF0E83C9"
+                    tools:text="S/.2'000.00" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+
+                >
+
+                <TextView
+                    android:id="@+id/tv_cantidad"
+                    android:layout_width="@dimen/ItemPedido_TVCantidadObs_Windth"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:textColor="#FF0E83C9"
+                    android:textSize="@dimen/TV_PP_Pedido_TextoSize"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    tools:text="10" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-
-            >
-
-            <TextView
-                android:id="@+id/tv_cantidad"
-                android:layout_width="@dimen/ItemPedido_TVCantidadObs_Windth"
-                android:layout_height="match_parent"
-                android:layout_margin="1dp"
-                android:textColor="#FF0E83C9"
-                android:textSize="@dimen/TV_PP_Pedido_TextoSize"
-                android:textStyle="bold"
-                android:gravity="center"
-                tools:text="10" />
-
-        </LinearLayout>
 
 
 
@@ -77,4 +91,6 @@
 
 
 
-</LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

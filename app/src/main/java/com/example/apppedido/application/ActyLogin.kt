@@ -55,7 +55,6 @@ class ActyLogin : AppCompatActivity() {
                         Confirmado = false
                         Toast.makeText(this, "INGRESAR CONFIGURACIONES", Toast.LENGTH_SHORT).show()
                     }else{
-
                         prefs.saveDominio(et_ip.text.toString())
                         prefs.savePuerto(et_port.text.toString())
                         Confirmado = true

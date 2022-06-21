@@ -1,18 +1,27 @@
 package com.example.apppedido.domain.Model
 
+import lombok.Builder
+import lombok.Getter
+import lombok.Setter
+
+@Getter
+@Setter
+@Builder
 data class DCPrecuenta(
-    val detalle: List<ListDetalle>,
-    val fechayhora: String,
-    val mesa: String,
+    var numerO_PEDIDO: String,
     val mesero: String,
-    val numerO_PEDIDO: String,
+    val zona: String,
+    val mesa: String,
+    val fechayhora: String,
     val observaciones: String,
-    val zona: String
+    val precioTotal: Double,
+    val igv:Double,
+    val detalle: List<ListDetalle>
 )
 
 data class ListDetalle(
     val cantidad: Int,
-    val importe: Double,
     val nombre: String,
-    val precio: Double
+    val precio: Double,
+    val importe: Double,
 )
