@@ -28,6 +28,18 @@ class ActyPanelPedidos : AppCompatActivity() {
         desaparecerBarraNavegacion()
     }
 
+    override fun onBackPressed() {
+        val count = supportFragmentManager.backStackEntryCount
+
+        println(count)
+
+        if (count == 0) {
+            super.onBackPressed()
+        } else {
+            supportFragmentManager.popBackStack()
+        }
+    }
+
     private fun desaparecerBarraNavegacion() {
         val decorView = window.decorView
         decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY

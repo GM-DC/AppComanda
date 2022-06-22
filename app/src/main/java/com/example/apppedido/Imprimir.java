@@ -22,7 +22,7 @@ public class Imprimir {
 
                     final StringBuilder builder = new StringBuilder();
                     item.getDetalle().forEach((val)->{
-                        builder.append("[L] <b>"+val.getNombre() +"[R]"+val.getImporte()+"\n");
+                        builder.append("[L] <b>"+val.getCantidad()+" "+val.getNombre() +"[R]"+val.getImporte()+"\n");
                     });
 
                     // imprimes
@@ -37,12 +37,6 @@ public class Imprimir {
                                     "[L] IMPORTE TOTAL [R]"+item.getPrecioTotal()+"\n" +
                                     "[L]\n" +
                                     "[L] _______________\n" +
-                                    "[L]\n" +
-                                    "[C]<font size='tall'>Customer Info</font>\n" +
-                                    "[L] EM Haseeb\n" +
-                                    "[L] 14 Streets\n" +
-                                    "[L] Cantt, LHR\n" +
-                                    "[L] Tel : +923040017916\n" +
                                     "[L]\n"
                             //  "[L] <barcode type='ean13' height='10'>831254784551</barcode>\n[L]\n" +
                             //    "[L] <qrcode>http://github.com/EmHaseeb/</qrcode>\n[L]\n[L]\n[L]\n"

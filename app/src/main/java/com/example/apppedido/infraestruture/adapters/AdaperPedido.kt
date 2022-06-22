@@ -48,14 +48,13 @@ class AdapterPedido(private val data: ArrayList<DataClassPedido>, private val on
                 tv_cantidad.setTextColor(Color.parseColor("#DA1212"))
             }
 
-
-
             //************ ASIGNANDO COMPONENTES ********
             tv_cantidad.text = data.cantidad.toString()
             tv_nombrePlato.text = data.namePlato
             tv_precio.text = "S/. ${data.precio}"
             data.precioTotal = data.precio*data.cantidad
             tv_precioTotal.text = "S/. ${data.precioTotal}"
+
             itemView.setOnClickListener { onClickListener(data) }
 
         }

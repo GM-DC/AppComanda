@@ -43,6 +43,8 @@ data class DCOrdenPedido(
     val comision: Double,
     val puntO_VENTA: String,
     val redondeo: String,
+    val mesa: String,
+    val piso: String,
     val validez: String,
     val motivo: String,
     val correlativo: String,

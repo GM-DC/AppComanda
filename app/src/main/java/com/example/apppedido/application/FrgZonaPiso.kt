@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -75,8 +76,10 @@ class FrgZonaPiso : Fragment() {
         rv_zona?.layoutManager = LinearLayoutManager(activity,RecyclerView.HORIZONTAL,false)
         adapterZona = AdapterZona(listaZona) { dataclassZonas -> onItemDatosZonas(dataclassZonas) }
         rv_zona?.adapter = adapterZona
+
     }
     //SELECCIONAR ZONA Y SE LISTA LAS MESAS
+
     private fun onItemDatosZonas(dataclassZonas: DCZonaItem) {
         val idZona = dataclassZonas.idZona
         getDataMesa(idZona)
@@ -106,6 +109,9 @@ class FrgZonaPiso : Fragment() {
     //SELECCIONAR MESA
     private fun onItemDatosMesa(dataclassMesa: DCMesaItem) {
         //ENVIAR DATOS DE MESA
+
+
+
         val datosRecuperados = arguments
         val recibeDatos: DCLoginDatosExito = datosRecuperados?.getSerializable("DATOUSUARIO") as DCLoginDatosExito
 
@@ -135,7 +141,7 @@ class FrgZonaPiso : Fragment() {
         fragment.arguments = enviarDatos
 
         //CAMBIAR FRAMENT
-        transaction!!.replace(R.id.frm_panel, fragment).commit()
+        transaction!!.add(R.id.frm_panel, fragment).addToBackStack(null).commit()
 
     }
     // Obtiene la informacion del API Mesa
