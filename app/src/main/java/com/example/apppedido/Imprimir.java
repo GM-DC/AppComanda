@@ -27,13 +27,14 @@ public class Imprimir {
 
                     // imprimes
                     printer.printFormattedTextAndCut(
-                            "[C]<u><font size='big'>ORDER N°"+item.getNumerO_PEDIDO()+"+</font></u>\n[L]\n" +
+                            "[C]<u><font size='big'>ORDER N°"+item.getNumerO_PEDIDO()+"</font></u>\n[L]\n" +
                                     "[L] _______________\n" +
                                     "[L] Descripcion [R]Importe \n[L]\n" +
                                     builder+
                                     "[L] _______________\n" +
-                                    "[L] IGV [R]"+item.getIgv()+"BD\n" +
-                                    "[L] IMPORTE TOTAL [R]"+item.getPrecioTotal()+"BD\n" +
+                                    "[L] SUBTOTAL [R]"+item.getSubtotal()+"\n" +
+                                    "[L] IGV [R]"+item.getIgv()+"\n" +
+                                    "[L] IMPORTE TOTAL [R]"+item.getPrecioTotal()+"\n" +
                                     "[L]\n" +
                                     "[L] _______________\n" +
                                     "[L]\n" +

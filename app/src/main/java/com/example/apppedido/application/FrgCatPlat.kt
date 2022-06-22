@@ -57,10 +57,10 @@ class FrgCatPlat: Fragment() {
     private val listaPlatoBuscado = ArrayList<DCPlatoItem>()
     private val listaPedido = ArrayList<DataClassPedido>()
     private val listaDetalleOrdenPedido = ArrayList<Detalle>()
+
+
+
     lateinit var idpedido:String
-
-    //private lateinit var precuenta:DCPrecuenta
-
 
 
     var apiInterface: APIService? = null
@@ -72,6 +72,7 @@ class FrgCatPlat: Fragment() {
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
 
         //++++++++++++++++++    DECLARA COMPONENTE     +++++++++++++++++
         apiInterface = RetrofitCall.client?.create(APIService::class.java) as APIService
@@ -106,6 +107,14 @@ class FrgCatPlat: Fragment() {
 
         //listaPedido.add(0,DataClassPedido(1,"SALCHILOCURA","pollo",15.2,15.2,"","ATENDIDO"))
 
+
+        //DESAPARECER BARRA DE NAVEGACION
+        desaparecerBarraNavegacion()
+
+    }
+
+    //DESAPARECER BARRA DE NAVEGACION
+    private fun desaparecerBarraNavegacion() {
         val decorView = view
         decorView?.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -113,7 +122,6 @@ class FrgCatPlat: Fragment() {
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_FULLSCREEN)
-
     }
 
     private fun guardarCambio() {
@@ -135,8 +143,8 @@ class FrgCatPlat: Fragment() {
         //OBTENER DATOS DE ZONA Y MESA
         val datosRecuperados = arguments
         val DatosUsuario: DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
-        val NAMEZONA = datosRecuperados?.getString("NAMEZONA")
-        val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
+        val NAMEZONA = datosRecuperados.getString("NAMEZONA")
+        val IDMESA = datosRecuperados.getString("IDMESA")?.toInt()
 
         //SUMAR CANTIDAD DE PEDIDOS
         var cantidadLista = 0f
@@ -144,21 +152,32 @@ class FrgCatPlat: Fragment() {
             cantidadLista += listaPedido[i].precioTotal.toFloat()
         }
 
+        val formato= DecimalFormat()
+        formato.maximumFractionDigits = 2 //Numero maximo de decimales a mostrar
+
+        var Total = cantidadLista
+        var igv = (cantidadLista*18)/118
+        var sub = Total-igv
+        igv = formato.format(igv).toFloat()
+        sub = formato.format(sub).toFloat()
+
         //TERNER LA LISTA PARA LA PRECUENTA
         val listadetalleprecuenta = ArrayList<ListDetalle>()
         for (i in listaPedido.indices){
             listadetalleprecuenta.add(i, ListDetalle(listaPedido[i].cantidad,listaPedido[i].namePlato,listaPedido[i].precio,listaPedido[i].precioTotal))
         }
 
+        println("///////////////////////////////////////////////////////")
+        println("////////////////// AQUI ESTA 22222/////////////////////")
+        println("///////////////////////////////////////////////////////")
+
+
         //BOLETA DE PRECUENTA PREPARADA
-        val boletaPreCuenta = DCPrecuenta(idpedido,DatosUsuario.nameMozo,NAMEZONA!!,IDMESA.toString()!!,"","",cantidadLista.toDouble().toString(),listadetalleprecuenta.toList())
+        val boletaPreCuenta = DCPrecuenta(idpedido,DatosUsuario.nameMozo,NAMEZONA!!,IDMESA.toString()!!,"","","S/. $sub","S/. $igv","S/. $Total",listadetalleprecuenta.toList())
 
         val imprimir = Imprimir()
 
-        println(boletaPreCuenta)
-
         imprimir.printTcp("192.168.1.114",9100, boletaPreCuenta)
-
     }
 
 
@@ -392,8 +411,8 @@ class FrgCatPlat: Fragment() {
                     "",
                     "2022-06-18T21:31:14.558Z",
                     0,
-                    0,
-                    0)
+                    0.0,
+                    0.0)
             )
 
 
@@ -413,12 +432,12 @@ class FrgCatPlat: Fragment() {
                 "",
                 "2022-06-18T21:31:14.558Z",
                 "",
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
                 "",
                 "",
                 "",
@@ -430,7 +449,7 @@ class FrgCatPlat: Fragment() {
                 "2022-06-18T21:31:14.558Z",
                 "",
                 "",
-                0,
+                0.0,
                 0,
                 "",
                 "2022-06-18T21:31:14.558Z",
@@ -439,7 +458,7 @@ class FrgCatPlat: Fragment() {
                 "",
                 "",
                 0,
-                0,
+                0.0,
                 "",
                 "",
                 "",
@@ -527,6 +546,8 @@ class FrgCatPlat: Fragment() {
                         if (!response.body()!!.isEmpty()){
 
                             idpedido = response.body()?.get(0)?.idPedido.toString()
+
+
                             getDataPreCuenta(response.body()?.get(0)?.idPedido.toString())
 
                         }
@@ -833,5 +854,19 @@ class FrgCatPlat: Fragment() {
         tv_PTotal?.text = "S/. ${formato.format(cantidadLista)}"
         //-------------------------------------------------------------
     }
+
+    /*
+    val datosRecuperados = arguments
+    val DatosUsuario: DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
+
+    private val dataPreCuenta = DCPrecuenta("","","","","","","",""," ", listOf())
+    private val setOrdenPedido = DCOrdenPedido(0,"","","","","","","",
+        "","","","2022-06-18T21:31:14.558Z","",0.0,0.0,
+        0.0,0.0,0.0,0.0,"","","",0,0,"",
+        "","2022-06-18T21:31:14.558Z","2022-06-18T21:31:14.558Z","","",0.0,
+        0,"","2022-06-18T21:31:14.558Z","string","","",
+        "",0,0.0,"","","","","","",0,"",
+        listOf())
+    */
 }
 

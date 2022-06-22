@@ -34,9 +34,10 @@ class ActyUsuario : AppCompatActivity() {
         binding = ActivityInicioBinding.inflate(layoutInflater)
         setContentView(binding.root)
         apiInterface = RetrofitCall.client?.create(APIService::class.java) as APIService
+
+        //INICIA LOS DATOS DE USUARIOS
         initUsuario()
         getData()
-
     }
 
     //**************   INICIAR DATOS    *********************
@@ -52,7 +53,6 @@ class ActyUsuario : AppCompatActivity() {
         val idMozo: String = dataClassUsuario.codigo
         intent.putExtra("USUARIOMOZO",usuarioMozo)
         intent.putExtra("IDMOZO",idMozo)
-
         startActivity(intent)
     }
     private fun getData() {

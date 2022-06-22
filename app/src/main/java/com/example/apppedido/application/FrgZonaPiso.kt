@@ -53,6 +53,12 @@ class FrgZonaPiso : Fragment() {
         //INICIAR DATOS
         getDataMesa("0001")
 
+        //DESAPARECER BARRA DE NAVEGACION
+        desaparecerBarraNavegacion()
+    }
+
+    //DESAPARECER BARRA DE NAVEGACION
+    private fun desaparecerBarraNavegacion() {
         val decorView = view
         decorView?.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -70,7 +76,7 @@ class FrgZonaPiso : Fragment() {
         adapterZona = AdapterZona(listaZona) { dataclassZonas -> onItemDatosZonas(dataclassZonas) }
         rv_zona?.adapter = adapterZona
     }
-    //SELECCIONAR MESA
+    //SELECCIONAR ZONA Y SE LISTA LAS MESAS
     private fun onItemDatosZonas(dataclassZonas: DCZonaItem) {
         val idZona = dataclassZonas.idZona
         getDataMesa(idZona)
@@ -99,16 +105,14 @@ class FrgZonaPiso : Fragment() {
     }
     //SELECCIONAR MESA
     private fun onItemDatosMesa(dataclassMesa: DCMesaItem) {
-
+        //ENVIAR DATOS DE MESA
         val datosRecuperados = arguments
         val recibeDatos: DCLoginDatosExito = datosRecuperados?.getSerializable("DATOUSUARIO") as DCLoginDatosExito
-
-        println("Datos en Zona y pmesas: ${recibeDatos}")
-
 
         val idZona = dataclassMesa.idZona
         var nameZona = ""
 
+        //ENCONTRAR LA ZONA
         for (i in listaZona.indices){
             if(listaZona[i].idZona==idZona){
                 nameZona = listaZona[i].nombreZonas

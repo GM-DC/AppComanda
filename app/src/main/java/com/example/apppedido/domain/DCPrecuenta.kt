@@ -9,13 +9,14 @@ import lombok.Setter
 @Builder
 data class DCPrecuenta(
     var numerO_PEDIDO: String,
-    val mesero: String,
+    var mesero: String,
     val zona: String,
     val mesa: String,
     val fechayhora: String,
     val observaciones: String,
-    val precioTotal: Double,
-    val igv:Double,
+    val subtotal: String,
+    val igv:String,
+    val precioTotal: String,
     val detalle: List<ListDetalle>
 )
 

@@ -24,6 +24,11 @@ class ActyPanelPedidos : AppCompatActivity() {
         //ABRE EL FRAMENT
         supportFragmentManager.beginTransaction().replace(R.id.frm_panel,framento).commit()
 
+        //DESAPARECER BARRA DE NAVEGACION
+        desaparecerBarraNavegacion()
+    }
+
+    private fun desaparecerBarraNavegacion() {
         val decorView = window.decorView
         decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE

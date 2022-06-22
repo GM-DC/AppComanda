@@ -86,6 +86,7 @@ class activityPasscode : AppCompatActivity()  {
                     //ENVIAR DATOS
                     val bundle = Bundle()
                     bundle.putSerializable("DATOSUSUARIO", response.body())
+
                     intent.putExtras(bundle)
                     startActivity(intent)
                     numeroAleatorio()
