@@ -85,7 +85,9 @@ class activityPasscode : AppCompatActivity()  {
                     val intent = Intent(applicationContext, ActyPanelPedidos::class.java)
                     //ENVIAR DATOS
                     val bundle = Bundle()
-                    bundle.putSerializable("DATOSUSUARIO", response.body())
+                    val DatosUsuario = response.body()
+
+                    bundle.putSerializable("DATOSUSUARIO", DatosUsuario)
 
                     intent.putExtras(bundle)
                     startActivity(intent)

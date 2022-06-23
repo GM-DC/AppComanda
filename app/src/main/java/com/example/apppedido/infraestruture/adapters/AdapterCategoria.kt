@@ -17,6 +17,8 @@ import kotlin.random.Random.Default.nextFloat
 
 class AdapterCategoria(private val data: List<DCCategoriaItem>, private val onClickListener: (DCCategoriaItem) -> Unit): RecyclerView.Adapter<AdapterCategoria.holderCategoria>() {
 
+    var selectedPosition = 0
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): holderCategoria {
         val layoutInflater = LayoutInflater.from(parent.context)
         return holderCategoria(layoutInflater.inflate(R.layout.item_categoria,parent,false))
@@ -25,6 +27,21 @@ class AdapterCategoria(private val data: List<DCCategoriaItem>, private val onCl
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: holderCategoria, position: Int) {
         holder.render(data[position], onClickListener)
+
+        if (selectedPosition === position) {
+
+            holder.itemView.setBackgroundResource(R.drawable.effect_clic_zona) //banco
+        }else {
+
+            holder.itemView.setBackgroundResource(R.drawable.effect_clic_mesa) //negro
+        }
+
+        holder.itemView.setOnClickListener {
+            onClickListener(data[position])
+            selectedPosition = position
+            notifyDataSetChanged()
+        }
+
     }
 
     override fun getItemCount(): Int {
@@ -45,8 +62,6 @@ class AdapterCategoria(private val data: List<DCCategoriaItem>, private val onCl
             tx_categoria.text = data.nameCategoria
             tx_categoria.setTextColor(randomColor)
             iv_categoria.setColorFilter(randomColor)
-
-            itemView.setOnClickListener { onClickListener(data) }
 
         }
     }

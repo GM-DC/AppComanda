@@ -23,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.properties.Delegates
 
 
 class FrgZonaPiso : Fragment() {
@@ -33,6 +34,8 @@ class FrgZonaPiso : Fragment() {
     private val listaZona = ArrayList<DCZonaItem>()
     private val listaMesa = ArrayList<DCMesaItem>()
     var apiInterface: APIService? = null
+
+
     //*************** FIN ATRIBUTOS ********************
 
 
@@ -84,15 +87,22 @@ class FrgZonaPiso : Fragment() {
         val idZona = dataclassZonas.idZona
         getDataMesa(idZona)
     }
+
     // Obtiene la informacion del API Zona
     private fun getDataZona(){
         CoroutineScope(Dispatchers.IO).launch {
-            val responseZona = apiInterface!!.getZonas()
+            val response = apiInterface!!.getZonas()
                 activity?.runOnUiThread {
-                if(responseZona.isSuccessful){
-                    listaZona.clear()
-                    listaZona.addAll(responseZona.body()!!)
+                if(response.isSuccessful){
+
+                    val datoss = response.body()
+
+                    for (i in datoss?.indices!!){
+                        listaZona.add(DCZonaItem(datoss[i].nombreZonas, datoss[i].idZona))
+                    }
+
                     adapterZona.notifyDataSetChanged()
+
                 }
             }
         }
@@ -106,11 +116,10 @@ class FrgZonaPiso : Fragment() {
         adapterMesa = AdapterMesa(listaMesa) { dataclassMesa -> onItemDatosMesa(dataclassMesa) }
         rv_mesa?.adapter = adapterMesa
     }
+
     //SELECCIONAR MESA
     private fun onItemDatosMesa(dataclassMesa: DCMesaItem) {
         //ENVIAR DATOS DE MESA
-
-
 
         val datosRecuperados = arguments
         val recibeDatos: DCLoginDatosExito = datosRecuperados?.getSerializable("DATOUSUARIO") as DCLoginDatosExito
@@ -141,7 +150,7 @@ class FrgZonaPiso : Fragment() {
         fragment.arguments = enviarDatos
 
         //CAMBIAR FRAMENT
-        transaction!!.add(R.id.frm_panel, fragment).addToBackStack(null).commit()
+        transaction!!.replace(R.id.frm_panel, fragment).addToBackStack(null).commit()
 
     }
     // Obtiene la informacion del API Mesa
@@ -161,28 +170,24 @@ class FrgZonaPiso : Fragment() {
     }
 
 
+/*
 
+    fun getInfoMesa(mesa:String,piso:String){
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = apiInterface!!.getPedidoZonaMesa("mesa eq '$mesa' and piso eq '$piso' and estado eq '0002'" )
+            activity?.runOnUiThread {
 
+                if(response.isSuccessful){
+                    response.body()?.get(0)?.idPedido
+                }else{
+                    println("fallo")
+                }
 
+            }
+        }
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+*/
 
 
 

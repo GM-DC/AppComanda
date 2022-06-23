@@ -3,22 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".application.View.FrgCatPlat"
     android:paddingHorizontal="15dp"
-    android:background="#0E83C9">
-
+    android:background="#0E83C9"
+    android:hapticFeedbackEnabled="true">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="#0E83C9"
         >
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="#0E83C9"
+            >
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -95,12 +97,32 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_pedido"
-                    android:layout_width="450dp"
-                    android:layout_height="550dp"
-                    android:layout_margin="@dimen/RV_PP_Pedido_Margin"
-                    />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_pedido"
+                        android:layout_width="450dp"
+                        android:layout_height="550dp"
+                        android:layout_margin="@dimen/RV_PP_Pedido_Margin"
+                        />
+                    <TextView
+                        android:id="@+id/tv_PTotal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="40sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:layout_gravity="end"
+                        android:text="S/. 0.0"
+                        />
+
+                </LinearLayout>
+
+
+
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -159,44 +181,44 @@
                         android:textColor="#0E83C9"
                         />
 
-                    <Button
-                        android:id="@+id/bt_cancelar"
-                        android:padding="0dp"
-                        android:backgroundTint="@color/white"
-                        android:layout_width="120dp"
-                        android:layout_height="80dp"
-                        android:textSize="15sp"
-                        android:text="Cancelar"
-                        android:textColor="#0E83C9"
-                        />
-
                 </LinearLayout>
-
-
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_PTotal"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="40sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:layout_marginEnd="50dp"
-                android:layout_gravity="end"
-                android:text="S/. 0.0"
-                />
-
-            <Button
-                android:id="@+id/bt_enviarComanda"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_gravity="center"
-                android:backgroundTint="@color/white"
-                android:text="Enviar"
-                android:textColor="#0E83C9"
-                android:textSize="20sp"/>
+                android:layout_marginTop="10dp"
+                >
+
+                <Button
+                    android:id="@+id/bt_enviarComanda"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/white"
+                    android:text="Enviar"
+                    android:textColor="#0E83C9"
+                    android:textSize="20sp"
+                    android:layout_marginHorizontal="15dp"
+                    />
+
+                <Button
+                    android:id="@+id/bt_cancelar"
+                    android:backgroundTint="@color/white"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="Cancelar"
+                    android:textColor="#0E83C9"
+                    android:layout_marginHorizontal="15dp"
+                    />
+
+            </LinearLayout>
+
+
 
         </LinearLayout>
     </LinearLayout>

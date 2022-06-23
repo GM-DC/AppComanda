@@ -12,13 +12,27 @@ import com.example.apppedido.domain.Model.DCMesaItem
 
 class AdapterMesa(private val data: ArrayList<DCMesaItem>, private val onClickListener: (DCMesaItem) -> Unit): RecyclerView.Adapter<AdapterMesa.holderMesa>() {
 
+    var selectedPosition = -1
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): holderMesa {
         val layoutInflater = LayoutInflater.from(parent.context)
         return holderMesa(layoutInflater.inflate(R.layout.item_mesa,parent,false))
     }
 
     override fun onBindViewHolder(holder: holderMesa, position: Int) {
-        holder.render(data[position],onClickListener)
+        holder.render(data[position],onClickListener, position)
+
+        if (selectedPosition === position) {
+            holder.itemView.setBackgroundResource(R.drawable.effect_clic_zona) //banco
+        }else {
+            holder.itemView.setBackgroundResource(R.drawable.effect_clic_mesa) //negro
+        }
+
+        holder.itemView.setOnClickListener {
+            onClickListener(data[position])
+            selectedPosition = position
+            notifyDataSetChanged()
+        }
     }
 
     override fun getItemCount(): Int {
@@ -27,9 +41,10 @@ class AdapterMesa(private val data: ArrayList<DCMesaItem>, private val onClickLi
     }
 
     class holderMesa(private val view: View): RecyclerView.ViewHolder(view){
-        fun render (data: DCMesaItem, onClickListener: (DCMesaItem) -> Unit){
+        fun render (data: DCMesaItem, onClickListener: (DCMesaItem) -> Unit, position: Int){
             val tx_mesa = view.findViewById<TextView>(R.id.tx_mesa)
             val iv_mesa = view.findViewById<ImageView>(R.id.iv_iconMesa)
+            var posicion = position
 
             println(data.estadoTrans)
 
@@ -43,7 +58,6 @@ class AdapterMesa(private val data: ArrayList<DCMesaItem>, private val onClickLi
                 iv_mesa.setColorFilter(Color.parseColor("#D50000"))
             }
 
-            itemView.setOnClickListener { onClickListener(data) }
         }
 
     }
