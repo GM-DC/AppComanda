@@ -45,6 +45,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.DecimalFormat
 import java.time.LocalDateTime
+import java.util.stream.Collectors
 
 
 class FrgCatPlat: Fragment() {
@@ -59,6 +60,7 @@ class FrgCatPlat: Fragment() {
     private val listaPlatoBuscado = ArrayList<DCPlatoItem>()
     private val listaPedido = ArrayList<DataClassPedido>()
     private val listaDetalleOrdenPedido = ArrayList<Detalle>()
+    private val listaPedidoFiltrado = ArrayList<DataClassPedido>()
 
 
 
@@ -108,6 +110,7 @@ class FrgCatPlat: Fragment() {
         //BUSCAR PLATOS
         consultaPedidosPendiente()
 
+
         //Recibir datos de mesa y Zona
         iniZonaMesa()
 
@@ -119,7 +122,7 @@ class FrgCatPlat: Fragment() {
 
         borrador()
 
-
+        actualizarPrecioTotal()
 
     }
 
@@ -195,6 +198,9 @@ class FrgCatPlat: Fragment() {
         val builder = AlertDialog.Builder(requireActivity())
         val view = layoutInflater.inflate(R.layout.dialogue_buscador,null)
         var sv_buscador = view.findViewById<SearchView>(R.id.sv_buscador)
+        var tv_cartelCategoria = view.findViewById<TextView>(R.id.tv_cartelCategoria)
+        var bt_cerrarbusqueda = view.findViewById<Button>(R.id.bt_cerrarbusqueda)
+
 
         //Pasando la vista al builder
         builder.setView(view)
@@ -206,6 +212,8 @@ class FrgCatPlat: Fragment() {
         dialog.show()
 
         //iniciar datos
+        tv_cartelCategoria.text = "CATEGORIA: ${nameCategoria}"
+
         val rv_platoBuscar = view?.findViewById<RecyclerView>(R.id.rv_platoBuscar)
         rv_platoBuscar?.layoutManager = LinearLayoutManager(activity,RecyclerView.VERTICAL,false)
         adapterPlatoFiltrado = AdapterPlatoFiltrado(listaPlatoBuscado) { dataClassPlatoBuscado -> onItemDatosPlatoBuscado(dataClassPlatoBuscado) }
@@ -223,6 +231,9 @@ class FrgCatPlat: Fragment() {
                 }
             }
         }
+
+        bt_cerrarbusqueda.setOnClickListener { dialog.hide() }
+
 
         sv_buscador?.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -283,12 +294,25 @@ class FrgCatPlat: Fragment() {
         //************** EVALUA SI HAY PEDIDOS ************
         println("----------------------------${listaPedido.size}")
 
-        if (listaPedido.size > 0){
-            listaPedido.clear()
+
+        //-------------Evalua POSICION Y ACCION DE AGREGAR-------------------
+        //println("------- Evalua POSICION Y ACCION DE AGREGAR-------------")
+        var numAtendido = 0
+
+        for (i in listaPedido.indices){
+            if(listaPedido[i].estadoPedido=="ATENDIDO"){
+                numAtendido += 1
+            }else{
+                //listaPedido.clear()
+            }
+        }
+
+        if (numAtendido==0){
             cambiarEstadoMesa(IDZONA!!,IDMESA!!,"L")
         }else{
-            cambiarEstadoMesa(IDZONA!!,IDMESA!!,"L")
+            cambiarEstadoMesa(IDZONA!!,IDMESA!!,"O")
         }
+
 
         val reenviar = Bundle()
         reenviar.putSerializable("DATOUSUARIO",DatosUsuario)
@@ -375,62 +399,94 @@ class FrgCatPlat: Fragment() {
         val IDMESA = datosRecuperados.getString("IDMESA")?.toInt()
         //***********************
 
-        for (i in listaPedido.indices){
-            listaDetalleOrdenPedido.add(
-                Detalle(
-                    0,
-                    listaPedido[i].idProducto,
-                    listaPedido[i].cantidad,
-                    listaPedido[i].namePlato,
-                    listaPedido[i].precio,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    listaPedido[i].observacion,
-                    0,
-                    0.0,
-                    "",
-                    0,
-                    "",
-                    0,
-                    0,
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    0,
-                    0,
-                    0,
-                    "",
-                    "2022-06-23T22:05:14.449Z",
-                    0,
-                    "",
-                    "",
-                    "",
-                    0,
-                    "",
-                    "",
-                    "",
-                    "",
-                    0,
-                    0,
-                    0,
-                    "",
-                    "2022-06-23T22:05:14.449Z",
-                    0,
-                    0,
-                    0)
-            )
+        listaPedidoFiltrado.clear()
+        for(i in listaPedido.indices){
+            var lt = listaPedido[i]
+            var conteo = 0
+            var pos = 0
+            for (e in listaPedidoFiltrado.indices){
+                if (listaPedido[i].namePlato == listaPedidoFiltrado[e].namePlato){
+                    conteo += 1
+                }
+                if (conteo == 1){
+                    pos = e
+                    break
+                }
+            }
 
-
+            if (conteo == 0){
+                listaPedidoFiltrado.add(listaPedido[i])
+            }else{
+                listaPedidoFiltrado[pos] = DataClassPedido(lt.cantidad+listaPedidoFiltrado[pos].cantidad,lt.namePlato,lt.categoria,lt.precio,(lt.cantidad+listaPedidoFiltrado[pos].cantidad
+                        )*lt.precio,lt.observacion,lt.estadoPedido,lt.idProducto)
+            }
+            println("La cantidad de conteo: $conteo")
         }
+
+        println("*****************************************************************************")
+        println("*****************************************************************************")
+        println(listaPedidoFiltrado)
+        println("*****************************************************************************")
+        println("*****************************************************************************")
+
+
+
+        for (i in listaPedidoFiltrado.indices){
+
+                listaDetalleOrdenPedido.add(
+                    Detalle(
+                        0,
+                        listaPedidoFiltrado[i].idProducto,
+                        listaPedidoFiltrado[i].cantidad,
+                        listaPedidoFiltrado[i].namePlato,
+                        listaPedidoFiltrado[i].precio,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        listaPedidoFiltrado[i].observacion,
+                        0,
+                        0.0,
+                        "",
+                        0,
+                        "",
+                        0,
+                        0,
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        0,
+                        0,
+                        0,
+                        "",
+                        "${LocalDateTime.now()}",
+                        0,
+                        "",
+                        "",
+                        "",
+                        0,
+                        "",
+                        "",
+                        "",
+                        "",
+                        0,
+                        0,
+                        0,
+                        "",
+                        "${LocalDateTime.now()}",
+                        0,
+                        0,
+                        0)
+                )
+            }
+
 
 
         val call: Call<DCOrdenPedido> = apiInterface!!.postOrdenPedido(
@@ -460,14 +516,14 @@ class FrgCatPlat: Fragment() {
                 0,
                 "",
                 "",
-                "2022-06-18T21:31:14.558Z",
-                "2022-06-18T21:31:14.558Z",
+                "${LocalDateTime.now()}",
+                "${LocalDateTime.now()}",
                 "",
                 "",
                 0,
                 0,
                 "",
-                "2022-06-18T21:31:14.558Z",
+                "${LocalDateTime.now()}",
                 "",
                 "",
                 "",
@@ -494,7 +550,7 @@ class FrgCatPlat: Fragment() {
                 println("*****************************************************")
 
                 println("*****************************************************")
-                Toast.makeText(activity, "IDPEDIDO: ${idpedido}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "IDPEDIDO: ${response.body()?.iD_PEDIDO}", Toast.LENGTH_SHORT).show()
                 println("********** Numero pedido:   ${response.body()?.iD_PEDIDO}    *************")
                 println("*****************************************************")
 
@@ -544,20 +600,17 @@ class FrgCatPlat: Fragment() {
                         println("DATOS PREPEDIDOS: ${data}")
                         println("*****************************************")
 
-                        //PREGUNTAR
-                        /*
                         for(i in data!!.indices){
-                            listaPedido.add(DataClassPedido(data[i].cantidad,data[i].nombre,"",data[i].precio.toDouble(),data[i].importe.toDouble(),"","ATENDIDO"))
-                        }*/
+                            listaPedido.add(DataClassPedido(data[i].cantidad,data[i].nombre,"",data[i].precio.toDouble(),data[i].importe.toDouble(),"","ATENDIDO",data[i].iD_PRODUCTO))
+                            actualizarPrecioTotal()
 
-                        adapterPedido.notifyDataSetChanged()
+                        }
+
                         actualizarPrecioTotal()
+                        adapterPedido.notifyDataSetChanged()
 
                     }else{
 
-                        println("*****************************************")
-                        println("FALLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
-                        println("*****************************************")
                     }
                 }
             }
@@ -567,7 +620,7 @@ class FrgCatPlat: Fragment() {
         //Informacion de la Mesa
         fun getInfoMesa(mesa:String,piso:String){
             CoroutineScope(Dispatchers.IO).launch {
-                val response = apiInterface!!.getPedidoZonaMesa(" mesa eq '$mesa' and piso eq '$piso' and estado eq '0002' " )
+                val response = apiInterface!!.getPedidoZonaMesa(" mesa eq '$mesa' and piso eq '$piso' and estado eq '0001' " )
                 activity?.runOnUiThread {
 
                     if(response.isSuccessful){
@@ -575,15 +628,8 @@ class FrgCatPlat: Fragment() {
                         if (!response.body()!!.isEmpty()){
 
                             idpedido = response.body()?.get(0)?.idPedido.toString()
-
                             getDataPreCuenta(idpedido)
-
-                            println("*****************************************")
-                            println("*****************************************")
-                            println("IDPEDIDO: ${idpedido}")
-                            println("*****************************************")
-                            println("*****************************************")
-
+                            actualizarPrecioTotal()
 
                         }
                     }else{
@@ -591,13 +637,12 @@ class FrgCatPlat: Fragment() {
                     }
                 }
             }
-        }
 
-        println("*********  ANALISIS DE CARGAR PEDIDO ***********")
-        println("Zona: ${datoZona} ${datoZona?.javaClass}")
-        println("Mesa: ${datoMesa} ${datoMesa?.javaClass}")
-        println("Segunda evaluacion: " + getInfoMesa(datoMesa!!,datoZona!!))
-        println("*********  ************************* ***********")
+
+        }
+        getInfoMesa(datoMesa.toString(),datoZona.toString())
+        actualizarPrecioTotal()
+
     }
 
 
@@ -638,9 +683,6 @@ class FrgCatPlat: Fragment() {
     }
     fun getDataPlato(nombreCat:String) {
 
-        println(" ${nombreCat}   0001   ************************************************************************")
-        println(" ${nombreCat}   0001   ************************************************************************")
-
         CoroutineScope(Dispatchers.IO).launch {
             val response = apiInterface!!.getPlato("$nombreCat","0001")
             activity?.runOnUiThread {
@@ -663,7 +705,7 @@ class FrgCatPlat: Fragment() {
         var action = 0
         var pos = -1
         for (i in listaPedido.indices){
-            if(listaPedido[i].namePlato==datos.nombre){
+            if(listaPedido[i].namePlato==datos.nombre && listaPedido[i].estadoPedido=="PENDIENTE"){
                 action += 1
             }
             if (action == 1){
@@ -674,18 +716,24 @@ class FrgCatPlat: Fragment() {
         }
 
         //----------------  AGREGA O AUMENTA LA CANTIDAD -------------------
-        if (action.equals(0)){
-            listaPedido.add(DataClassPedido(1,dataClassPlato.nombre,dataClassPlato.codigo,dataClassPlato.preciO_VENTA,dataClassPlato.preciO_VENTA,"","PENDIENTE",dataClassPlato.iD_PRODUCTO))
-            rv_pedido?.adapter?.notifyDataSetChanged()
-            rv_pedido?.scrollToPosition(listaPedido.size-1)
+
+        if (action == 0){
+
+          listaPedido.add(DataClassPedido(1,dataClassPlato.nombre,dataClassPlato.codigo,dataClassPlato.preciO_VENTA,dataClassPlato.preciO_VENTA,"","PENDIENTE",dataClassPlato.iD_PRODUCTO))
+          rv_pedido?.adapter?.notifyDataSetChanged()
+          rv_pedido?.scrollToPosition(listaPedido.size-1)
+
         }else{
-            val lt = listaPedido.get(pos)
-            var cantidad = lt.cantidad+1
-            var precioTotal = dataClassPlato.preciO_VENTA*cantidad
-            println("El precio es: $precioTotal")
-            listaPedido.set(pos, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion,"PENDIENTE",lt.idProducto))
-            rv_pedido?.adapter?.notifyDataSetChanged()
+
+           val lt = listaPedido.get(pos)
+           var cantidad = lt.cantidad+1
+           var precioTotal = dataClassPlato.preciO_VENTA*cantidad
+           println("El precio es: $precioTotal")
+           listaPedido.set(pos, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion,"PENDIENTE",lt.idProducto))
+           rv_pedido?.adapter?.notifyDataSetChanged()
+
         }
+
         //-------------------------------------------------------------------
 
         actualizarPrecioTotal()
@@ -753,23 +801,23 @@ class FrgCatPlat: Fragment() {
         //-----------BOTON ELIMINAR----------------
         bt_eliminar?.setOnClickListener {
 
-
             for (i in listaPedido.indices){
                 if (datos.estadoPedido == "PENDIENTE"){
+
                     if (listaPedido[i].namePlato == datos.namePlato){
                         if (datos.namePlato== listaPedido[index].namePlato && listaPedido[index].cantidad>1){
                             val lt = listaPedido.get(index)
                             var cantidad = lt.cantidad-1
                             var precioTotal = lt.precio*cantidad
                             listaPedido.set(index, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion,"PENDIENTE",lt.idProducto))
-
                             rv_pedido?.adapter?.notifyDataSetChanged()
-                            println("Ya no cumple")
                         }
                     }
+
                 }else{
                     Toast.makeText(activity, "Pedido no modificable", Toast.LENGTH_SHORT).show()
                 }
+
             }
             actualizarPrecioTotal()
 
@@ -796,7 +844,6 @@ class FrgCatPlat: Fragment() {
                 }else{
                     Toast.makeText(activity, "Pedido no modificable", Toast.LENGTH_SHORT).show()
                 }
-
             }
 
             actualizarPrecioTotal()
@@ -878,8 +925,6 @@ class FrgCatPlat: Fragment() {
             }
         }
     }
-
-
 
 
     // ACTUALIZA EL PRECIO TOTAL A PAGAR

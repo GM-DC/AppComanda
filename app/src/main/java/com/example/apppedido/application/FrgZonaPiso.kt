@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.apppedido.*
 import com.example.apppedido.domain.Model.DCMesaItem
 import com.example.apppedido.domain.Model.DCZonaItem
+import com.example.apppedido.domain.Model.DataClassPedido
 import com.example.apppedido.infraestruture.network.APIService
 import com.example.apppedido.infraestruture.adapters.AdapterMesa
 import com.example.apppedido.infraestruture.adapters.AdapterZona
@@ -60,6 +63,7 @@ class FrgZonaPiso : Fragment() {
         //DESAPARECER BARRA DE NAVEGACION
         desaparecerBarraNavegacion()
     }
+
 
     //DESAPARECER BARRA DE NAVEGACION
     private fun desaparecerBarraNavegacion() {
@@ -161,6 +165,7 @@ class FrgZonaPiso : Fragment() {
                 if(response.isSuccessful){
                     listaMesa.clear()
                     listaMesa.addAll(response.body()!!)
+
                     adapterMesa.notifyDataSetChanged()
                 }else{
                     Toast.makeText(activity, "Error", Toast.LENGTH_SHORT).show()

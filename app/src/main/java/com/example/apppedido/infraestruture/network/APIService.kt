@@ -51,8 +51,6 @@ interface APIService {
     @POST("api/Pedido/CreateOrder")
     fun postOrdenPedido(@Body ordenPedido: DCOrdenPedido) : Call<DCOrdenPedido>
 
-
-
     @PUT("/api/Mesas/EstadoMesa/{Piso}/{Mesa}/{Estado}")
     suspend fun putCambiarEstadoMesa(@Path("Piso") idZona:String, @Path("Mesa") idMesa:Int, @Path("Estado") estadoMesa:String) : Response<Void>
 
