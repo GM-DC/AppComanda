@@ -106,7 +106,6 @@ class FrgZonaPiso : Fragment() {
                     }
 
                     adapterZona.notifyDataSetChanged()
-
                 }
             }
         }
@@ -124,7 +123,6 @@ class FrgZonaPiso : Fragment() {
     //SELECCIONAR MESA
     private fun onItemDatosMesa(dataclassMesa: DCMesaItem) {
         //ENVIAR DATOS DE MESA
-
         val datosRecuperados = arguments
         val recibeDatos: DCLoginDatosExito = datosRecuperados?.getSerializable("DATOUSUARIO") as DCLoginDatosExito
 
@@ -159,7 +157,6 @@ class FrgZonaPiso : Fragment() {
 
         enviarDatos.putSerializable("BORRADOR",recibeDatosBorrador)
 
-
         val fragment = FrgCatPlat()
         val fragmentManager = activity?.supportFragmentManager
         val transaction = fragmentManager?.beginTransaction()
@@ -167,8 +164,8 @@ class FrgZonaPiso : Fragment() {
 
         //CAMBIAR FRAMENT
         transaction!!.replace(R.id.frm_panel, fragment).addToBackStack(null).commit()
-
     }
+
     // Obtiene la informacion del API Mesa
     private fun getDataMesa(idZona:String) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -184,45 +181,6 @@ class FrgZonaPiso : Fragment() {
                 }
             }
         }
-    }
-
-
-/*
-
-    fun getInfoMesa(mesa:String,piso:String){
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = apiInterface!!.getPedidoZonaMesa("mesa eq '$mesa' and piso eq '$piso' and estado eq '0002'" )
-            activity?.runOnUiThread {
-
-                if(response.isSuccessful){
-                    response.body()?.get(0)?.idPedido
-                }else{
-                    println("fallo")
-                }
-
-            }
-        }
-    }
-
-*/
-
-
-
-
-
-
-
-
-
-    // RETROFIT
-    fun getRetrofit(): APIService {
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://heyeldevs-001-site1.gtempurl.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        return  retrofit.create(APIService::class.java)
     }
 
 }

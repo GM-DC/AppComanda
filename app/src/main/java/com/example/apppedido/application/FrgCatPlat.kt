@@ -65,12 +65,7 @@ class FrgCatPlat: Fragment() {
 
     private var listaPedidoBorrador = ArrayList<DataClassPedidoBorrador>()
 
-
-
-
     lateinit var idpedido:String
-
-
 
     var apiInterface: APIService? = null
 
@@ -78,6 +73,7 @@ class FrgCatPlat: Fragment() {
         val view = inflater.inflate(R.layout.fragment_frg_cat_plat, container, false)
 
         return view
+
     }
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -106,26 +102,19 @@ class FrgCatPlat: Fragment() {
         getDataPlato("BARRA CERVEZAS")
         //Enviar Comanda
         bt_enviar_comanda?.setOnClickListener { enviarComanda() }
-        bt_cancelar?.setOnClickListener {
-            regregarZonaPisoCancelado()
-            guardarCambio()}
+        bt_cancelar?.setOnClickListener {regregarZonaPisoCancelado() }
 
         bt_precuenta?.setOnClickListener { imprimirPrecuenta() }
         bt_borrador?.setOnClickListener { guardarCambio() }
 
-        bt_atras?.setOnClickListener{
-            regregarZonaPisoCancelado()
-            guardarCambio()}
+        bt_atras?.setOnClickListener{ guardarCambio()}
 
         //BUSCAR PLATOS
         consultaPedidosPendiente()
         iniciarDatosGuardadosBorrador()
 
-        //Recibir datos de mesa y Zona
+        //RECIBIR ZONA Y MESA
         iniZonaMesa()
-
-        //listaPedido.add(0,DataClassPedido(1,"SALCHILOCURA","pollo",15.2,15.2,"","ATENDIDO"))
-
 
         //DESAPARECER BARRA DE NAVEGACION
         desaparecerBarraNavegacion()
@@ -134,53 +123,54 @@ class FrgCatPlat: Fragment() {
 
     private fun iniciarDatosGuardadosBorrador() {
         val datosRecuperados = arguments
+        val IDZONA = datosRecuperados?.getString("IDZONA")
+        val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
 
         if(datosRecuperados?.getSerializable("BORRADOR")!=null){
-            listaPedidoBorrador = datosRecuperados?.getSerializable("BORRADOR") as ArrayList<DataClassPedidoBorrador>
+            listaPedidoBorrador = datosRecuperados.getSerializable("BORRADOR") as ArrayList<DataClassPedidoBorrador>
         }
 
-        val IDZONA = datosRecuperados?.getString("IDZONA")?.toInt()
-        val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
         for (i in listaPedidoBorrador.indices){
-            if (listaPedidoBorrador[i].zona==IDZONA && listaPedidoBorrador[i].mesa==IDMESA){
+            if (listaPedidoBorrador[i].zona==IDZONA?.toInt() && listaPedidoBorrador[i].mesa==IDMESA){
                 listaPedido.addAll(listaPedidoBorrador[i].pedidoBorrador)
                 adapterPedido.notifyDataSetChanged()
+                listaPedidoBorrador.removeAt(i)
                 break
             }
         }
-
     }
 
     private fun guardarCambio() {
-
+        //DECLARAR VARIABLES
         val datosRecuperados = arguments
         val DatosUsuario: DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
+        val reenviar = Bundle()
+        val fragment = FrgZonaPiso()
+        val IDZONA = datosRecuperados.getString("IDZONA")
+        val IDMESA = datosRecuperados.getString("IDMESA")?.toInt()
 
-
+        //EVALUCAR SI HAY DATOS O NO
         if(datosRecuperados.getSerializable("BORRADOR")!=null){
             listaPedidoBorrador = datosRecuperados.getSerializable("BORRADOR") as ArrayList<DataClassPedidoBorrador>
         }
 
-        println("**************************************")
-        println("**************************************")
-        println("Recibido en Categ Plato : $listaPedidoBorrador")
-        println("**************************************")
-        println("**************************************")
+        for (i in listaPedidoBorrador.indices){
+            if(listaPedidoBorrador[i].zona==IDZONA?.toInt() && listaPedidoBorrador[i].mesa==IDMESA){
+                listaPedidoBorrador.removeAt(i)
+                break
+            }
+        }
 
-
-        val reenviar = Bundle()
-        val fragment = FrgZonaPiso()
-        val IDZONA = datosRecuperados.getString("IDZONA")?.toInt()
-        val IDMESA = datosRecuperados.getString("IDMESA")?.toInt()
-
-        listaPedidoBorrador.clear()
+        //AGREGA A LAS LISTA BORRADOR LOS ITEM DE LA LISTA PEDIDO
+        val lista = ArrayList<DataClassPedido>()
         for(i in listaPedido.indices){
-            var lista = ArrayList<DataClassPedido>()
             if (listaPedido[i].estadoPedido == "PENDIENTE"){
                 var lt = listaPedido[i]
                 lista.add(DataClassPedido(lt.cantidad,lt.namePlato,lt.categoria,lt.precio,lt.precioTotal,lt.observacion,lt.estadoPedido,lt.idProducto))
-                listaPedidoBorrador.add(DataClassPedidoBorrador(IDZONA!!,IDMESA!!,lista))
-                break
+                if(i == listaPedido.indices.last){
+                    listaPedidoBorrador.add(DataClassPedidoBorrador(IDZONA!!.toInt(),IDMESA!!,lista))
+                    break
+                }
             }
         }
 
@@ -188,16 +178,16 @@ class FrgCatPlat: Fragment() {
         reenviar.putSerializable("DATOUSUARIO",DatosUsuario)
         reenviar.putSerializable("BORRADOR",listaPedidoBorrador)
 
+        if (listaPedido.size>0){
+            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"O")
+        }else{
+            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"L")
+        }
+
         val transaction = fragmentManager?.beginTransaction()
         transaction?.replace(R.id.frm_panel,fragment)?.commit()
-
-        println("**************************************")
-        println("**************************************")
-        println("Enviar lista ${ listaPedidoBorrador }")
-        println("**************************************")
-        println("**************************************")
-
     }
+
 
     //DESAPARECER BARRA DE NAVEGACION
     private fun desaparecerBarraNavegacion() {
@@ -372,6 +362,7 @@ class FrgCatPlat: Fragment() {
 
         val reenviar = Bundle()
         reenviar.putSerializable("DATOUSUARIO",DatosUsuario)
+        reenviar.putSerializable("BORRADOR",listaPedidoBorrador)
 
         val fragment = FrgZonaPiso()
         fragment.arguments = reenviar
@@ -410,11 +401,9 @@ class FrgCatPlat: Fragment() {
         val dialog = builder?.create()
         dialog?.show()
 
-
-        //***********Declara elementos *****************
+        //*********** Declara elementos *****************
         var bt_confirmarcomanda = vista.findViewById<Button>(R.id.bt_confirmarcomanda)
         val bt_cancelarcomanda = vista.findViewById<Button>(R.id.bt_cancelarcomanda)
-
 
         //*********** BOTON GUARDAR DEL DIALOGO ********
         bt_confirmarcomanda.setOnClickListener {
@@ -661,8 +650,6 @@ class FrgCatPlat: Fragment() {
                             listaPedido.add(DataClassPedido(data[i].cantidad,data[i].nombre,"",data[i].precio.toDouble(),data[i].importe.toDouble(),"","ATENDIDO",data[i].iD_PRODUCTO))
                         }
 
-                        iniciarDatosGuardadosBorrador()
-
                         adapterPedido.notifyDataSetChanged()
                         actualizarPrecioTotal()
                     }
@@ -736,6 +723,7 @@ class FrgCatPlat: Fragment() {
         adapterPlato = AdapterPlato(listaPlato) { dataClassPlato -> onItemDatosPlato(dataClassPlato) }
         rv_plato?.adapter = adapterPlato
     }
+
     fun getDataPlato(nombreCat:String) {
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -751,6 +739,7 @@ class FrgCatPlat: Fragment() {
             }
         }
     }
+
     fun onItemDatosPlato(dataClassPlato: DCPlatoItem) {
         val rv_pedido = view?.findViewById<RecyclerView>(R.id.rv_pedido)
         val datos = dataClassPlato
@@ -776,6 +765,7 @@ class FrgCatPlat: Fragment() {
 
           listaPedido.add(DataClassPedido(1,dataClassPlato.nombre,dataClassPlato.codigo,dataClassPlato.preciO_VENTA,dataClassPlato.preciO_VENTA,"","PENDIENTE",dataClassPlato.iD_PRODUCTO))
           rv_pedido?.adapter?.notifyDataSetChanged()
+          adapterPedido.getItemId(pos)
           rv_pedido?.scrollToPosition(listaPedido.size-1)
 
         }else{
@@ -818,6 +808,7 @@ class FrgCatPlat: Fragment() {
                 if (listaPedido[viewHolder.bindingAdapterPosition].estadoPedido == "PENDIENTE"){
                     listaPedido.removeAt(viewHolder.bindingAdapterPosition)
                     actualizarPrecioTotal()
+                    viewHolder.itemView.setBackgroundResource(R.drawable.effect_clic_pedido)
                     rv_pedido?.adapter?.notifyDataSetChanged()
                 }else{
                     rv_pedido?.adapter?.notifyDataSetChanged()
@@ -865,6 +856,22 @@ class FrgCatPlat: Fragment() {
                             var cantidad = lt.cantidad-1
                             var precioTotal = lt.precio*cantidad
                             listaPedido.set(index, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion,"PENDIENTE",lt.idProducto))
+
+                            //****************************************
+                            // PRUEBA
+
+                            println(adapterPedido.itemCount)
+                            println(adapterPedido.selectedPosition)
+                            println(adapterPedido.notifyItemChanged(index))
+                            println(adapterPedido.getItemViewType(index))
+                            println(adapterPedido.getItemId(index))
+                            //println(AdapterPedido.holderPedido)
+
+                            //println(adapterPedido.bindViewHolder(adapterPedido,index))
+
+
+                            //****************************************
+
                             rv_pedido?.adapter?.notifyDataSetChanged()
                         }
                     }
@@ -880,6 +887,17 @@ class FrgCatPlat: Fragment() {
 
         //-----------BOTON AUMENTAR---------------
         bt_aumentar?.setOnClickListener {
+
+            println(adapterPedido.getItemId(index))
+            println(adapterPedido.getItemViewType(index))
+            println(adapterPedido.notifyItemChanged(index))
+            println(adapterPedido.selectedPosition)
+            println(adapterPedido.itemCount) // CANTIDAD DE ITEM
+            //println(adapterPedido.findRelativeAdapterPositionIn(adapterPedido))
+
+
+
+
 
             for (i in listaPedido.indices){
 
@@ -968,6 +986,7 @@ class FrgCatPlat: Fragment() {
         adapterPlatoFiltrado.filterList(filterdNamePlato)
     }
     private fun cambiarEstadoMesa(idZona:String,idMesa:Int,estadoMesa:String) {
+
         println("idZona: $idZona // idMesa: $idMesa  // estadoMesa: $estadoMesa")
         CoroutineScope(Dispatchers.IO).launch {
             val response = apiInterface!!.putCambiarEstadoMesa(idZona,idMesa,estadoMesa)
