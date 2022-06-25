@@ -128,6 +128,15 @@ class FrgZonaPiso : Fragment() {
         val datosRecuperados = arguments
         val recibeDatos: DCLoginDatosExito = datosRecuperados?.getSerializable("DATOUSUARIO") as DCLoginDatosExito
 
+        val recibeDatosBorrador = datosRecuperados.getSerializable("BORRADOR")
+
+        println("**************************************")
+        println("**************************************")
+        println("Enviar lista ${ datosRecuperados.getSerializable("BORRADOR") }")
+        println("**************************************")
+        println("**************************************")
+
+
         val idZona = dataclassMesa.idZona
         var nameZona = ""
 
@@ -147,6 +156,9 @@ class FrgZonaPiso : Fragment() {
         enviarDatos.putString("IDMESA",idMesa.toString())
         enviarDatos.putString("IDZONA",idZona)
         enviarDatos.putSerializable("DatosUsuario",recibeDatos)
+
+        enviarDatos.putSerializable("BORRADOR",recibeDatosBorrador)
+
 
         val fragment = FrgCatPlat()
         val fragmentManager = activity?.supportFragmentManager

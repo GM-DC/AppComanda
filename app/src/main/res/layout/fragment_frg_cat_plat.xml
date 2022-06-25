@@ -116,7 +116,7 @@
                         android:textStyle="bold"
                         android:textColor="@color/white"
                         android:layout_gravity="end"
-                        android:text="S/. 0.0"
+                        tools:text="S/ 0.0"
                         />
 
                 </LinearLayout>

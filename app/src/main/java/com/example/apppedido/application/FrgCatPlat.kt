@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apppedido.Imprimir
 import com.example.apppedido.R
+import com.example.apppedido.domain.DataClassPedidoBorrador
 import com.example.apppedido.domain.Model.DCCategoriaItem
 import com.example.apppedido.domain.Model.DCLoginDatosExito
 import com.example.apppedido.domain.Model.DCPlatoItem
@@ -61,6 +62,9 @@ class FrgCatPlat: Fragment() {
     private val listaPedido = ArrayList<DataClassPedido>()
     private val listaDetalleOrdenPedido = ArrayList<Detalle>()
     private val listaPedidoFiltrado = ArrayList<DataClassPedido>()
+
+    private var listaPedidoBorrador = ArrayList<DataClassPedidoBorrador>()
+
 
 
 
@@ -102,14 +106,20 @@ class FrgCatPlat: Fragment() {
         getDataPlato("BARRA CERVEZAS")
         //Enviar Comanda
         bt_enviar_comanda?.setOnClickListener { enviarComanda() }
-        bt_cancelar?.setOnClickListener { regregarZonaPisoCancelado() }
+        bt_cancelar?.setOnClickListener {
+            regregarZonaPisoCancelado()
+            guardarCambio()}
+
         bt_precuenta?.setOnClickListener { imprimirPrecuenta() }
         bt_borrador?.setOnClickListener { guardarCambio() }
-        bt_atras?.setOnClickListener{ regregarZonaPisoCancelado() }
+
+        bt_atras?.setOnClickListener{
+            regregarZonaPisoCancelado()
+            guardarCambio()}
 
         //BUSCAR PLATOS
         consultaPedidosPendiente()
-
+        iniciarDatosGuardadosBorrador()
 
         //Recibir datos de mesa y Zona
         iniZonaMesa()
@@ -120,15 +130,72 @@ class FrgCatPlat: Fragment() {
         //DESAPARECER BARRA DE NAVEGACION
         desaparecerBarraNavegacion()
 
-        borrador()
+    }
 
-        actualizarPrecioTotal()
+    private fun iniciarDatosGuardadosBorrador() {
+        val datosRecuperados = arguments
+
+        if(datosRecuperados?.getSerializable("BORRADOR")!=null){
+            listaPedidoBorrador = datosRecuperados?.getSerializable("BORRADOR") as ArrayList<DataClassPedidoBorrador>
+        }
+
+        val IDZONA = datosRecuperados?.getString("IDZONA")?.toInt()
+        val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
+        for (i in listaPedidoBorrador.indices){
+            if (listaPedidoBorrador[i].zona==IDZONA && listaPedidoBorrador[i].mesa==IDMESA){
+                listaPedido.addAll(listaPedidoBorrador[i].pedidoBorrador)
+                adapterPedido.notifyDataSetChanged()
+                break
+            }
+        }
 
     }
 
-    private fun borrador() {
+    private fun guardarCambio() {
+
+        val datosRecuperados = arguments
+        val DatosUsuario: DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
 
 
+        if(datosRecuperados.getSerializable("BORRADOR")!=null){
+            listaPedidoBorrador = datosRecuperados.getSerializable("BORRADOR") as ArrayList<DataClassPedidoBorrador>
+        }
+
+        println("**************************************")
+        println("**************************************")
+        println("Recibido en Categ Plato : $listaPedidoBorrador")
+        println("**************************************")
+        println("**************************************")
+
+
+        val reenviar = Bundle()
+        val fragment = FrgZonaPiso()
+        val IDZONA = datosRecuperados.getString("IDZONA")?.toInt()
+        val IDMESA = datosRecuperados.getString("IDMESA")?.toInt()
+
+        listaPedidoBorrador.clear()
+        for(i in listaPedido.indices){
+            var lista = ArrayList<DataClassPedido>()
+            if (listaPedido[i].estadoPedido == "PENDIENTE"){
+                var lt = listaPedido[i]
+                lista.add(DataClassPedido(lt.cantidad,lt.namePlato,lt.categoria,lt.precio,lt.precioTotal,lt.observacion,lt.estadoPedido,lt.idProducto))
+                listaPedidoBorrador.add(DataClassPedidoBorrador(IDZONA!!,IDMESA!!,lista))
+                break
+            }
+        }
+
+        fragment.arguments = reenviar
+        reenviar.putSerializable("DATOUSUARIO",DatosUsuario)
+        reenviar.putSerializable("BORRADOR",listaPedidoBorrador)
+
+        val transaction = fragmentManager?.beginTransaction()
+        transaction?.replace(R.id.frm_panel,fragment)?.commit()
+
+        println("**************************************")
+        println("**************************************")
+        println("Enviar lista ${ listaPedidoBorrador }")
+        println("**************************************")
+        println("**************************************")
 
     }
 
@@ -141,17 +208,6 @@ class FrgCatPlat: Fragment() {
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_FULLSCREEN)
-    }
-
-    private fun guardarCambio() {
-
-        val datosRecuperados = arguments
-        val DatosUsuario: DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
-        val reenviar = Bundle()
-        reenviar.putSerializable("DATOUSUARIO",DatosUsuario)
-        val fragment = FrgZonaPiso()
-        fragment.arguments = reenviar
-
     }
 
     private fun imprimirPrecuenta() {
@@ -288,8 +344,8 @@ class FrgCatPlat: Fragment() {
     private fun regregarZonaPisoCancelado() {
         val datosRecuperados = arguments
         val DatosUsuario: DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
-        val IDZONA = datosRecuperados?.getString("IDZONA")
-        val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
+        val IDZONA = datosRecuperados.getString("IDZONA")
+        val IDMESA = datosRecuperados.getString("IDMESA")?.toInt()
 
         //************** EVALUA SI HAY PEDIDOS ************
         println("----------------------------${listaPedido.size}")
@@ -589,6 +645,7 @@ class FrgCatPlat: Fragment() {
         val datoMesa = datosRecuperados?.getString("IDMESA")
 
 
+
         fun getDataPreCuenta(idPedido: String) {
             CoroutineScope(Dispatchers.IO).launch {
                 val response = apiInterface!!.getPrePedidos("$idPedido")
@@ -602,15 +659,12 @@ class FrgCatPlat: Fragment() {
 
                         for(i in data!!.indices){
                             listaPedido.add(DataClassPedido(data[i].cantidad,data[i].nombre,"",data[i].precio.toDouble(),data[i].importe.toDouble(),"","ATENDIDO",data[i].iD_PRODUCTO))
-                            actualizarPrecioTotal()
-
                         }
 
-                        actualizarPrecioTotal()
+                        iniciarDatosGuardadosBorrador()
+
                         adapterPedido.notifyDataSetChanged()
-
-                    }else{
-
+                        actualizarPrecioTotal()
                     }
                 }
             }
@@ -626,11 +680,8 @@ class FrgCatPlat: Fragment() {
                     if(response.isSuccessful){
                         println(response.body())
                         if (!response.body()!!.isEmpty()){
-
                             idpedido = response.body()?.get(0)?.idPedido.toString()
                             getDataPreCuenta(idpedido)
-                            actualizarPrecioTotal()
-
                         }
                     }else{
                         println("Fracaso")
@@ -640,8 +691,12 @@ class FrgCatPlat: Fragment() {
 
 
         }
+
+
         getInfoMesa(datoMesa.toString(),datoZona.toString())
         actualizarPrecioTotal()
+
+
 
     }
 
