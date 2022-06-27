@@ -1,6 +1,7 @@
 package com.example.apppedido.infraestruture.network
 
 import DCOrdenPedido
+import com.example.apppedido.domain.DCComandaItem
 import com.example.apppedido.domain.DCPedidoMesaItem
 import com.example.apppedido.domain.Model.DCPedidoXMesa
 import com.example.apppedido.domain.Model.*
@@ -34,24 +35,22 @@ interface APIService {
     @POST("api/Users/Login")
     suspend fun checkLoginComanda(@Body loginMozo: DCLoginUser) : Response<DCLoginDatosExito>
 
-
-
-
-
     @GET("api/Pedido? orderby=idPedido desc & top=1")
     suspend fun getPedidoZonaMesa(@Query("filter") filter:String) : Response<DCPedidoXMesa>
 
     @GET("/api/Pedido/PedidoMesa/{id}")
     suspend fun getPrePedidos(@Path("id") id:String) : Response<List<DCPedidoMesaItem>>
 
-
-
-
+    @GET("api/Pedido/Precuenta?")
+    suspend fun getPreCuenta(@Query("idPedido") idPedido:String) : Response<List<DCPedidoMesaItem>>
 
     @POST("api/Pedido/CreateOrder")
     fun postOrdenPedido(@Body ordenPedido: DCOrdenPedido) : Call<DCOrdenPedido>
 
     @PUT("/api/Mesas/EstadoMesa/{Piso}/{Mesa}/{Estado}")
     suspend fun putCambiarEstadoMesa(@Path("Piso") idZona:String, @Path("Mesa") idMesa:Int, @Path("Estado") estadoMesa:String) : Response<Void>
+
+    @GET("api/Pedido/Comanda?")
+    suspend fun getComanda(@Query("idPedido") idPedido:String) : Response<Void>
 
 }

@@ -102,11 +102,9 @@ class FrgCatPlat: Fragment() {
         getDataPlato("BARRA CERVEZAS")
         //Enviar Comanda
         bt_enviar_comanda?.setOnClickListener { enviarComanda() }
-        bt_cancelar?.setOnClickListener {regregarZonaPisoCancelado() }
-
+        bt_cancelar?.setOnClickListener { regregarZonaPisoCancelado() }
         bt_precuenta?.setOnClickListener { imprimirPrecuenta() }
         bt_borrador?.setOnClickListener { guardarCambio() }
-
         bt_atras?.setOnClickListener{ guardarCambio()}
 
         //BUSCAR PLATOS
@@ -154,23 +152,18 @@ class FrgCatPlat: Fragment() {
             listaPedidoBorrador = datosRecuperados.getSerializable("BORRADOR") as ArrayList<DataClassPedidoBorrador>
         }
 
-        for (i in listaPedidoBorrador.indices){
-            if(listaPedidoBorrador[i].zona==IDZONA?.toInt() && listaPedidoBorrador[i].mesa==IDMESA){
-                listaPedidoBorrador.removeAt(i)
-                break
-            }
-        }
-
         //AGREGA A LAS LISTA BORRADOR LOS ITEM DE LA LISTA PEDIDO
         val lista = ArrayList<DataClassPedido>()
         for(i in listaPedido.indices){
+
             if (listaPedido[i].estadoPedido == "PENDIENTE"){
+
                 var lt = listaPedido[i]
                 lista.add(DataClassPedido(lt.cantidad,lt.namePlato,lt.categoria,lt.precio,lt.precioTotal,lt.observacion,lt.estadoPedido,lt.idProducto))
-                if(i == listaPedido.indices.last){
-                    listaPedidoBorrador.add(DataClassPedidoBorrador(IDZONA!!.toInt(),IDMESA!!,lista))
-                    break
-                }
+            }
+
+            if(i == listaPedido.indices.last){
+                listaPedidoBorrador.add(DataClassPedidoBorrador(IDZONA!!.toInt(),IDMESA!!,lista))
             }
         }
 
@@ -188,7 +181,6 @@ class FrgCatPlat: Fragment() {
         transaction?.replace(R.id.frm_panel,fragment)?.commit()
     }
 
-
     //DESAPARECER BARRA DE NAVEGACION
     private fun desaparecerBarraNavegacion() {
         val decorView = view
@@ -200,6 +192,7 @@ class FrgCatPlat: Fragment() {
                 or View.SYSTEM_UI_FLAG_FULLSCREEN)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun imprimirPrecuenta() {
         //OBTENER DATOS DE ZONA Y MESA
         val datosRecuperados = arguments
@@ -207,14 +200,39 @@ class FrgCatPlat: Fragment() {
         val NAMEZONA = datosRecuperados.getString("NAMEZONA")
         val IDMESA = datosRecuperados.getString("IDMESA")?.toInt()
 
+        listaPedidoFiltrado.clear()
+        for(i in listaPedido.indices){
+            var lt = listaPedido[i]
+            var conteo = 0
+            var pos = 0
+            for (e in listaPedidoFiltrado.indices){
+                if (listaPedido[i].namePlato == listaPedidoFiltrado[e].namePlato){
+                    conteo += 1
+                }
+                if (conteo == 1){
+                    pos = e
+                    break
+                }
+            }
+
+            if (conteo == 0){
+                listaPedidoFiltrado.add(listaPedido[i])
+            }else{
+                listaPedidoFiltrado[pos] = DataClassPedido(lt.cantidad+listaPedidoFiltrado[pos].cantidad,lt.namePlato,lt.categoria,lt.precio,(lt.cantidad+listaPedidoFiltrado[pos].cantidad
+                        )*lt.precio,lt.observacion,lt.estadoPedido,lt.idProducto)
+            }
+            println("La cantidad de conteo: $conteo")
+        }
+
+
         //SUMAR CANTIDAD DE PEDIDOS
         var cantidadLista = 0f
-        for (i in listaPedido.indices){
-            cantidadLista += listaPedido[i].precioTotal.toFloat()
+        for (i in listaPedidoFiltrado.indices){
+            cantidadLista += listaPedidoFiltrado[i].precioTotal.toFloat()
         }
 
         val formato= DecimalFormat()
-        formato.maximumFractionDigits = 2 //Numero maximo de decimales a mostrar
+        formato.maximumFractionDigits = 3 //Numero maximo de decimales a mostrar
 
         var Total = cantidadLista
         var igv = formato.format((cantidadLista*18)/118).toFloat()
@@ -222,14 +240,14 @@ class FrgCatPlat: Fragment() {
 
         //TERNER LA LISTA PARA LA PRECUENTA
         val listadetalleprecuenta = ArrayList<ListDetalle>()
-        for (i in listaPedido.indices){
-            listadetalleprecuenta.add(i, ListDetalle(listaPedido[i].cantidad,listaPedido[i].namePlato,listaPedido[i].precio,listaPedido[i].precioTotal))
+        for (i in listaPedidoFiltrado.indices){
+            listadetalleprecuenta.add(i, ListDetalle(listaPedidoFiltrado[i].cantidad,listaPedidoFiltrado[i].namePlato,listaPedidoFiltrado[i].precio,listaPedidoFiltrado[i].precioTotal))
         }
 
         //BOLETA DE PRECUENTA PREPARADA
 
-        if(listaPedido.size>0){
-            val boletaPreCuenta = DCPrecuenta(idpedido,DatosUsuario.nameMozo,NAMEZONA!!,IDMESA.toString()!!,"","","S/. $sub","S/. $igv","S/. $Total",listadetalleprecuenta.toList())
+        if(listaPedidoFiltrado.size>0){
+            val boletaPreCuenta = DCPrecuenta(idpedido,DatosUsuario.nameMozo,NAMEZONA!!,IDMESA.toString()!!,"${LocalDateTime.now()}","","S/. $sub","S/. $igv","S/. $Total",listadetalleprecuenta.toList())
             val imprimir = Imprimir()
             imprimir.printTcp("192.168.1.114",9100, boletaPreCuenta)
         }else{
@@ -237,7 +255,6 @@ class FrgCatPlat: Fragment() {
         }
 
     }
-
 
     fun iconbuscarPlato(nameCategoria:String) {
         //Asignar Valores
@@ -279,7 +296,6 @@ class FrgCatPlat: Fragment() {
         }
 
         bt_cerrarbusqueda.setOnClickListener { dialog.hide() }
-
 
         sv_buscador?.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -419,9 +435,6 @@ class FrgCatPlat: Fragment() {
             dialog?.hide()
         }
 
-
-
-
         //****************************************************************
         //getDataOrdenPedido()
         //****************************************************************
@@ -468,13 +481,19 @@ class FrgCatPlat: Fragment() {
             println("La cantidad de conteo: $conteo")
         }
 
-        println("*****************************************************************************")
-        println("*****************************************************************************")
-        println(listaPedidoFiltrado)
-        println("*****************************************************************************")
-        println("*****************************************************************************")
 
+        //SUMAR CANTIDAD DE PEDIDOS
+        var cantidadLista = 0f
+        for (i in listaPedidoFiltrado.indices){
+            cantidadLista += listaPedidoFiltrado[i].precioTotal.toFloat()
+        }
 
+        val formato= DecimalFormat()
+        formato.maximumFractionDigits = 3 //Numero maximo de decimales a mostrar
+
+        var Total = cantidadLista
+        var igv = formato.format((cantidadLista*18)/118).toFloat()
+        var sub = formato.format(Total-igv).toFloat()
 
         for (i in listaPedidoFiltrado.indices){
 
@@ -501,7 +520,7 @@ class FrgCatPlat: Fragment() {
                         "",
                         "",
                         "",
-                        "",
+                        "0",
                         "",
                         "",
                         "",
@@ -549,9 +568,9 @@ class FrgCatPlat: Fragment() {
                 "${LocalDateTime.now()}",
                 "",
                 0,
+                igv.toDouble(),
                 0,
-                0,
-                0,
+                Total.toDouble(),
                 0,
                 0,
                 "",
@@ -590,26 +609,21 @@ class FrgCatPlat: Fragment() {
         )
         call.enqueue(object  : Callback<DCOrdenPedido>{
             override fun onResponse(call: Call<DCOrdenPedido>, response: Response<DCOrdenPedido>) {
-                println("*****************************************************")
-                println("****************      Exito          ****************")
-                println("*****************************************************")
 
-                println("*****************************************************")
                 Toast.makeText(activity, "IDPEDIDO: ${response.body()?.iD_PEDIDO}", Toast.LENGTH_SHORT).show()
-                println("********** Numero pedido:   ${response.body()?.iD_PEDIDO}    *************")
-                println("*****************************************************")
-
 
                 val IDZONA = datosRecuperados?.getString("IDZONA")
                 val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
                 if (listaPedido.size > 0){
-                    println()
-                    println("Se cambio a O")
                     cambiarEstadoMesa(IDZONA!!,IDMESA!!,"O")
                 }else{
-                    println("Se cambio a L")
                     cambiarEstadoMesa(IDZONA!!,IDMESA!!,"L")
                 }
+
+                println("*****************************************")
+                println("*********   SE ENVIAR PEDIDO     ********")
+                println("*****************************************")
+                getDataPreCuenta(response.body()?.iD_PEDIDO.toString())
 
                 val transaction = fragmentManager?.beginTransaction()
                 transaction?.replace(R.id.frm_panel,fragment)?.commit()
@@ -618,22 +632,42 @@ class FrgCatPlat: Fragment() {
 
             }
             override fun onFailure(call: Call<DCOrdenPedido>, t: Throwable) {
-                println("*****************************************************")
-                println("****************      ERROR          ****************")
-                println("*****************************************************")
             }
         })
-
-
     }
+
+
+        fun getDataPreCuenta(idPedido: String) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val response = apiInterface!!.getComanda("$idPedido")
+                activity?.runOnUiThread {
+                    if(response.isSuccessful){
+                        println("******************************")
+                        println("*********   EXITO     *********")
+                        println("******************************")
+
+                    }else{
+                        println("******************************")
+                        println("**********  FALLO  ************")
+                        println("******************************")
+                    }
+                }
+            }
+        }
+
+
+
+
+
+
+
+
     //LISTAR PRECUENTA
     fun consultaPedidosPendiente(){
         //RECIBE DATOS Y USA DATOS
         val datosRecuperados = arguments
         val datoZona = datosRecuperados?.getString("IDZONA")
         val datoMesa = datosRecuperados?.getString("IDMESA")
-
-
 
         fun getDataPreCuenta(idPedido: String) {
             CoroutineScope(Dispatchers.IO).launch {
@@ -682,8 +716,6 @@ class FrgCatPlat: Fragment() {
 
         getInfoMesa(datoMesa.toString(),datoZona.toString())
         actualizarPrecioTotal()
-
-
 
     }
 
