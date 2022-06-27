@@ -105,7 +105,7 @@ class FrgCatPlat: Fragment() {
         //bt_cancelar?.setOnClickListener { regregarZonaPisoCancelado() }
         bt_precuenta?.setOnClickListener { imprimirPrecuenta() }
         bt_borrador?.setOnClickListener { guardarCambio() }
-        bt_atras?.setOnClickListener{ guardarCambio()}
+        bt_atras?.setOnClickListener{ guardarCambio() }
 
         //BUSCAR PLATOS
         consultaPedidosPendiente()
@@ -176,33 +176,8 @@ class FrgCatPlat: Fragment() {
             cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"L")
         }
 
-
-        //***********  INFLA DIALOGO DE COMANDA
-        val builder = activity?.let { AlertDialog.Builder(it) }
-        val vista = layoutInflater.inflate(R.layout.dialogue_confirmar_guardado,null)
-        vista.setBackgroundResource(R.color.trans)
-
-        builder?.setView(vista)
-
-        val dialog = builder?.create()
-        dialog?.show()
-
-        //*********** Declara elementos *****************
-        var bt_confirmarcomanda = vista.findViewById<Button>(R.id.bt_confirmarguardado)
-
-        //*********** BOTON GUARDAR DEL DIALOGO ********
-        bt_confirmarcomanda.setOnClickListener {
-            if (listaPedido.size>0){
-                dialog?.hide()
-            }else{
-               // Toast.makeText(activity, "NO HAY PEDIDOS", Toast.LENGTH_SHORT).show()
-            }
-            val transaction = fragmentManager?.beginTransaction()
-            transaction?.replace(R.id.frm_panel,fragment)?.commit()
-            dialog?.hide()
-        }
-
-
+        val transaction = fragmentManager?.beginTransaction()
+        transaction?.replace(R.id.frm_panel,fragment)?.commit()
     }
 
     //DESAPARECER BARRA DE NAVEGACION
@@ -224,53 +199,43 @@ class FrgCatPlat: Fragment() {
         val NAMEZONA = datosRecuperados.getString("NAMEZONA")
         val IDMESA = datosRecuperados.getString("IDMESA")?.toInt()
 
-        listaPedidoFiltrado.clear()
+
+
+
+
+        //AGREGA A LAS LISTA BORRADOR LOS ITEM DE LA LISTA PEDIDO
+        val lista = ArrayList<DataClassPedido>()
         for(i in listaPedido.indices){
-            var lt = listaPedido[i]
-            var conteo = 0
-            var pos = 0
-            for (e in listaPedidoFiltrado.indices){
-                if (listaPedido[i].namePlato == listaPedidoFiltrado[e].namePlato){
-                    conteo += 1
-                }
-                if (conteo == 1){
-                    pos = e
-                    break
-                }
+
+            if (listaPedido[i].estadoPedido == "ATENDIDO"){
+                var lt = listaPedido[i]
+                lista.add(DataClassPedido(lt.cantidad,lt.namePlato,lt.categoria,lt.precio,lt.precioTotal,lt.observacion,lt.estadoPedido,lt.idProducto))
             }
 
-            if (conteo == 0){
-                listaPedidoFiltrado.add(listaPedido[i])
-            }else{
-                listaPedidoFiltrado[pos] = DataClassPedido(lt.cantidad+listaPedidoFiltrado[pos].cantidad,lt.namePlato,lt.categoria,lt.precio,(lt.cantidad+listaPedidoFiltrado[pos].cantidad
-                        )*lt.precio,lt.observacion,lt.estadoPedido,lt.idProducto)
-            }
-            println("La cantidad de conteo: $conteo")
         }
-
 
         //SUMAR CANTIDAD DE PEDIDOS
         var cantidadLista = 0f
-        for (i in listaPedidoFiltrado.indices){
-            cantidadLista += listaPedidoFiltrado[i].precioTotal.toFloat()
+        for (i in lista.indices){
+            cantidadLista += lista[i].precioTotal.toFloat()
         }
 
         val formato= DecimalFormat()
-        formato.maximumFractionDigits = 3 //Numero maximo de decimales a mostrar
+        formato.maximumFractionDigits = 2 //Numero maximo de decimales a mostrar
 
         var Total = cantidadLista
-        var igv = formato.format((cantidadLista*18)/118).toFloat()
-        var sub = formato.format(Total-igv).toFloat()
+        var igv = formato.format((cantidadLista*0.18).toFloat())
+        var sub = formato.format(Total-igv.toFloat()).toFloat()
 
         //TERNER LA LISTA PARA LA PRECUENTA
         val listadetalleprecuenta = ArrayList<ListDetalle>()
-        for (i in listaPedidoFiltrado.indices){
-            listadetalleprecuenta.add(i, ListDetalle(listaPedidoFiltrado[i].cantidad,listaPedidoFiltrado[i].namePlato,listaPedidoFiltrado[i].precio,listaPedidoFiltrado[i].precioTotal))
+        for (i in lista.indices){
+            listadetalleprecuenta.add(i, ListDetalle(lista[i].cantidad,lista[i].namePlato,lista[i].precio,lista[i].precioTotal))
         }
 
         //BOLETA DE PRECUENTA PREPARADA
 
-        if(listaPedidoFiltrado.size>0){
+        if(listadetalleprecuenta.size>0){
             val boletaPreCuenta = DCPrecuenta(idpedido,DatosUsuario.nameMozo,NAMEZONA!!,IDMESA.toString()!!,"${LocalDateTime.now()}","","S/. $sub","S/. $igv","S/. $Total",listadetalleprecuenta.toList())
             val imprimir = Imprimir()
             imprimir.printTcp("192.168.1.114",9100, boletaPreCuenta)
@@ -399,18 +364,12 @@ class FrgCatPlat: Fragment() {
             cambiarEstadoMesa(IDZONA!!,IDMESA!!,"O")
         }
 
-
         val reenviar = Bundle()
         reenviar.putSerializable("DATOUSUARIO",DatosUsuario)
         reenviar.putSerializable("BORRADOR",listaPedidoBorrador)
 
         val fragment = FrgZonaPiso()
         fragment.arguments = reenviar
-
-
-
-
-
 
         //***********  INFLA DIALOGO DE COMANDA
         val builder = activity?.let { AlertDialog.Builder(it) }
@@ -436,24 +395,9 @@ class FrgCatPlat: Fragment() {
             val transaction = fragmentManager?.beginTransaction()
             transaction?.replace(R.id.frm_panel,fragment)?.commit()
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
+
+
     private fun iniZonaMesa() {
         val iniZona=view?.findViewById<TextView>(R.id.tv_TitleZona)
         val iniMesa=view?.findViewById<TextView>(R.id.tv_TitleMesa)
@@ -546,7 +490,6 @@ class FrgCatPlat: Fragment() {
                 listaPedidoFiltrado[pos] = DataClassPedido(lt.cantidad+listaPedidoFiltrado[pos].cantidad,lt.namePlato,lt.categoria,lt.precio,(lt.cantidad+listaPedidoFiltrado[pos].cantidad
                         )*lt.precio,lt.observacion,lt.estadoPedido,lt.idProducto)
             }
-            println("La cantidad de conteo: $conteo")
         }
 
 
@@ -692,21 +635,12 @@ class FrgCatPlat: Fragment() {
                 transaction?.replace(R.id.frm_panel,fragment)?.commit()
 
                 println(response.body()?.iD_PEDIDO)
-
             }
+
             override fun onFailure(call: Call<DCOrdenPedido>, t: Throwable) {
             }
         })
     }
-
-
-
-
-
-
-
-
-
 
 
     //LISTAR PRECUENTA
@@ -746,13 +680,18 @@ class FrgCatPlat: Fragment() {
             CoroutineScope(Dispatchers.IO).launch {
                 val response = apiInterface!!.getPedidoZonaMesa(" mesa eq '$mesa' and piso eq '$piso' and estado eq '0001' " )
                 activity?.runOnUiThread {
+                    val IDZONA = datosRecuperados?.getString("IDZONA")
+                    val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
 
                     if(response.isSuccessful){
+
                         if (!response.body()!!.isEmpty()){
                             idpedido = response.body()?.get(0)?.idPedido.toString()
+                            cambiarEstadoMesa(IDZONA!!,IDMESA!!,"O")
                             getDataPreCuenta(idpedido)
                         }else{
                             iniciarDatosGuardadosBorrador()
+                            cambiarEstadoMesa(IDZONA!!,IDMESA!!,"L")
                         }
                     }
                 }
@@ -840,7 +779,6 @@ class FrgCatPlat: Fragment() {
         }
 
         //----------------  AGREGA O AUMENTA LA CANTIDAD -------------------
-
         if (action == 0){
 
           listaPedido.add(DataClassPedido(1,dataClassPlato.nombre,dataClassPlato.codigo,dataClassPlato.preciO_VENTA,dataClassPlato.preciO_VENTA,"","PENDIENTE",dataClassPlato.iD_PRODUCTO))
@@ -858,8 +796,19 @@ class FrgCatPlat: Fragment() {
            rv_pedido?.adapter?.notifyDataSetChanged()
 
         }
-
         //-------------------------------------------------------------------
+
+
+        val datosRecuperados = arguments
+        val IDZONA = datosRecuperados?.getString("IDZONA")
+        val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
+
+        if (listaPedido.size>0){
+            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"O")
+        }else{
+            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"L")
+        }
+
 
         actualizarPrecioTotal()
     }
@@ -889,7 +838,19 @@ class FrgCatPlat: Fragment() {
                     listaPedido.removeAt(viewHolder.bindingAdapterPosition)
                     actualizarPrecioTotal()
                     viewHolder.itemView.setBackgroundResource(R.drawable.effect_clic_pedido)
+
+                    val datosRecuperados = arguments
+                    val IDZONA = datosRecuperados?.getString("IDZONA")
+                    val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
+
                     rv_pedido?.adapter?.notifyDataSetChanged()
+
+                    if (listaPedido.size>0){
+                        cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"O")
+                    }else{
+                        cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"L")
+                    }
+
                 }else{
                     rv_pedido?.adapter?.notifyDataSetChanged()
                 }
@@ -900,6 +861,16 @@ class FrgCatPlat: Fragment() {
 
         val swap =  ItemTouchHelper(itemswipe)
         swap.attachToRecyclerView(rv_pedido)
+
+        val datosRecuperados = arguments
+        val IDZONA = datosRecuperados?.getString("IDZONA")
+        val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
+
+        if (listaPedido.size>0){
+            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"O")
+        }else{
+            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"L")
+        }
 
 
     }
@@ -922,7 +893,7 @@ class FrgCatPlat: Fragment() {
                 break
             }
         }
-        //----------------------------------------------------------
+        //-----------------------------------------------------------
 
         //-----------BOTON ELIMINAR----------------
         bt_eliminar?.setOnClickListener {
@@ -1043,7 +1014,15 @@ class FrgCatPlat: Fragment() {
 
         desaparecerBarraNavegacion()
 
-        println(datos)
+        val datosRecuperados = arguments
+        val IDZONA = datosRecuperados?.getString("IDZONA")
+        val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
+
+        if (listaPedido.size>0){
+            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"O")
+        }else{
+            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"L")
+        }
 
         actualizarPrecioTotal()
 
