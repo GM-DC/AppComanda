@@ -84,7 +84,7 @@ class FrgCatPlat: Fragment() {
         apiInterface = RetrofitCall.client?.create(APIService::class.java) as APIService
 
         val bt_enviar_comanda = view?.findViewById<Button>(R.id.bt_enviarComanda)
-        val bt_cancelar = view?.findViewById<Button>(R.id.bt_cancelar)
+        //val bt_cancelar = view?.findViewById<Button>(R.id.bt_cancelar)
         val bt_precuenta = view?.findViewById<Button>(R.id.bt_precuenta)
         val bt_borrador = view?.findViewById<Button>(R.id.bt_guardarCambio)
         val bt_atras = view?.findViewById<Button>(R.id.bt_atras)
@@ -102,14 +102,13 @@ class FrgCatPlat: Fragment() {
         getDataPlato("BARRA CERVEZAS")
         //Enviar Comanda
         bt_enviar_comanda?.setOnClickListener { enviarComanda() }
-        bt_cancelar?.setOnClickListener { regregarZonaPisoCancelado() }
+        //bt_cancelar?.setOnClickListener { regregarZonaPisoCancelado() }
         bt_precuenta?.setOnClickListener { imprimirPrecuenta() }
         bt_borrador?.setOnClickListener { guardarCambio() }
         bt_atras?.setOnClickListener{ guardarCambio()}
 
         //BUSCAR PLATOS
         consultaPedidosPendiente()
-        iniciarDatosGuardadosBorrador()
 
         //RECIBIR ZONA Y MESA
         iniZonaMesa()
@@ -177,8 +176,33 @@ class FrgCatPlat: Fragment() {
             cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"L")
         }
 
-        val transaction = fragmentManager?.beginTransaction()
-        transaction?.replace(R.id.frm_panel,fragment)?.commit()
+
+        //***********  INFLA DIALOGO DE COMANDA
+        val builder = activity?.let { AlertDialog.Builder(it) }
+        val vista = layoutInflater.inflate(R.layout.dialogue_confirmar_guardado,null)
+        vista.setBackgroundResource(R.color.trans)
+
+        builder?.setView(vista)
+
+        val dialog = builder?.create()
+        dialog?.show()
+
+        //*********** Declara elementos *****************
+        var bt_confirmarcomanda = vista.findViewById<Button>(R.id.bt_confirmarguardado)
+
+        //*********** BOTON GUARDAR DEL DIALOGO ********
+        bt_confirmarcomanda.setOnClickListener {
+            if (listaPedido.size>0){
+                dialog?.hide()
+            }else{
+               // Toast.makeText(activity, "NO HAY PEDIDOS", Toast.LENGTH_SHORT).show()
+            }
+            val transaction = fragmentManager?.beginTransaction()
+            transaction?.replace(R.id.frm_panel,fragment)?.commit()
+            dialog?.hide()
+        }
+
+
     }
 
     //DESAPARECER BARRA DE NAVEGACION
@@ -251,7 +275,7 @@ class FrgCatPlat: Fragment() {
             val imprimir = Imprimir()
             imprimir.printTcp("192.168.1.114",9100, boletaPreCuenta)
         }else{
-            Toast.makeText(activity, "No hay cuenta", Toast.LENGTH_SHORT).show()
+          //Toast.makeText(activity, "No hay cuenta", Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -383,8 +407,52 @@ class FrgCatPlat: Fragment() {
         val fragment = FrgZonaPiso()
         fragment.arguments = reenviar
 
-        val transaction = fragmentManager?.beginTransaction()
-        transaction?.replace(R.id.frm_panel,fragment)?.commit()
+
+
+
+
+
+        //***********  INFLA DIALOGO DE COMANDA
+        val builder = activity?.let { AlertDialog.Builder(it) }
+        val vista = layoutInflater.inflate(R.layout.dialogue_confirmar_cancelacion,null)
+        vista.setBackgroundResource(R.color.trans)
+
+        builder?.setView(vista)
+
+        val dialog = builder?.create()
+        dialog?.show()
+
+        //*********** Declara elementos *****************
+        var bt_confirmarcancelacion = vista.findViewById<Button>(R.id.bt_confirmarcancelacion)
+
+        //*********** BOTON GUARDAR DEL DIALOGO ********
+        bt_confirmarcancelacion.setOnClickListener {
+            if (listaPedido.size>0){
+                dialog?.hide()
+            }else{
+                Toast.makeText(activity, "NO HAY PEDIDOS", Toast.LENGTH_SHORT).show()
+            }
+            dialog?.hide()
+            val transaction = fragmentManager?.beginTransaction()
+            transaction?.replace(R.id.frm_panel,fragment)?.commit()
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
     private fun iniZonaMesa() {
         val iniZona=view?.findViewById<TextView>(R.id.tv_TitleZona)
@@ -505,8 +573,8 @@ class FrgCatPlat: Fragment() {
                         listaPedidoFiltrado[i].namePlato,
                         listaPedidoFiltrado[i].precio,
                         0,
-                        0,
-                        0,
+                        (((listaPedidoFiltrado[i].cantidad*listaPedidoFiltrado[i].precio)*18)/188),
+                        listaPedidoFiltrado[i].cantidad*listaPedidoFiltrado[i].precio,
                         0,
                         0,
                         listaPedidoFiltrado[i].observacion,
@@ -523,7 +591,7 @@ class FrgCatPlat: Fragment() {
                         "0",
                         "",
                         "",
-                        "",
+                        DatosUsuario.nameMozo,
                         "",
                         "",
                         0,
@@ -563,8 +631,8 @@ class FrgCatPlat: Fragment() {
                 "",
                 "",
                 "",
-                "",
-                "",
+                DatosUsuario.cdgpago,
+                DatosUsuario.cdgmoneda,
                 "${LocalDateTime.now()}",
                 "",
                 0,
@@ -576,13 +644,13 @@ class FrgCatPlat: Fragment() {
                 "",
                 "",
                 "0001",
+                DatosUsuario.iD_CLIENTE,
                 0,
-                0,
-                "",
-                "",
+                DatosUsuario.usuariocreacion,
+                DatosUsuario.usuarioautoriza,
                 "${LocalDateTime.now()}",
                 "${LocalDateTime.now()}",
-                "",
+                DatosUsuario.codigO_EMPRESA,
                 "",
                 0,
                 0,
@@ -592,16 +660,16 @@ class FrgCatPlat: Fragment() {
                 "",
                 "",
                 "",
-                0,
-                0,
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
+                DatosUsuario.iD_COTIZACION.toInt(),
                 0,
                 "",
+                DatosUsuario.redondeo,
+                "",
+                "",
+                "",
+                "",
+                0,
+                DatosUsuario.sucursal,
                 "$IDMESA",
                 "$IDZONA",
                 listaDetalleOrdenPedido.toList()
@@ -620,11 +688,6 @@ class FrgCatPlat: Fragment() {
                     cambiarEstadoMesa(IDZONA!!,IDMESA!!,"L")
                 }
 
-                println("*****************************************")
-                println("*********   SE ENVIAR PEDIDO     ********")
-                println("*****************************************")
-                getDataPreCuenta(response.body()?.iD_PEDIDO.toString())
-
                 val transaction = fragmentManager?.beginTransaction()
                 transaction?.replace(R.id.frm_panel,fragment)?.commit()
 
@@ -637,23 +700,7 @@ class FrgCatPlat: Fragment() {
     }
 
 
-        fun getDataPreCuenta(idPedido: String) {
-            CoroutineScope(Dispatchers.IO).launch {
-                val response = apiInterface!!.getComanda("$idPedido")
-                activity?.runOnUiThread {
-                    if(response.isSuccessful){
-                        println("******************************")
-                        println("*********   EXITO     *********")
-                        println("******************************")
 
-                    }else{
-                        println("******************************")
-                        println("**********  FALLO  ************")
-                        println("******************************")
-                    }
-                }
-            }
-        }
 
 
 
@@ -685,7 +732,9 @@ class FrgCatPlat: Fragment() {
                         }
 
                         adapterPedido.notifyDataSetChanged()
+                        iniciarDatosGuardadosBorrador()
                         actualizarPrecioTotal()
+                    }else{
                     }
                 }
             }
@@ -699,13 +748,12 @@ class FrgCatPlat: Fragment() {
                 activity?.runOnUiThread {
 
                     if(response.isSuccessful){
-                        println(response.body())
                         if (!response.body()!!.isEmpty()){
                             idpedido = response.body()?.get(0)?.idPedido.toString()
                             getDataPreCuenta(idpedido)
+                        }else{
+                            iniciarDatosGuardadosBorrador()
                         }
-                    }else{
-                        println("Fracaso")
                     }
                 }
             }
@@ -926,32 +974,27 @@ class FrgCatPlat: Fragment() {
             println(adapterPedido.selectedPosition)
             println(adapterPedido.itemCount) // CANTIDAD DE ITEM
             //println(adapterPedido.findRelativeAdapterPositionIn(adapterPedido))
+            //listaPedido[viewHolder.bindingAdapterPosition]
+
+            //viewHolder.itemView.setBackgroundResource(R.drawable.effect_clic_pedido)
+            //AdapterPedido.holderPedido(view.rootView)
+
+
+
+
+            rv_pedido!!.adapter!!.getItemId(0)
+            //adapterPedido.findRelativeAdapterPositionIn(rv_pedido,AdapterPedido.holderPedido,)
+            //rv_pedido.adapter.
+
+
+            ///rv_pedido.findViewHolderForAdapterPosition(adapterPedido.)
 
 
 
 
 
-            for (i in listaPedido.indices){
 
-                if (datos.estadoPedido == "PENDIENTE"){
 
-                    if (listaPedido[i].namePlato == datos.namePlato) {
-                        val lt = listaPedido[index]
-                        var cantidad = lt.cantidad + 1
-                        var precioTotal = lt.precio * cantidad
-                        listaPedido.set(
-                            index,
-                            DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion,"PENDIENTE",lt.idProducto)
-                        )
-                    }
-                    rv_pedido?.adapter?.notifyDataSetChanged()
-
-                }else{
-                    Toast.makeText(activity, "Pedido no modificable", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            actualizarPrecioTotal()
         }
 
         //-----------BOTON DETALLE-----------------
@@ -1024,9 +1067,9 @@ class FrgCatPlat: Fragment() {
             val response = apiInterface!!.putCambiarEstadoMesa(idZona,idMesa,estadoMesa)
             activity?.runOnUiThread {
                 if(response.isSuccessful){
-                    Toast.makeText(activity, "Se cambio estado", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(activity, "Se cambio estado", Toast.LENGTH_SHORT).show()
                 }else{
-                    Toast.makeText(activity, "Error en cambio de estado", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(activity, "Error en cambio de estado", Toast.LENGTH_SHORT).show()
                 }
             }
         }

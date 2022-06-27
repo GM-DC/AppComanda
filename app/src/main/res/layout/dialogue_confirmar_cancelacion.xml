@@ -18,7 +18,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CONFIRMAR ENVIO DE COMANDA"
+            android:text="SE ELIMINARA TODOS LOS CAMBIOS"
             android:textSize="22sp"
             android:layout_marginBottom="20dp"
             android:textStyle="bold"
@@ -30,19 +30,10 @@
             android:layout_gravity="center">
 
             <Button
-                android:id="@+id/bt_confirmarcomanda"
+                android:id="@+id/bt_confirmarcancelacion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Confirmar"
-                android:layout_marginHorizontal="20dp"
-                android:backgroundTint="#E2E2E3"
-                />
-
-            <Button
-                android:id="@+id/bt_cancelarcomanda"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Cancelar"
+                android:text="Aceptar"
                 android:layout_marginHorizontal="20dp"
                 android:backgroundTint="#E2E2E3"
                 />
