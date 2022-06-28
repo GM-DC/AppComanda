@@ -46,7 +46,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.DecimalFormat
 import java.time.LocalDateTime
-import java.util.stream.Collectors
 
 
 class FrgCatPlat: Fragment() {
@@ -441,10 +440,12 @@ class FrgCatPlat: Fragment() {
             }else{
                 Toast.makeText(activity, "NO HAY PEDIDOS", Toast.LENGTH_SHORT).show()
             }
+            desaparecerBarraNavegacion()
         }
 
         bt_cancelarcomanda.setOnClickListener {
             dialog?.hide()
+            desaparecerBarraNavegacion()
         }
 
         //****************************************************************
@@ -620,6 +621,12 @@ class FrgCatPlat: Fragment() {
         )
         call.enqueue(object  : Callback<DCOrdenPedido>{
             override fun onResponse(call: Call<DCOrdenPedido>, response: Response<DCOrdenPedido>) {
+
+
+
+
+
+
 
                 Toast.makeText(activity, "IDPEDIDO: ${response.body()?.iD_PEDIDO}", Toast.LENGTH_SHORT).show()
 
@@ -887,9 +894,9 @@ class FrgCatPlat: Fragment() {
         //-------------Posicion--------------------------------------
         var index = -1
         for (i in listaPedido.indices) {
-            if (listaPedido[i].namePlato == datos.namePlato){
-                println("Bucle: ${listaPedido[i].namePlato} == ${datos.namePlato}")
+            if (listaPedido[i].namePlato == datos.namePlato && listaPedido[i].estadoPedido=="PENDIENTE"){
                 index = i
+                println("posicion: $index")
                 break
             }
         }
@@ -902,29 +909,20 @@ class FrgCatPlat: Fragment() {
                 if (datos.estadoPedido == "PENDIENTE"){
 
                     if (listaPedido[i].namePlato == datos.namePlato){
-                        if (datos.namePlato== listaPedido[index].namePlato && listaPedido[index].cantidad>1){
-                            val lt = listaPedido.get(index)
-                            var cantidad = lt.cantidad-1
-                            var precioTotal = lt.precio*cantidad
-                            listaPedido.set(index, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion,"PENDIENTE",lt.idProducto))
 
-                            //****************************************
-                            // PRUEBA
+                        if (listaPedido[i].estadoPedido == "PENDIENTE"){
 
-                            println(adapterPedido.itemCount)
-                            println(adapterPedido.selectedPosition)
-                            println(adapterPedido.notifyItemChanged(index))
-                            println(adapterPedido.getItemViewType(index))
-                            println(adapterPedido.getItemId(index))
-                            //println(AdapterPedido.holderPedido)
+                            if (datos.namePlato== listaPedido[index].namePlato && listaPedido[index].cantidad>1){
+                                val lt = listaPedido.get(index)
+                                var cantidad = lt.cantidad-1
+                                var precioTotal = lt.precio*cantidad
+                                listaPedido[index] = DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion,"PENDIENTE",lt.idProducto)
 
-                            //println(adapterPedido.bindViewHolder(adapterPedido,index))
+                                rv_pedido?.adapter?.notifyDataSetChanged()
+                            }
 
-
-                            //****************************************
-
-                            rv_pedido?.adapter?.notifyDataSetChanged()
                         }
+
                     }
 
                 }else{
@@ -936,36 +934,65 @@ class FrgCatPlat: Fragment() {
 
         }
 
+
+
+        //****************************** PRUEBA *******************************
+
+
+        val viewHolder: RecyclerView.ViewHolder = rv_pedido!!.getChildViewHolder(rv_pedido.getChildAt(0))
+        viewHolder.itemView.setBackgroundResource(R.drawable.effect_clic_pedido)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //*****************************************************************
+
         //-----------BOTON AUMENTAR---------------
         bt_aumentar?.setOnClickListener {
 
-            println(adapterPedido.getItemId(index))
-            println(adapterPedido.getItemViewType(index))
-            println(adapterPedido.notifyItemChanged(index))
-            println(adapterPedido.selectedPosition)
-            println(adapterPedido.itemCount) // CANTIDAD DE ITEM
-            //println(adapterPedido.findRelativeAdapterPositionIn(adapterPedido))
-            //listaPedido[viewHolder.bindingAdapterPosition]
+            for (i in listaPedido.indices){
+                if (datos.estadoPedido == "PENDIENTE"){
 
-            //viewHolder.itemView.setBackgroundResource(R.drawable.effect_clic_pedido)
-            //AdapterPedido.holderPedido(view.rootView)
+                    if (listaPedido[i].namePlato == datos.namePlato ){
 
+                        if (listaPedido[i].estadoPedido == "PENDIENTE"){
 
+                            val lt = listaPedido[index]
+                            var cantidad = lt.cantidad+1
+                            var precioTotal = lt.precio*cantidad
+                            listaPedido[index] = DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion,"PENDIENTE",lt.idProducto)
 
+                            rv_pedido?.adapter?.notifyDataSetChanged()
 
-            rv_pedido!!.adapter!!.getItemId(0)
-            //adapterPedido.findRelativeAdapterPositionIn(rv_pedido,AdapterPedido.holderPedido,)
-            //rv_pedido.adapter.
+                        }
 
 
-            ///rv_pedido.findViewHolderForAdapterPosition(adapterPedido.)
+                    }
 
+                }else{
+                    Toast.makeText(activity, "Pedido no modificable", Toast.LENGTH_SHORT).show()
+                }
 
-
-
-
-
-
+            }
+            actualizarPrecioTotal()
         }
 
         //-----------BOTON DETALLE-----------------
@@ -974,37 +1001,44 @@ class FrgCatPlat: Fragment() {
 
                 if (datos.estadoPedido == "PENDIENTE"){
 
+
+
                     if (listaPedido[i].namePlato == datos.namePlato) {
-                        //***********  Alerta de Dialogo  ***********
-                        val builder = activity?.let { AlertDialog.Builder(it) }
-                        val vista = layoutInflater.inflate(R.layout.dialogue_detalle,null)
-                        vista.setBackgroundResource(R.color.trans)
 
-                        val lt = listaPedido[index]
+                        if (listaPedido[i].estadoPedido == "PENDIENTE"){
 
-                        builder?.setView(vista)
+                            //***********  Alerta de Dialogo  ***********
+                            val builder = activity?.let { AlertDialog.Builder(it) }
+                            val vista = layoutInflater.inflate(R.layout.dialogue_detalle,null)
+                            vista.setBackgroundResource(R.color.trans)
 
-                        val dialog = builder?.create()
-                        dialog?.window!!.setGravity(Gravity.TOP)
-                        dialog?.show()
+                            val lt = listaPedido[index]
 
-                        //***********Declara elementos *****************
-                        var et_detalle = vista.findViewById<EditText>(R.id.et_detalle)
-                        val bt_guardarDetalle = vista.findViewById<Button>(R.id.bt_guardarDetalle)
-                        val tv_AlerObservacion = vista.findViewById<TextView>(R.id.tv_AlerObservacion)
-                        tv_AlerObservacion.text = listaPedido[index].observacion
+                            builder?.setView(vista)
 
-                        //*********** BOTON GUARDAR DEL DIALOGO ********
-                        bt_guardarDetalle.setOnClickListener {
-                            var detalle:String = et_detalle.text.toString()
+                            val dialog = builder?.create()
+                            dialog?.window!!.setGravity(Gravity.TOP)
+                            dialog?.show()
 
-                            listaPedido[index] = DataClassPedido(lt.cantidad,lt.namePlato,lt.categoria,lt.precio,lt.precioTotal,detalle,"PENDIENTE",lt.idProducto)
-                            dialog?.hide()
-                            desaparecerBarraNavegacion()
+                            //***********Declara elementos *****************
+                            var et_detalle = vista.findViewById<EditText>(R.id.et_detalle)
+                            val bt_guardarDetalle = vista.findViewById<Button>(R.id.bt_guardarDetalle)
+                            val tv_AlerObservacion = vista.findViewById<TextView>(R.id.tv_AlerObservacion)
+                            tv_AlerObservacion.text = listaPedido[index].observacion
 
-                            adapterPedido.notifyDataSetChanged()
+                            //*********** BOTON GUARDAR DEL DIALOGO ********
+                            bt_guardarDetalle.setOnClickListener {
+                                var detalle:String = et_detalle.text.toString()
+
+                                listaPedido[index] = DataClassPedido(lt.cantidad,lt.namePlato,lt.categoria,lt.precio,lt.precioTotal,detalle,"PENDIENTE",lt.idProducto)
+                                dialog?.hide()
+
+                                desaparecerBarraNavegacion()
+                                adapterPedido.notifyDataSetChanged()
+                            }
                         }
-                        desaparecerBarraNavegacion()
+
+
                     }
                 }else{
                     Toast.makeText(activity, "Pedido no modificable", Toast.LENGTH_SHORT).show()
@@ -1012,7 +1046,6 @@ class FrgCatPlat: Fragment() {
             }
         }
 
-        desaparecerBarraNavegacion()
 
         val datosRecuperados = arguments
         val IDZONA = datosRecuperados?.getString("IDZONA")

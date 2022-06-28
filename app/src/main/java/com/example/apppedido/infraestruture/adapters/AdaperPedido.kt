@@ -24,7 +24,7 @@ class AdapterPedido(private val data: ArrayList<DataClassPedido>, private val on
 
         holder.itemView.setBackgroundResource(R.drawable.effect_clic_mesa) //negro
 
-        if (selectedPosition === position) {
+        if (selectedPosition == position) {
             holder.itemView.setBackgroundResource(R.drawable.effect_clic_pedido) //banco
             selectedPosition = -1
         }else {
@@ -32,8 +32,7 @@ class AdapterPedido(private val data: ArrayList<DataClassPedido>, private val on
         }
 
         holder.itemView.setOnClickListener {
-            onClickListener(data[position]
-            )
+            onClickListener(data[position])
             selectedPosition = position
             notifyDataSetChanged()
         }
@@ -53,6 +52,9 @@ class AdapterPedido(private val data: ArrayList<DataClassPedido>, private val on
             val tv_cantidad = view.findViewById<TextView>(R.id.tv_cantidad)
             val tv_precio = view.findViewById<TextView>(R.id.tv_precio)
             val tv_precioTotal = view.findViewById<TextView>(R.id.tv_precioTotal)
+
+            val tv_nota = view.findViewById<TextView>(R.id.tv_nota)
+
             val precio = view.findViewById<TextView>(R.id.precio)
             val cantidad = view.findViewById<TextView>(R.id.cantidad)
             val total = view.findViewById<TextView>(R.id.total)
@@ -66,7 +68,7 @@ class AdapterPedido(private val data: ArrayList<DataClassPedido>, private val on
                 precio.setTextColor(Color.parseColor("#11468F"))
                 cantidad.setTextColor(Color.parseColor("#11468F"))
                 total.setTextColor(Color.parseColor("#11468F"))
-
+                tv_nota.setTextColor(Color.parseColor("#11468F"))
 
             }else{
                 tv_nombrePlato.setTextColor(Color.parseColor("#DA1212"))
@@ -76,7 +78,15 @@ class AdapterPedido(private val data: ArrayList<DataClassPedido>, private val on
                 precio.setTextColor(Color.parseColor("#DA1212"))
                 cantidad.setTextColor(Color.parseColor("#DA1212"))
                 total.setTextColor(Color.parseColor("#DA1212"))
+                tv_nota.setTextColor(Color.parseColor("#DA1212"))
             }
+
+            if (data.observacion==""){
+                tv_nota.text = ""
+            }else{
+                tv_nota.text = "N"
+            }
+
 
             //************ ASIGNANDO COMPONENTES ********
             tv_cantidad.text = "${data.cantidad}"
