@@ -26,7 +26,7 @@ data class DCPedidoMesaItem(
     val flaG_P: Any,
     val flaG_COLOR: Any,
     val noM_UNIDAD: Any,
-    val comanda: Any,
+    val comanda: String,
     val mozo: Any,
     val unidad: String,
     val codigO_BARRA: String,

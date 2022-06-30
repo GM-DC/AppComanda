@@ -13,6 +13,9 @@ data class DataClassPedido (
     var observacion:String,
     var estadoPedido:String,
     var idProducto:Int,
+    var camanda:String,
+    val igv: Double,
+    val psigv: Double
 
     )
 

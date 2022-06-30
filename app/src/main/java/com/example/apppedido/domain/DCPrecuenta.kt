@@ -16,7 +16,7 @@ data class DCPrecuenta(
     val observaciones: String,
     val subtotal: String,
     val igv:String,
-    val precioTotal: String,
+    val total: String,
     val detalle: List<ListDetalle>
 )
 

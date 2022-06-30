@@ -24,10 +24,14 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apppedido.Imprimir
+import com.example.apppedido.ImprimirComanda
 import com.example.apppedido.R
+import com.example.apppedido.domain.DCComandaItem
+import com.example.apppedido.domain.DCPedidoMesaItem
 import com.example.apppedido.domain.DataClassPedidoBorrador
 import com.example.apppedido.domain.Model.DCCategoriaItem
 import com.example.apppedido.domain.Model.DCLoginDatosExito
+import com.example.apppedido.domain.Model.DCPedidoXMesa
 import com.example.apppedido.domain.Model.DCPlatoItem
 import com.example.apppedido.domain.Model.DCPrecuenta
 import com.example.apppedido.domain.Model.DataClassPedido
@@ -40,6 +44,7 @@ import com.example.apppedido.infraestruture.network.APIService
 import com.example.apppedido.infraestruture.network.RetrofitCall
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -62,9 +67,16 @@ class FrgCatPlat: Fragment() {
     private val listaDetalleOrdenPedido = ArrayList<Detalle>()
     private val listaPedidoFiltrado = ArrayList<DataClassPedido>()
 
+    private val listaComanda = ArrayList<DCComandaItem>()
+    private val listaComandaFiltrado = ArrayList<com.example.apppedido.domain.Detalle>()
+
+
     private var listaPedidoBorrador = ArrayList<DataClassPedidoBorrador>()
 
     lateinit var idpedido:String
+    var ingresodatos = true
+
+    //var estadoMesa = ""
 
     var apiInterface: APIService? = null
 
@@ -83,10 +95,12 @@ class FrgCatPlat: Fragment() {
         apiInterface = RetrofitCall.client?.create(APIService::class.java) as APIService
 
         val bt_enviar_comanda = view?.findViewById<Button>(R.id.bt_enviarComanda)
-        //val bt_cancelar = view?.findViewById<Button>(R.id.bt_cancelar)
+        val bt_cancelar = view?.findViewById<Button>(R.id.bt_cancelar)
         val bt_precuenta = view?.findViewById<Button>(R.id.bt_precuenta)
         val bt_borrador = view?.findViewById<Button>(R.id.bt_guardarCambio)
         val bt_atras = view?.findViewById<Button>(R.id.bt_atras)
+        //val bt_agregar = view?.findViewById<Button>(R.id.bt_agregarpedido)
+
 
 
         //++++++++++++++++++   INICIA LAS FUNCIONES    +++++++++++++++++
@@ -97,14 +111,22 @@ class FrgCatPlat: Fragment() {
         initPlato()
         //INICIAR PEDIDO
         initPedido()
+
+        //INICIAR MENSAJE MESA
+        //initMensajeMesa()
+
         //Iniciar Datos
         getDataPlato("BARRA CERVEZAS")
         //Enviar Comanda
-        bt_enviar_comanda?.setOnClickListener { enviarComanda() }
-        //bt_cancelar?.setOnClickListener { regregarZonaPisoCancelado() }
+        bt_enviar_comanda?.setOnClickListener { enviarPedido() }
+        bt_cancelar?.setOnClickListener {
+            limpiarLista()
+            //regregarZonaPisoCancelado()
+            }
         bt_precuenta?.setOnClickListener { imprimirPrecuenta() }
         bt_borrador?.setOnClickListener { guardarCambio() }
         bt_atras?.setOnClickListener{ guardarCambio() }
+        //bt_agregar?.setOnClickListener { agregarpedidos() }
 
         //BUSCAR PLATOS
         consultaPedidosPendiente()
@@ -116,6 +138,67 @@ class FrgCatPlat: Fragment() {
         desaparecerBarraNavegacion()
 
     }
+
+    private fun limpiarLista() {
+        listaPedido.clear()
+        consultaPedidosPendiente()
+        adapterPedido.notifyDataSetChanged()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun agregarpedidos() {
+
+        val datosRecuperados = arguments
+        val DatosUsuario: DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
+        val IDZONA = datosRecuperados.getString("IDZONA")
+        val IDMESA = datosRecuperados.getString("IDMESA")?.toInt()
+        val reenviar = Bundle()
+        reenviar.putSerializable("DATOUSUARIO",DatosUsuario)
+        val fragment = FrgZonaPiso()
+        fragment.arguments = reenviar
+
+        //***********  INFLA DIALOGO DE COMANDA
+        val builder = activity?.let { AlertDialog.Builder(it) }
+        val vista = layoutInflater.inflate(R.layout.dialogue_confirma_comanda,null)
+        vista.setBackgroundResource(R.color.trans)
+
+        builder?.setView(vista)
+
+        val dialog = builder?.create()
+        dialog?.show()
+
+        //*********** Declara elementos *****************
+        var bt_confirmarcomanda = vista.findViewById<Button>(R.id.bt_confirmarcomanda)
+        val bt_cancelarcomanda = vista.findViewById<Button>(R.id.bt_cancelarcomanda)
+
+        //*********** BOTON GUARDAR DEL DIALOGO ********
+        bt_confirmarcomanda.setOnClickListener {
+
+            for(i in listaPedido.indices){
+                if (listaPedido[i].estadoPedido=="ATENDIDO"){
+                    getDataOrdenPedido()
+                    dialog?.hide()
+                    desaparecerBarraNavegacion()
+                    break
+                }else{
+                    Toast.makeText(activity, "INGRESAR NUEVO PEDIDO", Toast.LENGTH_SHORT).show()
+                    dialog?.hide()
+                    desaparecerBarraNavegacion()
+                }
+            }
+            if (listaPedido.isEmpty()){
+                Toast.makeText(activity, "INGRESAR NUEVO PEDIDO", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        bt_cancelarcomanda.setOnClickListener {
+            dialog?.hide()
+            desaparecerBarraNavegacion()
+        }
+
+        desaparecerBarraNavegacion()
+    }
+
 
     private fun iniciarDatosGuardadosBorrador() {
         val datosRecuperados = arguments
@@ -153,11 +236,9 @@ class FrgCatPlat: Fragment() {
         //AGREGA A LAS LISTA BORRADOR LOS ITEM DE LA LISTA PEDIDO
         val lista = ArrayList<DataClassPedido>()
         for(i in listaPedido.indices){
-
             if (listaPedido[i].estadoPedido == "PENDIENTE"){
-
                 var lt = listaPedido[i]
-                lista.add(DataClassPedido(lt.cantidad,lt.namePlato,lt.categoria,lt.precio,lt.precioTotal,lt.observacion,lt.estadoPedido,lt.idProducto))
+                lista.add(DataClassPedido(lt.cantidad,lt.namePlato,lt.categoria,lt.precio,lt.precioTotal,lt.observacion,lt.estadoPedido,lt.idProducto,lt.camanda,lt.igv,lt.psigv))
             }
 
             if(i == listaPedido.indices.last){
@@ -169,15 +250,89 @@ class FrgCatPlat: Fragment() {
         reenviar.putSerializable("DATOUSUARIO",DatosUsuario)
         reenviar.putSerializable("BORRADOR",listaPedidoBorrador)
 
-        if (listaPedido.size>0){
-            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"O")
+
+
+        //CONSULTA SI HAY PEDIDO PARA COLOCAR LIBRE O OCUPADO
+        if(listaPedido.size>0){
+            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!.toInt(),"O")
         }else{
-            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"L")
+            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!.toInt(),"L")
         }
+
+
+
+
+
 
         val transaction = fragmentManager?.beginTransaction()
         transaction?.replace(R.id.frm_panel,fragment)?.commit()
     }
+
+
+    private fun consultaPedidosPendienteLineaPrincipal2() {
+        //RECIBE DATOS Y USA DATOS
+        val datosRecuperados = arguments
+        val datoZona = datosRecuperados?.getString("IDZONA")
+        val datoMesa = datosRecuperados?.getString("IDMESA")
+
+        //Informacion de la Mesa
+        fun getInfoMesa2(mesa:String,piso:String){
+            CoroutineScope(Dispatchers.IO).launch {
+                val call = apiInterface!!.getPedidoZonaMesa2(" mesa eq '$mesa' and piso eq '$piso' and estado eq '0001' " )
+                call.enqueue(object : Callback<DCPedidoXMesa>{
+                    @RequiresApi(Build.VERSION_CODES.O)
+                    override fun onResponse(call: Call<DCPedidoXMesa>, response: Response<DCPedidoXMesa>) {
+                        if (response.body()!!.isEmpty() && listaPedido.size>0){
+                            cambiarEstadoMesa(datoZona.toString(),datoMesa!!.toInt(),"O")
+                        }else if (listaPedido.size>0){
+                            cambiarEstadoMesa(datoZona.toString(),datoMesa!!.toInt(),"O")
+                        }
+                    }
+                    override fun onFailure(call: Call<DCPedidoXMesa>, t: Throwable) {
+                        Toast.makeText(activity, "Error $t", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+        }
+
+        getInfoMesa2(datoMesa.toString(),datoZona.toString())
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //DESAPARECER BARRA DE NAVEGACION
     private fun desaparecerBarraNavegacion() {
@@ -192,14 +347,17 @@ class FrgCatPlat: Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun imprimirPrecuenta() {
+
+        //****************************** TODO OK  /////////////////////////*************
+
         //OBTENER DATOS DE ZONA Y MESA
         val datosRecuperados = arguments
         val DatosUsuario: DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
         val NAMEZONA = datosRecuperados.getString("NAMEZONA")
         val IDMESA = datosRecuperados.getString("IDMESA")?.toInt()
-
-
-
+        val datoZona = datosRecuperados?.getString("IDZONA")
+        val datoMesa = datosRecuperados?.getString("IDMESA")
+        var idprecuenta = 0
 
 
         //AGREGA A LAS LISTA BORRADOR LOS ITEM DE LA LISTA PEDIDO
@@ -208,7 +366,7 @@ class FrgCatPlat: Fragment() {
 
             if (listaPedido[i].estadoPedido == "ATENDIDO"){
                 var lt = listaPedido[i]
-                lista.add(DataClassPedido(lt.cantidad,lt.namePlato,lt.categoria,lt.precio,lt.precioTotal,lt.observacion,lt.estadoPedido,lt.idProducto))
+                lista.add(DataClassPedido(lt.cantidad,lt.namePlato,lt.categoria,lt.precio,lt.precioTotal,lt.observacion,lt.estadoPedido,lt.idProducto,lt.camanda,lt.igv,lt.psigv))
             }
 
         }
@@ -222,9 +380,9 @@ class FrgCatPlat: Fragment() {
         val formato= DecimalFormat()
         formato.maximumFractionDigits = 2 //Numero maximo de decimales a mostrar
 
-        var Total = cantidadLista
-        var igv = formato.format((cantidadLista*0.18).toFloat())
-        var sub = formato.format(Total-igv.toFloat()).toFloat()
+        //var Total = cantidadLista
+        //var igv = formato.format((cantidadLista*0.18).toFloat())
+        //var sub = formato.format(Total-igv.toFloat()).toFloat()
 
         //TERNER LA LISTA PARA LA PRECUENTA
         val listadetalleprecuenta = ArrayList<ListDetalle>()
@@ -234,13 +392,95 @@ class FrgCatPlat: Fragment() {
 
         //BOLETA DE PRECUENTA PREPARADA
 
+        /*
         if(listadetalleprecuenta.size>0){
             val boletaPreCuenta = DCPrecuenta(idpedido,DatosUsuario.nameMozo,NAMEZONA!!,IDMESA.toString()!!,"${LocalDateTime.now()}","","S/. $sub","S/. $igv","S/. $Total",listadetalleprecuenta.toList())
             val imprimir = Imprimir()
             imprimir.printTcp("192.168.1.114",9100, boletaPreCuenta)
         }else{
           //Toast.makeText(activity, "No hay cuenta", Toast.LENGTH_SHORT).show()
+        }*/
+
+        //****************************** TODO OK  /////////////////////////*************
+
+
+
+        //****************************** NUEVO    /////////////////////////*************
+        fun getPreCuenta(idPedido:String) {
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val response = apiInterface!!.getPreCuenta("$idPedido")
+                activity?.runOnUiThread {
+                    if(response.isSuccessful){
+
+                        var igv = response.body()!!.igv
+                        var sub = response.body()!!.subtotal
+                        var Total = response.body()!!.total
+
+                        if(listadetalleprecuenta.size>0){
+                            val boletaPreCuenta = DCPrecuenta(idpedido,DatosUsuario.nameMozo,NAMEZONA!!,IDMESA.toString()!!,"${LocalDateTime.now()}","","${sub}","$igv","$Total",listadetalleprecuenta.toList())
+                            val imprimir = Imprimir()
+                            imprimir.printTcp("192.168.1.114",9100, boletaPreCuenta)
+
+                            println("************************************************")
+                            println("************************************************")
+                            println("IDPEDIDO: $idPedido")
+                            println("igv: $igv")
+                            println("sub: $sub")
+                            println("Total: $Total")
+                            println("************************************************")
+                            println("************************************************")
+
+                        }
+
+                    }else{
+                        Toast.makeText(activity, "Error", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
+
+
+
+
+
+        //Informacion de la Mesa
+        fun getInfoMesa(mesa:String,piso:String){
+            CoroutineScope(Dispatchers.IO).launch {
+                val response = apiInterface!!.getPedidoZonaMesa(" mesa eq '$mesa' and piso eq '$piso' and estado eq '0001' " )
+                activity?.runOnUiThread {
+                    if(response.isSuccessful){
+                        idprecuenta = response.body()!![0].idPedido
+                        getPreCuenta(idprecuenta.toString())
+                    }
+                }
+            }
+        }
+
+
+        getInfoMesa(datoMesa.toString(),datoZona.toString())
+
+        //****************************** NUEVO    /////////////////////////*************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     }
 
@@ -319,7 +559,7 @@ class FrgCatPlat: Fragment() {
 
         //----------------  AGREGA O AUMENTA LA CANTIDAD -------------------
         if (action.equals(0)){
-            listaPedido.add(DataClassPedido(1,dataClassPlatoBuscado.nombre,dataClassPlatoBuscado.codigo,dataClassPlatoBuscado.preciO_VENTA,dataClassPlatoBuscado.preciO_VENTA,"","PENDIENTE",dataClassPlatoBuscado.iD_PRODUCTO))
+            listaPedido.add(DataClassPedido(1,datos.nombre,datos.codigo,datos.preciO_VENTA,datos.preciO_VENTA,"","PENDIENTE",datos.iD_PRODUCTO,datos.comanda,datos.igv.toDouble(),datos.psigv.toDouble()))
             rv_pedido?.adapter?.notifyDataSetChanged()
             rv_pedido?.scrollToPosition(listaPedido.size-1)
         }else{
@@ -327,7 +567,7 @@ class FrgCatPlat: Fragment() {
             var cantidad = lt.cantidad+1
             var precioTotal = dataClassPlatoBuscado.preciO_VENTA*cantidad
             println("El precio es: $precioTotal")
-            listaPedido.set(pos, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion,"PENDIENTE",lt.idProducto))
+            listaPedido.set(pos, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion,"PENDIENTE",lt.idProducto,lt.camanda,lt.igv,lt.psigv))
             rv_pedido?.adapter?.notifyDataSetChanged()
         }
         //-------------------------------------------------------------------
@@ -409,7 +649,7 @@ class FrgCatPlat: Fragment() {
 
     //ENVIAR COMANDA
     @RequiresApi(Build.VERSION_CODES.O)
-    fun enviarComanda(){
+    fun enviarPedido(){
 
         val datosRecuperados = arguments
         val DatosUsuario: DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
@@ -434,13 +674,48 @@ class FrgCatPlat: Fragment() {
 
         //*********** BOTON GUARDAR DEL DIALOGO ********
         bt_confirmarcomanda.setOnClickListener {
+
             if (listaPedido.size>0){
                 getDataOrdenPedido()
                 dialog?.hide()
             }else{
                 Toast.makeText(activity, "NO HAY PEDIDOS", Toast.LENGTH_SHORT).show()
             }
+            
+            /*  LOS CORRECTO
+                if (listaPedido.size>0){
+                    for (i in listaPedido.indices){
+                        if (listaPedido[i].estadoPedido=="ATENDIDO"){
+                            println("*****************************************")
+                            println("*****************************************")
+                            println("HAY UN ATENDIDO")
+                            println("$idpedido")
+                            println("*****************************************")
+                            println("*****************************************")
+                            getDataOrdenPedido2(idpedido)
+                            break
+                        }else{
+                            if (i == listaPedido.indices.last){
+                                println("*****************************************")
+                                println("*****************************************")
+                                println("TODOS SON PENDIENTE")
+                                println("*****************************************")
+                                println("*****************************************")
+                                getDataOrdenPedido()
+                            }
+                        }
+                    }
+                    //getDataOrdenPedido()
+                    dialog?.hide()
+                }else{
+                    Toast.makeText(activity, "NO HAY PEDIDOS", Toast.LENGTH_SHORT).show()
+                }*/
+
+
+
+
             desaparecerBarraNavegacion()
+
         }
 
         bt_cancelarcomanda.setOnClickListener {
@@ -448,15 +723,116 @@ class FrgCatPlat: Fragment() {
             desaparecerBarraNavegacion()
         }
 
+        desaparecerBarraNavegacion()
+
         //****************************************************************
         //getDataOrdenPedido()
         //****************************************************************
 
     }
+
+    private fun consultaPedidosPendienteLineaPrincipal() {
+        //RECIBE DATOS Y USA DATOS
+        val datosRecuperados = arguments
+        val datoZona = datosRecuperados?.getString("IDZONA")
+        val datoMesa = datosRecuperados?.getString("IDMESA")
+
+        fun getDataPreCuenta2(idPedido: String) {
+            val call: Call<List<DCPedidoMesaItem>> = apiInterface!!.getPrePedidos2("$idPedido")
+            call.enqueue(object :Callback<List<DCPedidoMesaItem>>{
+                @RequiresApi(Build.VERSION_CODES.O)
+                override fun onResponse(call: Call<List<DCPedidoMesaItem>>,response: Response<List<DCPedidoMesaItem>>) {
+                    if (response.body()!!.isNotEmpty()){
+
+                        listaPedido.clear()
+                        var data = response.body()
+                        for(i in data!!.indices){
+                            listaPedido.add(DataClassPedido(data[i].cantidad,data[i].nombre,"",data[i].precio.toDouble(),data[i].importe.toDouble(),"","ATENDIDO",data[i].iD_PRODUCTO,"",data[i].igv,0.0))
+                        }
+                        adapterPedido.notifyDataSetChanged()
+                        Toast.makeText(activity, "MESA ESTA SIENDO OCUPADA", Toast.LENGTH_SHORT).show()
+                        iniciarDatosGuardadosBorrador()
+                        actualizarPrecioTotal()
+                    }
+                }
+
+                override fun onFailure(call: Call<List<DCPedidoMesaItem>>, t: Throwable) {
+                    Toast.makeText(activity, "Error $t", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+
+        //Informacion de la Mesa
+        fun getInfoMesa(mesa:String,piso:String){
+            CoroutineScope(Dispatchers.IO).launch {
+                val call = apiInterface!!.getPedidoZonaMesa2(" mesa eq '$mesa' and piso eq '$piso' and estado eq '0001' " )
+                call.enqueue(object : Callback<DCPedidoXMesa>{
+                    @RequiresApi(Build.VERSION_CODES.O)
+                    override fun onResponse(call: Call<DCPedidoXMesa>, response: Response<DCPedidoXMesa>) {
+                        if (response.body()!!.isNotEmpty()){
+                            getDataPreCuenta2(response.body()!![0].idPedido.toString())
+                        }else{
+                            getDataOrdenPedido()
+                        }
+                    }
+                    override fun onFailure(call: Call<DCPedidoXMesa>, t: Throwable) {
+                        Toast.makeText(activity, "Error $t", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+        }
+
+        getInfoMesa(datoMesa.toString(),datoZona.toString())
+        actualizarPrecioTotal()
+
+    }
+
+
+    fun getDataMesa(idZona:String) {
+        val datosRecuperados = arguments
+        val IDZONA = datosRecuperados?.getString("IDZONA")
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = apiInterface!!.getMesa("piso eq '$idZona'" )
+            activity?.runOnUiThread{
+                if(response.isSuccessful){
+
+                    for (i in response.body()!!.indices){
+                        if (response.body()!![i].idZona == IDZONA){
+                            //estadoMesa = response.body()!![i].estadoTrans
+                        }
+                    }
+
+                }else{
+                    Toast.makeText(activity, "Error", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //ENVIAR ORDEN PEDIDO API
     @RequiresApi(Build.VERSION_CODES.O)
     fun getDataOrdenPedido() {
-
         //***********************
         val datosRecuperados = arguments
         val DatosUsuario: DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
@@ -465,10 +841,10 @@ class FrgCatPlat: Fragment() {
         val fragment = FrgZonaPiso()
         fragment.arguments = reenviar
 
-        val NAMEZONA = datosRecuperados.getString("NAMEZONA")
         val IDZONA = datosRecuperados.getString("IDZONA")
         val IDMESA = datosRecuperados.getString("IDMESA")?.toInt()
         //***********************
+
 
         listaPedidoFiltrado.clear()
         for(i in listaPedido.indices){
@@ -489,23 +865,43 @@ class FrgCatPlat: Fragment() {
                 listaPedidoFiltrado.add(listaPedido[i])
             }else{
                 listaPedidoFiltrado[pos] = DataClassPedido(lt.cantidad+listaPedidoFiltrado[pos].cantidad,lt.namePlato,lt.categoria,lt.precio,(lt.cantidad+listaPedidoFiltrado[pos].cantidad
-                        )*lt.precio,lt.observacion,lt.estadoPedido,lt.idProducto)
+                        )*lt.precio,lt.observacion,lt.estadoPedido,lt.idProducto,lt.camanda,lt.igv,lt.psigv)
             }
         }
 
 
         //SUMAR CANTIDAD DE PEDIDOS
         var cantidadLista = 0f
+        var cantidadDespachada = 0
+        var TotalIgv = 0.0
+        var TotalSubtotal = 0.0
         for (i in listaPedidoFiltrado.indices){
             cantidadLista += listaPedidoFiltrado[i].precioTotal.toFloat()
+            cantidadDespachada += listaPedidoFiltrado[i].cantidad
+            TotalIgv += listaPedidoFiltrado[i].igv
+            TotalSubtotal += listaPedidoFiltrado[i].psigv
         }
+
+        TotalSubtotal= listaPedidoFiltrado.sumOf { t -> t.psigv}
+
+
 
         val formato= DecimalFormat()
         formato.maximumFractionDigits = 3 //Numero maximo de decimales a mostrar
 
         var Total = cantidadLista
-        var igv = formato.format((cantidadLista*18)/118).toFloat()
-        var sub = formato.format(Total-igv).toFloat()
+        var igv = formato.format((Total*0.18).toFloat())
+        TotalSubtotal = formato.format(TotalSubtotal).toDouble()
+        TotalIgv = formato.format(TotalIgv).toDouble()
+        TotalSubtotal = formato.format(TotalSubtotal).toDouble()
+
+
+
+        println("****************************************")
+        println("*************  ******************")
+        println(listaPedidoFiltrado)
+        println("****************************************")
+        println("****************************************")
 
         for (i in listaPedidoFiltrado.indices){
 
@@ -517,40 +913,40 @@ class FrgCatPlat: Fragment() {
                         listaPedidoFiltrado[i].namePlato,
                         listaPedidoFiltrado[i].precio,
                         0,
-                        (((listaPedidoFiltrado[i].cantidad*listaPedidoFiltrado[i].precio)*18)/188),
+                        listaPedidoFiltrado[i].igv,
                         listaPedidoFiltrado[i].cantidad*listaPedidoFiltrado[i].precio,
                         0,
                         0,
                         listaPedidoFiltrado[i].observacion,
-                        0,
+                        i,
                         0.0,
-                        "",
+                        "1",            //***
+                        0,
+                        "1",       //***
+                        0,
                         0,
                         "",
-                        0,
-                        0,
+                        "0",          //***
                         "",
+                        "0",      //***
                         "",
-                        "",
-                        "0",
-                        "",
-                        "",
+                        listaPedidoFiltrado[i].camanda,
                         DatosUsuario.nameMozo,
-                        "",
+                        "0001",      //***
                         "",
                         0,
                         0,
                         0,
                         "",
                         "${LocalDateTime.now()}",
+                        1, //**
+                        "",
+                        "S",      //**
+                        "",
                         0,
-                        "",
-                        "",
-                        "",
-                        0,
-                        "",
-                        "",
-                        "",
+                        "N",     //**
+                        "0",
+                        "N",      //**
                         "",
                         0,
                         0,
@@ -579,8 +975,8 @@ class FrgCatPlat: Fragment() {
                 DatosUsuario.cdgmoneda,
                 "${LocalDateTime.now()}",
                 "",
-                0,
-                igv.toDouble(),
+                TotalSubtotal,
+                TotalIgv,
                 0,
                 Total.toDouble(),
                 0,
@@ -622,16 +1018,13 @@ class FrgCatPlat: Fragment() {
         call.enqueue(object  : Callback<DCOrdenPedido>{
             override fun onResponse(call: Call<DCOrdenPedido>, response: Response<DCOrdenPedido>) {
 
-
-
-
-
-
-
                 Toast.makeText(activity, "IDPEDIDO: ${response.body()?.iD_PEDIDO}", Toast.LENGTH_SHORT).show()
 
                 val IDZONA = datosRecuperados?.getString("IDZONA")
                 val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
+
+                //enviarComanda("103190")
+
                 if (listaPedido.size > 0){
                     cambiarEstadoMesa(IDZONA!!,IDMESA!!,"O")
                 }else{
@@ -649,6 +1042,288 @@ class FrgCatPlat: Fragment() {
         })
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getDataOrdenPedido2(idPedido:String) {
+        //***********************
+        val datosRecuperados = arguments
+        val DatosUsuario: DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
+        val reenviar = Bundle()
+        reenviar.putSerializable("DATOUSUARIO",DatosUsuario)
+        val fragment = FrgZonaPiso()
+        fragment.arguments = reenviar
+
+        val IDZONA = datosRecuperados.getString("IDZONA")
+        val IDMESA = datosRecuperados.getString("IDMESA")?.toInt()
+        //***********************
+
+
+        listaPedidoFiltrado.clear()
+        for(i in listaPedido.indices){
+            var lt = listaPedido[i]
+            var conteo = 0
+            var pos = 0
+            for (e in listaPedidoFiltrado.indices){
+                if (listaPedido[i].namePlato == listaPedidoFiltrado[e].namePlato){
+                    conteo += 1
+                }
+                if (conteo == 1){
+                    pos = e
+                    break
+                }
+            }
+
+            if (conteo == 0){
+                listaPedidoFiltrado.add(listaPedido[i])
+            }else{
+                listaPedidoFiltrado[pos] = DataClassPedido(lt.cantidad+listaPedidoFiltrado[pos].cantidad,lt.namePlato,lt.categoria,lt.precio,(lt.cantidad+listaPedidoFiltrado[pos].cantidad
+                        )*lt.precio,lt.observacion,lt.estadoPedido,lt.idProducto,lt.camanda,lt.igv,lt.psigv)
+            }
+        }
+
+
+        //SUMAR CANTIDAD DE PEDIDOS
+        var cantidadLista = 0f
+        var cantidadDespachada = 0
+        var TotalIgv = 0.0
+        var TotalSubtotal = 0.0
+        for (i in listaPedidoFiltrado.indices){
+            cantidadLista += listaPedidoFiltrado[i].precioTotal.toFloat()
+            cantidadDespachada += listaPedidoFiltrado[i].cantidad
+            TotalIgv += listaPedidoFiltrado[i].igv
+            TotalSubtotal += listaPedidoFiltrado[i].psigv
+        }
+
+        TotalSubtotal= listaPedidoFiltrado.sumOf { t -> t.psigv}
+
+
+
+        val formato= DecimalFormat()
+        formato.maximumFractionDigits = 3 //Numero maximo de decimales a mostrar
+
+        var Total = cantidadLista
+        var igv = formato.format((Total*0.18).toFloat())
+        TotalSubtotal = formato.format(TotalSubtotal).toDouble()
+        TotalIgv = formato.format(TotalIgv).toDouble()
+        TotalSubtotal = formato.format(TotalSubtotal).toDouble()
+
+
+
+        println("****************************************")
+        println("*************  ******************")
+        println(listaPedidoFiltrado)
+        println("****************************************")
+        println("****************************************")
+
+        for (i in listaPedidoFiltrado.indices){
+
+            listaDetalleOrdenPedido.add(
+                Detalle(
+                    0,
+                    listaPedidoFiltrado[i].idProducto,
+                    listaPedidoFiltrado[i].cantidad,
+                    listaPedidoFiltrado[i].namePlato,
+                    listaPedidoFiltrado[i].precio,
+                    0,
+                    listaPedidoFiltrado[i].igv,
+                    listaPedidoFiltrado[i].cantidad*listaPedidoFiltrado[i].precio,
+                    0,
+                    0,
+                    listaPedidoFiltrado[i].observacion,
+                    i,
+                    0.0,
+                    "1",            //***
+                    0,
+                    "1",       //***
+                    0,
+                    0,
+                    "",
+                    "0",          //***
+                    "",
+                    "0",      //***
+                    "",
+                    listaPedidoFiltrado[i].camanda,
+                    DatosUsuario.nameMozo,
+                    "0001",      //***
+                    "",
+                    0,
+                    0,
+                    0,
+                    "",
+                    "${LocalDateTime.now()}",
+                    1, //**
+                    "",
+                    "S",      //**
+                    "",
+                    0,
+                    "N",     //**
+                    "0",
+                    "N",      //**
+                    "",
+                    0,
+                    0,
+                    0,
+                    "",
+                    "${LocalDateTime.now()}",
+                    0,
+                    0,
+                    0)
+            )
+        }
+
+
+
+        val call: Call<DCOrdenPedido> = apiInterface!!.postOrdenPedido(
+            DCOrdenPedido(idPedido.toInt(),
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                DatosUsuario.cdgpago,
+                DatosUsuario.cdgmoneda,
+                "${LocalDateTime.now()}",
+                "",
+                TotalSubtotal,
+                TotalIgv,
+                0,
+                Total.toDouble(),
+                0,
+                0,
+                "",
+                "",
+                "0001",
+                DatosUsuario.iD_CLIENTE,
+                0,
+                DatosUsuario.usuariocreacion,
+                DatosUsuario.usuarioautoriza,
+                "${LocalDateTime.now()}",
+                "${LocalDateTime.now()}",
+                DatosUsuario.codigO_EMPRESA,
+                "",
+                0,
+                0,
+                "",
+                "${LocalDateTime.now()}",
+                "",
+                "",
+                "",
+                "",
+                DatosUsuario.iD_COTIZACION.toInt(),
+                0,
+                "",
+                DatosUsuario.redondeo,
+                "",
+                "",
+                "",
+                "",
+                0,
+                DatosUsuario.sucursal,
+                "$IDMESA",
+                "$IDZONA",
+                listaDetalleOrdenPedido.toList()
+            )
+        )
+        call.enqueue(object  : Callback<DCOrdenPedido>{
+            override fun onResponse(call: Call<DCOrdenPedido>, response: Response<DCOrdenPedido>) {
+
+                Toast.makeText(activity, "IDPEDIDO: ${response.body()?.iD_PEDIDO}", Toast.LENGTH_SHORT).show()
+
+                val IDZONA = datosRecuperados.getString("IDZONA")
+                val IDMESA = datosRecuperados.getString("IDMESA")?.toInt()
+
+                //enviarComanda("103190")
+
+                if (listaPedido.size > 0){
+                    cambiarEstadoMesa(IDZONA!!,IDMESA!!,"O")
+                }else{
+                    cambiarEstadoMesa(IDZONA!!,IDMESA!!,"L")
+                }
+
+                val transaction = fragmentManager?.beginTransaction()
+                transaction?.replace(R.id.frm_panel,fragment)?.commit()
+
+                println(response.body()?.iD_PEDIDO)
+            }
+
+            override fun onFailure(call: Call<DCOrdenPedido>, t: Throwable) {
+            }
+        })
+    }
+
+    fun enviarComanda(idPedido:String){
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = apiInterface!!.getComanda("$idPedido" )
+            activity?.runOnUiThread{
+                if(response.isSuccessful){
+
+                    val r = response.body()!!
+                    val impComanda = ImprimirComanda()
+
+                    for (i in r.indices ){
+                        listaComanda.add(DCComandaItem(r[i].numerO_PEDIDO,r[i].destino,r[i].zona,r[i].mesa,r[i].mesero,r[i].fechayhora,r[i].detalle))
+                        impComanda.printTcp("192.168.1.114",9100,listaComanda[i])
+                    }
+
+                }else{
+                    Toast.makeText(activity, "Error", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
+    //Informacion de la Mesa
+    fun getInfoMesa(mesa:String,piso:String){
+        CoroutineScope(Dispatchers.IO).launch {
+            val call = apiInterface!!.getPedidoZonaMesa2(" mesa eq '$mesa' and piso eq '$piso' and estado eq '0001' " )
+            call.enqueue(object : Callback<DCPedidoXMesa>{
+                @RequiresApi(Build.VERSION_CODES.O)
+                override fun onResponse(call: Call<DCPedidoXMesa>, response: Response<DCPedidoXMesa>) {
+                    if (response.body()!!.isNotEmpty()){
+                        response.body()!![0].idPedido.toString()
+                    }else{
+                        getDataOrdenPedido()
+                    }
+                }
+                override fun onFailure(call: Call<DCPedidoXMesa>, t: Throwable) {
+                    Toast.makeText(activity, "Error $t", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //LISTAR PRECUENTA
     fun consultaPedidosPendiente(){
@@ -664,12 +1339,9 @@ class FrgCatPlat: Fragment() {
                     if(response.isSuccessful){
 
                         var data = response.body()
-                        println("*****************************************")
-                        println("DATOS PREPEDIDOS: ${data}")
-                        println("*****************************************")
 
                         for(i in data!!.indices){
-                            listaPedido.add(DataClassPedido(data[i].cantidad,data[i].nombre,"",data[i].precio.toDouble(),data[i].importe.toDouble(),"","ATENDIDO",data[i].iD_PRODUCTO))
+                            listaPedido.add(DataClassPedido(data[i].cantidad,data[i].nombre,"",data[i].precio.toDouble(),data[i].importe.toDouble(),"","ATENDIDO",data[i].iD_PRODUCTO,"",data[i].igv,0.0))
                         }
 
                         adapterPedido.notifyDataSetChanged()
@@ -788,18 +1460,19 @@ class FrgCatPlat: Fragment() {
         //----------------  AGREGA O AUMENTA LA CANTIDAD -------------------
         if (action == 0){
 
-          listaPedido.add(DataClassPedido(1,dataClassPlato.nombre,dataClassPlato.codigo,dataClassPlato.preciO_VENTA,dataClassPlato.preciO_VENTA,"","PENDIENTE",dataClassPlato.iD_PRODUCTO))
+          listaPedido.add(DataClassPedido(1,datos.nombre,datos.codigo,datos.preciO_VENTA,datos.preciO_VENTA,"","PENDIENTE",datos.iD_PRODUCTO,datos.comanda,datos.igv.toDouble(),datos.psigv.toDouble()))
           rv_pedido?.adapter?.notifyDataSetChanged()
           adapterPedido.getItemId(pos)
           rv_pedido?.scrollToPosition(listaPedido.size-1)
 
+
         }else{
 
-           val lt = listaPedido.get(pos)
+           val lt = listaPedido[pos]
            var cantidad = lt.cantidad+1
            var precioTotal = dataClassPlato.preciO_VENTA*cantidad
            println("El precio es: $precioTotal")
-           listaPedido.set(pos, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion,"PENDIENTE",lt.idProducto))
+           listaPedido.set(pos, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion,"PENDIENTE",lt.idProducto,lt.camanda,lt.igv,lt.psigv))
            rv_pedido?.adapter?.notifyDataSetChanged()
 
         }
@@ -916,7 +1589,7 @@ class FrgCatPlat: Fragment() {
                                 val lt = listaPedido.get(index)
                                 var cantidad = lt.cantidad-1
                                 var precioTotal = lt.precio*cantidad
-                                listaPedido[index] = DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion,"PENDIENTE",lt.idProducto)
+                                listaPedido[index] = DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion,"PENDIENTE",lt.idProducto,lt.camanda,lt.igv,lt.psigv)
 
                                 rv_pedido?.adapter?.notifyDataSetChanged()
                             }
@@ -978,7 +1651,7 @@ class FrgCatPlat: Fragment() {
                             val lt = listaPedido[index]
                             var cantidad = lt.cantidad+1
                             var precioTotal = lt.precio*cantidad
-                            listaPedido[index] = DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion,"PENDIENTE",lt.idProducto)
+                            listaPedido[index] = DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion,"PENDIENTE",lt.idProducto,lt.camanda,lt.igv,lt.psigv)
 
                             rv_pedido?.adapter?.notifyDataSetChanged()
 
@@ -1030,7 +1703,7 @@ class FrgCatPlat: Fragment() {
                             bt_guardarDetalle.setOnClickListener {
                                 var detalle:String = et_detalle.text.toString()
 
-                                listaPedido[index] = DataClassPedido(lt.cantidad,lt.namePlato,lt.categoria,lt.precio,lt.precioTotal,detalle,"PENDIENTE",lt.idProducto)
+                                listaPedido[index] = DataClassPedido(lt.cantidad,lt.namePlato,lt.categoria,lt.precio,lt.precioTotal,detalle,"PENDIENTE",lt.idProducto,lt.camanda,lt.igv,lt.psigv)
                                 dialog?.hide()
 
                                 desaparecerBarraNavegacion()

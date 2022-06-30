@@ -10,5 +10,8 @@ data class DCPlatoItem(
     val preciO_VENTA: Double,
     val receta: Int,
     val adicional: String,
-    val comanda: Any
+    val comanda: String,
+    val igv: String,
+    val psigv: String
+
 )

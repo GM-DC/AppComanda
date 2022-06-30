@@ -1,6 +1,13 @@
 package com.example.apppedido.domain
 
+import com.google.gson.annotations.SerializedName
+import lombok.Builder
+import lombok.Getter
+import lombok.Setter
 
+@Getter
+@Setter
+@Builder
 class DCComanda : ArrayList<DCComandaItem>()
 
 data class DCComandaItem(

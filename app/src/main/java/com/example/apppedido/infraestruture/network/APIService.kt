@@ -41,8 +41,15 @@ interface APIService {
     @GET("/api/Pedido/PedidoMesa/{id}")
     suspend fun getPrePedidos(@Path("id") id:String) : Response<List<DCPedidoMesaItem>>
 
-    @GET("api/Pedido/Precuenta?")
-    suspend fun getPreCuenta(@Query("idPedido") idPedido:String) : Response<List<DCPedidoMesaItem>>
+    @GET("/api/Pedido/PedidoMesa/{id}")
+    fun getPrePedidos2(@Path("id") id:String) : Call<List<DCPedidoMesaItem>>
+
+    @GET("api/Pedido? orderby=idPedido desc & top=1")
+    fun getPedidoZonaMesa2(@Query("filter") filter:String) : Call<DCPedidoXMesa>
+
+    @GET("api/Pedido/Precuenta")
+    suspend fun getPreCuenta(@Query("idPedido") idPedido:String) : Response<DCPrecuenta>
+
 
     @POST("api/Pedido/CreateOrder")
     fun postOrdenPedido(@Body ordenPedido: DCOrdenPedido) : Call<DCOrdenPedido>
@@ -51,6 +58,6 @@ interface APIService {
     suspend fun putCambiarEstadoMesa(@Path("Piso") idZona:String, @Path("Mesa") idMesa:Int, @Path("Estado") estadoMesa:String) : Response<Void>
 
     @GET("api/Pedido/Comanda?")
-    suspend fun getComanda(@Query("idPedido") idPedido:String) : Response<Void>
+    suspend fun getComanda(@Query("idPedido") idPedido:String) : Response<List<DCComandaItem>>
 
 }

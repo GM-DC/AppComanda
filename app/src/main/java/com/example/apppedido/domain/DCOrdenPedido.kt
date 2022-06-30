@@ -13,7 +13,7 @@ data class DCOrdenPedido(
     val codigO_MONEDA: String,
     val fechA_PEDIDO: String,
     val numerO_OCLIENTE: String,
-    val importE_STOT: Int,
+    val importE_STOT: Double,
     val importE_IGV: Double,
     val importE_DESCUENTO: Int,
     val importE_TOTAL: Double,

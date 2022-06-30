@@ -27,19 +27,20 @@ public class Imprimir {
 
                     // imprimes
                     printer.printFormattedTextAndCut(
-                            "[C]<u><font size='big'>ORDER N°"+item.getNumerO_PEDIDO()+"</font></u>\n[L]\n" +
+                                    "[C]<u><font size='big'>ORDER N°"+item.getNumerO_PEDIDO()+"</font></u>\n[L]\n" +
+                                    "[C]<u><font size='tall'>"+item.getZona()+" MESA: "+item.getMesa()+"</font></u>\n[L]\n" +
                                     "[L] _______________\n" +
                                     "[L] Descripcion [R]Importe \n[L]\n" +
                                     builder+
                                     "[L] _______________\n" +
                                     "[L] SUBTOTAL [R]"+item.getSubtotal()+"\n" +
                                     "[L] IGV [R]"+item.getIgv()+"\n" +
-                                    "[L] IMPORTE TOTAL [R]"+item.getPrecioTotal()+"\n" +
+                                    "[L] IMPORTE TOTAL [R]"+item.getTotal()+"\n" +
                                     "[L]\n" +
                                     "[L] _______________\n" +
                                     "[L]\n"
                             //  "[L] <barcode type='ean13' height='10'>831254784551</barcode>\n[L]\n" +
-                            //    "[L] <qrcode>http://github.com/EmHaseeb/</qrcode>\n[L]\n[L]\n[L]\n"
+                            //  "[L] <qrcode>http://github.com/EmHaseeb/</qrcode>\n[L]\n[L]\n[L]\n"
                     );
                     printer.disconnectPrinter();
                 } catch (EscPosConnectionException | EscPosParserException | EscPosEncodingException | EscPosBarcodeException e) {
