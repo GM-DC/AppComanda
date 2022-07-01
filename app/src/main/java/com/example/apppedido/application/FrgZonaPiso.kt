@@ -155,6 +155,8 @@ class FrgZonaPiso : Fragment() {
         enviarDatos.putString("IDZONA",idZona)
         enviarDatos.putSerializable("DatosUsuario",recibeDatos)
 
+        println("DATOS RECIBIDO Y ENVIADO: $recibeDatosBorrador")
+
         enviarDatos.putSerializable("BORRADOR",recibeDatosBorrador)
 
         val fragment = FrgCatPlat()

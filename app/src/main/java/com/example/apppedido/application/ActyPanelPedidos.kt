@@ -17,6 +17,9 @@ class ActyPanelPedidos : AppCompatActivity() {
         val enviarDatos = Bundle()
         enviarDatos.putSerializable("DATOUSUARIO",recibirDatos)
 
+        println("${recibirDatos}")
+
+
         //DIRECCIONA EL LUGAR DE LOS DATOS
         val framento = FrgZonaPiso()
         framento.arguments = enviarDatos

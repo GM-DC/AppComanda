@@ -135,11 +135,6 @@ class FrgCatPlat: Fragment() {
         //regregarZonaPisoCancelado()
     }
 
-    //*************************       FALTA REVISAR    *********************
-
-
-
-
     //*************************       REVISAR y MEJORADO     *********************
     fun limpiarLista() {
         var size = listaPedido.size
@@ -164,23 +159,7 @@ class FrgCatPlat: Fragment() {
 
 
 
-
-
-    private fun iniciarDatosGuardadosBorrador() {
-        val datosRecuperados = arguments
-        val IDZONA = datosRecuperados?.getString("IDZONA")
-        val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
-
-        for (i in listaPedidoBorrador.indices){
-            if (listaPedidoBorrador[i].zona==IDZONA?.toInt() && listaPedidoBorrador[i].mesa==IDMESA){
-                listaPedido.addAll(listaPedidoBorrador[i].pedidoBorrador)
-                adapterPedido.notifyDataSetChanged()
-                listaPedidoBorrador.removeAt(i)
-                break
-            }
-        }
-    }
-
+    //***********************************************************************************************************************
     private fun guardarCambio() {
         //DECLARAR VARIABLES
         val datosRecuperados = arguments
@@ -212,8 +191,6 @@ class FrgCatPlat: Fragment() {
         reenviar.putSerializable("DATOUSUARIO",DatosUsuario)
         reenviar.putSerializable("BORRADOR",listaPedidoBorrador)
 
-
-
         //CONSULTA SI HAY PEDIDO PARA COLOCAR LIBRE O OCUPADO
         if(listaPedido.size>0){
             cambiarEstadoMesa(IDZONA.toString(),IDMESA!!.toInt(),"O")
@@ -221,15 +198,27 @@ class FrgCatPlat: Fragment() {
             cambiarEstadoMesa(IDZONA.toString(),IDMESA!!.toInt(),"L")
         }
 
-
-
-
-
-
         val transaction = fragmentManager?.beginTransaction()
         transaction?.replace(R.id.frm_panel,fragment)?.commit()
     }
+    private fun iniciarDatosGuardadosBorrador() {
+        val datosRecuperados = arguments
+        val IDZONA = datosRecuperados?.getString("IDZONA")
+        val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
+        if(datosRecuperados?.getSerializable("BORRADOR")!=null){
+            listaPedidoBorrador = datosRecuperados.getSerializable("BORRADOR") as ArrayList<DataClassPedidoBorrador>
+        }
+        for (i in listaPedidoBorrador.indices){
+            if (listaPedidoBorrador[i].zona==IDZONA?.toInt() && listaPedidoBorrador[i].mesa==IDMESA){
+                listaPedido.addAll(listaPedidoBorrador[i].pedidoBorrador)
+                adapterPedido.notifyDataSetChanged()
+                listaPedidoBorrador.removeAt(i)
+                break
+            }
+        }
+    }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun imprimirPrecuenta() {
         //OBTENER DATOS DE ZONA Y MESA
         val datosRecuperados = arguments
@@ -342,8 +331,6 @@ class FrgCatPlat: Fragment() {
         //****************************** NUEVO    /////////////////////////*************
 
     }
-
-
 
     //ENVIAR COMANDA (revisado)
     @RequiresApi(Build.VERSION_CODES.O)

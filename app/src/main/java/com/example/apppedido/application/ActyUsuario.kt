@@ -59,22 +59,6 @@ class ActyUsuario : AppCompatActivity() {
         intent.putExtra("IDMOZO",idMozo)
         startActivity(intent)
     }
-    private fun getData() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = apiInterface!!.getUsuario()
-        //getRetrofit().getUsuario()
-            runOnUiThread {
-                if(response.isSuccessful){
-                    listaUsuario.clear()
-                    listaUsuario.addAll(response.body()!!)
-                    adapter.notifyDataSetChanged()
-                }else{
-                    Toast.makeText(this@ActyUsuario, "VERIFIQUE SU CONECCION", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
 
     fun getData2(){
         CoroutineScope(Dispatchers.IO).launch {
@@ -87,7 +71,7 @@ class ActyUsuario : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<List<DCUsuarioItem>>, t: Throwable) {
-                    Toast.makeText(this@ActyUsuario, "REVISAR INTERNET", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@ActyUsuario, "VERIFICAR SU INTERNET", Toast.LENGTH_LONG).show()
                 }
 
             })
@@ -96,10 +80,21 @@ class ActyUsuario : AppCompatActivity() {
 
 
 
-
-
-
-
+    private fun getData() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = apiInterface!!.getUsuario()
+            //getRetrofit().getUsuario()
+            runOnUiThread {
+                if(response.isSuccessful){
+                    listaUsuario.clear()
+                    listaUsuario.addAll(response.body()!!)
+                    adapter.notifyDataSetChanged()
+                }else{
+                    Toast.makeText(this@ActyUsuario, "VERIFIQUE SU CONECCION", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 
 /*
         val call: Call<List<DCUsuarioItem>> = getRetrofit().getUsuario()
@@ -114,7 +109,5 @@ class ActyUsuario : AppCompatActivity() {
             }
         })
 */
-
-
 
 }
