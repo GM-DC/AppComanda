@@ -14,6 +14,11 @@ interface APIService {
     @GET("api/Users/")
     suspend fun getUsuario(): Response<List<DCUsuarioItem>>
 
+
+    @GET("api/Users/")
+    fun getUsuario2(): Call<List<DCUsuarioItem>>
+
+
     @GET("api/TablasBasicas/Detail?filter=codigo eq 'CDG_PISO'&select=nombre,numero")
     suspend fun getZonas(): Response<List<DCZonaItem>>
 

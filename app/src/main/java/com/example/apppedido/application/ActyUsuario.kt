@@ -1,7 +1,10 @@
 package com.example.apppedido.application.View
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +13,7 @@ import com.example.apppedido.infraestruture.adapters.AdapterUsuario
 import com.example.apppedido.domain.Model.DCUsuarioItem
 import com.example.apppedido.R
 import com.example.apppedido.databinding.ActivityInicioBinding
+import com.example.apppedido.domain.Model.DCPedidoXMesa
 import com.example.apppedido.infraestruture.network.RetrofitCall
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +41,7 @@ class ActyUsuario : AppCompatActivity() {
 
         //INICIA LOS DATOS DE USUARIOS
         initUsuario()
-        getData()
+        getData2()
     }
 
     //**************   INICIAR DATOS    *********************
@@ -58,16 +62,35 @@ class ActyUsuario : AppCompatActivity() {
     private fun getData() {
         CoroutineScope(Dispatchers.IO).launch {
             val response = apiInterface!!.getUsuario()
-        //        getRetrofit().getUsuario()
+        //getRetrofit().getUsuario()
             runOnUiThread {
                 if(response.isSuccessful){
                     listaUsuario.clear()
                     listaUsuario.addAll(response.body()!!)
                     adapter.notifyDataSetChanged()
                 }else{
-                    println("error de internet")
+                    Toast.makeText(this@ActyUsuario, "VERIFIQUE SU CONECCION", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+    }
+
+
+    fun getData2(){
+        CoroutineScope(Dispatchers.IO).launch {
+            val call = apiInterface!!.getUsuario2()
+            call.enqueue(object : Callback<List<DCUsuarioItem>>{
+                override fun onResponse( call: Call<List<DCUsuarioItem>>, response: Response<List<DCUsuarioItem>>) {
+                    listaUsuario.clear()
+                    listaUsuario.addAll(response.body()!!)
+                    adapter.notifyDataSetChanged()
+                }
+
+                override fun onFailure(call: Call<List<DCUsuarioItem>>, t: Throwable) {
+                    Toast.makeText(this@ActyUsuario, "REVISAR INTERNET", Toast.LENGTH_SHORT).show()
+                }
+
+            })
         }
     }
 
