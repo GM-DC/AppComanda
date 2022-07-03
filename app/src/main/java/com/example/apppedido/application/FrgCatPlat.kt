@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.apppedido.DataBase.ZonaApp
 import com.example.apppedido.Imprimir
 import com.example.apppedido.ImprimirComanda
 import com.example.apppedido.R
@@ -69,17 +70,11 @@ class FrgCatPlat: Fragment() {
     private val listaPedidoFiltrado = ArrayList<DataClassPedido>()
 
     private val listaComanda = ArrayList<DCComandaItem>()
-    private val listaComandaFiltrado = ArrayList<com.example.apppedido.domain.Detalle>()
-
-
     private var listaPedidoBorrador = ArrayList<DataClassPedidoBorrador>()
 
-    var idpedido = 0
-    var ingresodatos = true
-
-    //var estadoMesa = ""
-
     var apiInterface: APIService? = null
+    var idpedido = 0
+
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
@@ -94,6 +89,7 @@ class FrgCatPlat: Fragment() {
 
         //++++++++++++++++++    DECLARA COMPONENTE     +++++++++++++++++
         apiInterface = RetrofitCall.client?.create(APIService::class.java) as APIService
+
 
         val bt_enviar_comanda = view?.findViewById<Button>(R.id.bt_enviarComanda)
         val bt_cancelar = view?.findViewById<Button>(R.id.bt_cancelar)
@@ -129,6 +125,9 @@ class FrgCatPlat: Fragment() {
         //DESAPARECER BARRA DE NAVEGACION
         desaparecerBarraNavegacion()
 
+
+
+
         //INICIAR MENSAJE MESA
         //initMensajeMesa()
         //bt_agregar?.setOnClickListener { agregarpedidos() }
@@ -149,15 +148,8 @@ class FrgCatPlat: Fragment() {
             }
         }while(size != cont)
         adapterPedido.notifyDataSetChanged()
+        actualizarPrecioTotal()
     }
-
-
-
-
-
-
-
-
 
     //***********************************************************************************************************************
     private fun guardarCambio() {
@@ -225,8 +217,8 @@ class FrgCatPlat: Fragment() {
         val DatosUsuario: DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
         val NAMEZONA = datosRecuperados.getString("NAMEZONA")
         val IDMESA = datosRecuperados.getString("IDMESA")?.toInt()
-        val datoZona = datosRecuperados?.getString("IDZONA")
-        val datoMesa = datosRecuperados?.getString("IDMESA")
+        val datoZona = datosRecuperados.getString("IDZONA")
+        val datoMesa = datosRecuperados.getString("IDMESA")
         var idprecuenta = 0
 
 
@@ -489,7 +481,7 @@ class FrgCatPlat: Fragment() {
         }
         desaparecerBarraNavegacion()
     }
-    //ENVIAR ORDEN PEDIDO API
+    //ENVIAR ORDEN PEDIDO
     @RequiresApi(Build.VERSION_CODES.O)
         fun getDataOrdenPedido(IDPedido:Int) {
         //***********************
@@ -952,7 +944,7 @@ class FrgCatPlat: Fragment() {
 
         actualizarPrecioTotal()
     }
-    //*********************   INICIAR PEDIDO  ***********************
+    //*********************   PEDIDO  ***********************
     fun initPedido(){
         val rv_pedido = view?.findViewById<RecyclerView>(R.id.rv_pedido)
         rv_pedido?.layoutManager = LinearLayoutManager(activity)

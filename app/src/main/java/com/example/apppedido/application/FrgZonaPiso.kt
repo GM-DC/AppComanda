@@ -1,22 +1,23 @@
 package com.example.apppedido.application.View
 
+import android.content.Context
 import com.example.apppedido.domain.Model.DCLoginDatosExito
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apppedido.*
+import com.example.apppedido.DataBase.DaoZona
+import com.example.apppedido.DataBase.ZonaApp
+import com.example.apppedido.DataBase.tbZona
 import com.example.apppedido.domain.Model.DCMesaItem
 import com.example.apppedido.domain.Model.DCZonaItem
-import com.example.apppedido.domain.Model.DataClassPedido
 import com.example.apppedido.infraestruture.network.APIService
 import com.example.apppedido.infraestruture.adapters.AdapterMesa
 import com.example.apppedido.infraestruture.adapters.AdapterZona
@@ -24,9 +25,6 @@ import com.example.apppedido.infraestruture.network.RetrofitCall
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import kotlin.properties.Delegates
 
 
 class FrgZonaPiso : Fragment() {
@@ -38,10 +36,11 @@ class FrgZonaPiso : Fragment() {
     private val listaMesa = ArrayList<DCMesaItem>()
     var apiInterface: APIService? = null
 
+    private lateinit var dao: DaoZona
+
+
 
     //*************** FIN ATRIBUTOS ********************
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_frg_zona_piso, container, false)
         return view
@@ -60,8 +59,32 @@ class FrgZonaPiso : Fragment() {
         //INICIAR DATOS
         getDataMesa("0001")
 
+        guardarZonas()
+
         //DESAPARECER BARRA DE NAVEGACION
         desaparecerBarraNavegacion()
+    }
+
+    private fun guardarZonas() {
+
+        println("********2***********")
+        println("${dao.javaClass}")
+        println("********************")
+
+
+        lifecycleScope.launch {
+
+            dao.insertZona(tbZona("01","CASA"))
+            val allZona = dao.getAllZonas()
+
+            println("********************")
+            println("$allZona")
+            println("********************")
+
+        }
+
+
+
     }
 
 
@@ -101,9 +124,12 @@ class FrgZonaPiso : Fragment() {
 
                     val datoss = response.body()
 
+
                     for (i in datoss?.indices!!){
                         listaZona.add(DCZonaItem(datoss[i].nombreZonas, datoss[i].idZona))
                     }
+
+
 
                     adapterZona.notifyDataSetChanged()
                 }
