@@ -5,15 +5,15 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class EntityZona (
+data class EntityCategoria (
 
     @PrimaryKey(autoGenerate = true)
     val id: Int = 1,
 
-    @ColumnInfo(name = "idZona")
-    val idZona: String,
+    @ColumnInfo(name = "idCategoria")
+    val idCategoria: String,
 
-    @ColumnInfo(name = "nombreZonas")
-    val nombreZonas: String,
+    @ColumnInfo(name = "nameCategoria")
+    val nameCategoria: String,
 
-)
+    )

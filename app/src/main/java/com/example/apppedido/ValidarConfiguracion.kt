@@ -18,7 +18,7 @@ class ValidarConfiguracion:Application() {
         super.onCreate()
 
         prefs = Prefs(applicationContext)
-        database =  Room.databaseBuilder(this, ComandaDB::class.java, "ComandaDB").build()
+        database =  Room.databaseBuilder(this, ComandaDB::class.java, "ComandaDB").fallbackToDestructiveMigration().build()
     }
 
 }

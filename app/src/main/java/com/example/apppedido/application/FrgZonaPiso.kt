@@ -177,6 +177,11 @@ class FrgZonaPiso : Fragment() {
         val datosRecuperados = arguments
         val recibeDatos: DCLoginDatosExito = datosRecuperados?.getSerializable("DATOUSUARIO") as DCLoginDatosExito
         val recibeDatosBorrador = datosRecuperados.getSerializable("BORRADOR")
+        val recibeDatosListaCategoria = datosRecuperados.getSerializable("ListaCategoria")
+
+        println("***** lista recibira de categoria ***********")
+        println("$recibeDatosListaCategoria")
+        println("***** *************************** ***********")
 
 
         val idZona = dataclassMesa.idZona
@@ -199,6 +204,8 @@ class FrgZonaPiso : Fragment() {
         enviarDatos.putString("IDZONA",idZona)
         enviarDatos.putSerializable("DatosUsuario",recibeDatos)
         enviarDatos.putSerializable("ListaZona",listaZona)
+        enviarDatos.putSerializable("ListaCategoria",recibeDatosListaCategoria)
+
 
         println("DATOS RECIBIDO Y ENVIADO: $recibeDatosBorrador")
 

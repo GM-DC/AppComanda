@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.example.apppedido.DataBase.ComandaDB
+import com.example.apppedido.DataBase.EntityCategoria
 import com.example.apppedido.DataBase.EntityZona
 import com.example.apppedido.Imprimir
 import com.example.apppedido.ImprimirComanda
@@ -50,7 +51,9 @@ import com.example.apppedido.infraestruture.network.APIService
 import com.example.apppedido.infraestruture.network.RetrofitCall
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -68,14 +71,13 @@ class FrgCatPlat: Fragment() {
     private lateinit var adapterPlato: AdapterPlato
     private lateinit var adapterPlatoFiltrado: AdapterPlatoFiltrado
     private lateinit var adapterPedido: AdapterPedido
-    private val listaCategoria = ArrayList<DCCategoriaItem>()
+    private var listaCategoria = ArrayList<DCCategoriaItem>()
     private val listaCategoriaInjeccion = ArrayList<DCCategoriaItem>()
     private val listaPlato = ArrayList<DCPlatoItem>()
     private val listaPlatoBuscado = ArrayList<DCPlatoItem>()
     private val listaPedido = ArrayList<DataClassPedido>()
     private val listaDetalleOrdenPedido = ArrayList<Detalle>()
     private val listaPedidoFiltrado = ArrayList<DataClassPedido>()
-
     private val listaComanda = ArrayList<DCComandaItem>()
     private var listaPedidoBorrador = ArrayList<DataClassPedidoBorrador>()
 
@@ -108,7 +110,6 @@ class FrgCatPlat: Fragment() {
         //++++++++++++++++++   INICIA LAS FUNCIONES    +++++++++++++++++
         //INICIAR CATEGORIA
         initCategoria()
-        getDataCategoria()
         //INICIAR CATEGORIA
         initPlato()
         //INICIAR PEDIDO
@@ -132,6 +133,21 @@ class FrgCatPlat: Fragment() {
         //DESAPARECER BARRA DE NAVEGACION
         desaparecerBarraNavegacion()
 
+
+        iniciarCategoria()
+
+
+    }
+
+    private fun iniciarCategoria() {
+        val datosRecuperados = arguments
+        if (datosRecuperados?.getSerializable("ListaCategoria")==null){
+            getDataCategoria()
+        }else{
+            val lista2: ArrayList<DCCategoriaItem> = datosRecuperados?.getSerializable("ListaCategoria") as ArrayList<DCCategoriaItem>
+            listaCategoria.addAll(lista2)
+            adapterCategoria.notifyDataSetChanged()
+        }
     }
 
     //*************************       REVISAR y MEJORADO     *********************
@@ -189,6 +205,15 @@ class FrgCatPlat: Fragment() {
         fragment.arguments = reenviar
         reenviar.putSerializable("DATOUSUARIO",DatosUsuario)
         reenviar.putSerializable("ListaZona",DatosZonas)
+        reenviar.putSerializable("ListaCategoria",listaCategoria)
+        
+
+
+
+
+
+
+
         reenviar.putSerializable("BORRADOR",listaPedidoBorrador)
 
         //CONSULTA SI HAY PEDIDO PARA COLOCAR LIBRE O OCUPADO
@@ -764,20 +789,87 @@ class FrgCatPlat: Fragment() {
         getDataPlato(nameCategoria)
         iv_buscarPlato?.setOnClickListener { iconbuscarPlato(nameCategoria) }
     }
+
     fun getDataCategoria() {
         CoroutineScope(Dispatchers.IO).launch {
             val response = apiInterface!!.getCategoria()
             activity?.runOnUiThread {
                 if(response.isSuccessful){
-                    listaCategoria.clear()
-                    listaCategoria.addAll(response.body()!!)
-                    adapterCategoria.notifyDataSetChanged()
+                    val datoss = response.body()
+                    for (i in datoss?.indices!!){
+                        listaCategoriaInjeccion.add(DCCategoriaItem(datoss[i].nameCategoria, datoss[i].idCategoria))
+                    }
+                    inyectarDatosCategoria(listaCategoriaInjeccion)
+
                 }else{
                     Toast.makeText(activity, "Error", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
+
+    fun inyectarDatosCategoria(lista: ArrayList<DCCategoriaItem>){
+
+        ///*************   ROOM FUNCIONAL ******************************************************
+        GlobalScope.launch(Dispatchers.Default) {
+            ValidarConfiguracion.database.daoCategoria().deleteTable()
+            ValidarConfiguracion.database.daoCategoria().clearPrimaryKey()
+
+            lista.forEach { ValidarConfiguracion.database.daoCategoria().insertCategoria(EntityCategoria(0,it.idCategoria,it.nameCategoria)) }
+
+            for (i in 1..lista.size){
+                val categoriaId = ValidarConfiguracion.database.daoCategoria().getCategoriaId(i)
+                val categoriaNombre = ValidarConfiguracion.database.daoCategoria().getCategoriaNombre(i)
+
+                println("*************************************")
+                println(categoriaId)
+                println(categoriaNombre)
+                println("*************************************")
+
+                withContext(Dispatchers.Main) {
+                    listaCategoria.add(DCCategoriaItem(categoriaNombre,categoriaId))
+                    if (i == lista.size){
+                        adapterCategoria.notifyDataSetChanged()
+                    }
+                }
+            }
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //********************        PLATOS        ********************//
     fun initPlato(){
         val rv_plato = view?.findViewById<RecyclerView>(R.id.rv_platillo)
