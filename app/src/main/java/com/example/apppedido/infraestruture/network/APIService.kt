@@ -14,13 +14,18 @@ interface APIService {
     @GET("api/Users/")
     suspend fun getUsuario(): Response<List<DCUsuarioItem>>
 
-
     @GET("api/Users/")
     fun getUsuario2(): Call<List<DCUsuarioItem>>
 
-
     @GET("api/TablasBasicas/Detail?filter=codigo eq 'CDG_PISO'&select=nombre,numero")
     suspend fun getZonas(): Response<List<DCZonaItem>>
+
+    @GET("api/TablasBasicas/Detail?filter=codigo eq 'CDG_PISO'&select=nombre,numero")
+    fun getZonas2(): Call<List<DCZonaItem>>
+
+
+
+
 
     @GET("api/Producto")
     suspend fun getPlatoBuscado(): Response<List<DCPlatoItem>>
@@ -54,7 +59,6 @@ interface APIService {
 
     @GET("api/Pedido/Precuenta")
     suspend fun getPreCuenta(@Query("idPedido") idPedido:String) : Response<DCPrecuenta>
-
 
     @POST("api/Pedido/CreateOrder")
     fun postOrdenPedido(@Body ordenPedido: DCOrdenPedido) : Call<DCOrdenPedido>

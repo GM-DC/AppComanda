@@ -1,24 +1,31 @@
 package com.example.apppedido.DataBase
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.apppedido.domain.Model.DCZonaItem
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DaoZona {
 
-    @Query("SELECT * FROM tbZona")
-    suspend fun getAllZonas(): tbZona
+    @Query("SELECT * FROM EntityZona")
+    fun getAllZonas(): List<EntityZona>
+
+    @Query("SELECT idZona FROM EntityZona WHERE id = :id")
+    fun getZonaId(id: Int): String
+
+    @Query("SELECT nombreZonas FROM EntityZona WHERE id = :id")
+    fun getZonaNombre(id: Int): String
 
     @Insert
-    suspend fun insertZona( insertzonas: tbZona)
+    fun insertZona( insertzonas: EntityZona)
 
-    @Query("SELECT * FROM tbZona WHERE idZona = :id")
-    fun getByZonas(id: String): List<tbZona>
+    @Query("DELETE FROM EntityZona")
+    fun deleteTable()
 
-    @Delete
-    fun deleteZona(deletezonas: List<tbZona>)
+    @Query("UPDATE SQLITE_SEQUENCE SET seq = 0 WHERE name = 'EntityZona'")
+    fun clearPrimaryKey()
 
 }

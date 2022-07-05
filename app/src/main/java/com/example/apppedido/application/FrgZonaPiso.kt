@@ -1,6 +1,5 @@
 package com.example.apppedido.application.View
 
-import android.content.Context
 import com.example.apppedido.domain.Model.DCLoginDatosExito
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,10 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import com.example.apppedido.*
-import com.example.apppedido.DataBase.DaoZona
-import com.example.apppedido.DataBase.ZonaApp
-import com.example.apppedido.DataBase.tbZona
+import com.example.apppedido.DataBase.ComandaDB
+import com.example.apppedido.DataBase.EntityZona
+import com.example.apppedido.ValidarConfiguracion.Companion.database
 import com.example.apppedido.domain.Model.DCMesaItem
 import com.example.apppedido.domain.Model.DCZonaItem
 import com.example.apppedido.infraestruture.network.APIService
@@ -24,7 +24,9 @@ import com.example.apppedido.infraestruture.adapters.AdapterZona
 import com.example.apppedido.infraestruture.network.RetrofitCall
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class FrgZonaPiso : Fragment() {
@@ -33,10 +35,10 @@ class FrgZonaPiso : Fragment() {
     private lateinit var adapterZona: AdapterZona
     private lateinit var adapterMesa: AdapterMesa
     private val listaZona = ArrayList<DCZonaItem>()
+    private val listaInjeccion = ArrayList<DCZonaItem>()
     private val listaMesa = ArrayList<DCMesaItem>()
-    var apiInterface: APIService? = null
 
-    private lateinit var dao: DaoZona
+    var apiInterface: APIService? = null
 
 
 
@@ -54,37 +56,29 @@ class FrgZonaPiso : Fragment() {
 
         //INICIAR ZONAS
         initZona()
+        iniciarZonas()
         initMesa()
-        getDataZona()
+
+
+
         //INICIAR DATOS
         getDataMesa("0001")
 
-        guardarZonas()
 
         //DESAPARECER BARRA DE NAVEGACION
         desaparecerBarraNavegacion()
+
     }
 
-    private fun guardarZonas() {
-
-        println("********2***********")
-        println("${dao.javaClass}")
-        println("********************")
-
-
-        lifecycleScope.launch {
-
-            dao.insertZona(tbZona("01","CASA"))
-            val allZona = dao.getAllZonas()
-
-            println("********************")
-            println("$allZona")
-            println("********************")
-
+    private fun iniciarZonas() {
+        val datosRecuperados = arguments
+        if (datosRecuperados?.getSerializable("ListaZona")==null){
+            getDataZona()
+        }else{
+            val lista2: ArrayList<DCZonaItem> = datosRecuperados?.getSerializable("ListaZona") as ArrayList<DCZonaItem>
+            listaZona.addAll(lista2)
+            adapterZona.notifyDataSetChanged()
         }
-
-
-
     }
 
 
@@ -119,21 +113,52 @@ class FrgZonaPiso : Fragment() {
     private fun getDataZona(){
         CoroutineScope(Dispatchers.IO).launch {
             val response = apiInterface!!.getZonas()
-                activity?.runOnUiThread {
+            activity?.runOnUiThread {
                 if(response.isSuccessful){
-
                     val datoss = response.body()
-
-
                     for (i in datoss?.indices!!){
-                        listaZona.add(DCZonaItem(datoss[i].nombreZonas, datoss[i].idZona))
+                        listaInjeccion.add(DCZonaItem(datoss[i].nombreZonas, datoss[i].idZona))
                     }
-
-
-
-                    adapterZona.notifyDataSetChanged()
+                    inyectarDatosZonas(listaInjeccion)
                 }
             }
+        }
+    }
+
+    fun inyectarDatosZonas(lista: ArrayList<DCZonaItem>){
+
+        println("******** LISTA DE ZONAS ***********")
+        println(lista)
+        println("***********************************")
+
+        ///*************   ROOM FUNCIONAL ******************************************************
+        GlobalScope.launch(Dispatchers.Default) {
+            database.daoZona().deleteTable()
+            database.daoZona().clearPrimaryKey()
+            lista.forEach { database.daoZona().insertZona(EntityZona(0,it.idZona,it.nombreZonas)) }
+
+            for (i in 1..lista.size){
+                val zonasId = database.daoZona().getZonaId(i)
+                val zonasNombre = database.daoZona().getZonaNombre(i)
+
+                println("*************************************")
+                println(zonasId)
+                println(zonasNombre)
+                println("*************************************")
+
+                withContext(Dispatchers.Main) {
+                    listaZona.add(DCZonaItem(zonasNombre,zonasId))
+
+                    if (i == lista.size){
+                        adapterZona.notifyDataSetChanged()
+                    }
+
+                }
+
+            }
+
+
+
         }
     }
 
@@ -151,14 +176,7 @@ class FrgZonaPiso : Fragment() {
         //ENVIAR DATOS DE MESA
         val datosRecuperados = arguments
         val recibeDatos: DCLoginDatosExito = datosRecuperados?.getSerializable("DATOUSUARIO") as DCLoginDatosExito
-
         val recibeDatosBorrador = datosRecuperados.getSerializable("BORRADOR")
-
-        println("**************************************")
-        println("**************************************")
-        println("Enviar lista ${ datosRecuperados.getSerializable("BORRADOR") }")
-        println("**************************************")
-        println("**************************************")
 
 
         val idZona = dataclassMesa.idZona
@@ -180,6 +198,7 @@ class FrgZonaPiso : Fragment() {
         enviarDatos.putString("IDMESA",idMesa.toString())
         enviarDatos.putString("IDZONA",idZona)
         enviarDatos.putSerializable("DatosUsuario",recibeDatos)
+        enviarDatos.putSerializable("ListaZona",listaZona)
 
         println("DATOS RECIBIDO Y ENVIADO: $recibeDatosBorrador")
 
@@ -202,7 +221,6 @@ class FrgZonaPiso : Fragment() {
                 if(response.isSuccessful){
                     listaMesa.clear()
                     listaMesa.addAll(response.body()!!)
-
                     adapterMesa.notifyDataSetChanged()
                 }else{
                     Toast.makeText(activity, "Error", Toast.LENGTH_SHORT).show()

@@ -19,14 +19,18 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.apppedido.DataBase.ZonaApp
+import androidx.room.Room
+import com.example.apppedido.DataBase.ComandaDB
+import com.example.apppedido.DataBase.EntityZona
 import com.example.apppedido.Imprimir
 import com.example.apppedido.ImprimirComanda
 import com.example.apppedido.R
+import com.example.apppedido.ValidarConfiguracion
 import com.example.apppedido.domain.DCComandaItem
 import com.example.apppedido.domain.DCPedidoMesaItem
 import com.example.apppedido.domain.DataClassPedidoBorrador
@@ -35,6 +39,7 @@ import com.example.apppedido.domain.Model.DCLoginDatosExito
 import com.example.apppedido.domain.Model.DCPedidoXMesa
 import com.example.apppedido.domain.Model.DCPlatoItem
 import com.example.apppedido.domain.Model.DCPrecuenta
+import com.example.apppedido.domain.Model.DCZonaItem
 import com.example.apppedido.domain.Model.DataClassPedido
 import com.example.apppedido.domain.Model.ListDetalle
 import com.example.apppedido.infraestruture.adapters.AdapterCategoria
@@ -50,6 +55,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
+import java.io.Serializable
 import java.text.DecimalFormat
 import java.time.LocalDateTime
 import kotlin.properties.Delegates
@@ -63,6 +69,7 @@ class FrgCatPlat: Fragment() {
     private lateinit var adapterPlatoFiltrado: AdapterPlatoFiltrado
     private lateinit var adapterPedido: AdapterPedido
     private val listaCategoria = ArrayList<DCCategoriaItem>()
+    private val listaCategoriaInjeccion = ArrayList<DCCategoriaItem>()
     private val listaPlato = ArrayList<DCPlatoItem>()
     private val listaPlatoBuscado = ArrayList<DCPlatoItem>()
     private val listaPedido = ArrayList<DataClassPedido>()
@@ -72,9 +79,9 @@ class FrgCatPlat: Fragment() {
     private val listaComanda = ArrayList<DCComandaItem>()
     private var listaPedidoBorrador = ArrayList<DataClassPedidoBorrador>()
 
+
     var apiInterface: APIService? = null
     var idpedido = 0
-
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
@@ -125,13 +132,6 @@ class FrgCatPlat: Fragment() {
         //DESAPARECER BARRA DE NAVEGACION
         desaparecerBarraNavegacion()
 
-
-
-
-        //INICIAR MENSAJE MESA
-        //initMensajeMesa()
-        //bt_agregar?.setOnClickListener { agregarpedidos() }
-        //regregarZonaPisoCancelado()
     }
 
     //*************************       REVISAR y MEJORADO     *********************
@@ -156,6 +156,13 @@ class FrgCatPlat: Fragment() {
         //DECLARAR VARIABLES
         val datosRecuperados = arguments
         val DatosUsuario: DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
+        val DatosZonas: ArrayList<DCZonaItem> = datosRecuperados.getSerializable("ListaZona") as ArrayList<DCZonaItem>
+
+        println("*********** DATOS RECIBIDOS ***************")
+        println("$DatosZonas")
+        println("********************************")
+
+
         val reenviar = Bundle()
         val fragment = FrgZonaPiso()
         val IDZONA = datosRecuperados.getString("IDZONA")
@@ -181,6 +188,7 @@ class FrgCatPlat: Fragment() {
 
         fragment.arguments = reenviar
         reenviar.putSerializable("DATOUSUARIO",DatosUsuario)
+        reenviar.putSerializable("ListaZona",DatosZonas)
         reenviar.putSerializable("BORRADOR",listaPedidoBorrador)
 
         //CONSULTA SI HAY PEDIDO PARA COLOCAR LIBRE O OCUPADO

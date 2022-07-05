@@ -9,6 +9,9 @@ data class DCMesaItem(
     val estadoTrans: String,
     @SerializedName("piso") val idZona: String,
     val secuencia: Int,
-    val tipo: String
+    val tipo: String,
+    val idPedido: String,
+    val nombreMozo: String
+
 )
 
