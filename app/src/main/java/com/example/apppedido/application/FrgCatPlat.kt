@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -81,10 +82,8 @@ class FrgCatPlat: Fragment() {
     private val listaComanda = ArrayList<DCComandaItem>()
     private var listaPedidoBorrador = ArrayList<DataClassPedidoBorrador>()
 
-
     var apiInterface: APIService? = null
     var idpedido = 0
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_frg_cat_plat, container, false)
@@ -110,6 +109,7 @@ class FrgCatPlat: Fragment() {
         //++++++++++++++++++   INICIA LAS FUNCIONES    +++++++++++++++++
         //INICIAR CATEGORIA
         initCategoria()
+        iniciarCategoria()
         //INICIAR CATEGORIA
         initPlato()
         //INICIAR PEDIDO
@@ -134,9 +134,6 @@ class FrgCatPlat: Fragment() {
         desaparecerBarraNavegacion()
 
 
-        iniciarCategoria()
-
-
     }
 
     private fun iniciarCategoria() {
@@ -154,15 +151,19 @@ class FrgCatPlat: Fragment() {
     fun limpiarLista() {
         var size = listaPedido.size
         var cont = 0
-        do{
-            if (listaPedido[cont].estadoPedido=="PENDIENTE"){
-                listaPedido.removeAt(cont)
-                cont=0
-                size-=1
-            }else{
-                cont+=1
-            }
-        }while(size != cont)
+
+        if (listaPedido.size>0){
+            do{
+                if (listaPedido[cont].estadoPedido=="PENDIENTE"){
+                    listaPedido.removeAt(cont)
+                    cont=0
+                    size-=1
+                }else{
+                    cont+=1
+                }
+            }while(size != cont)
+        }
+
         adapterPedido.notifyDataSetChanged()
         actualizarPrecioTotal()
     }
@@ -206,14 +207,6 @@ class FrgCatPlat: Fragment() {
         reenviar.putSerializable("DATOUSUARIO",DatosUsuario)
         reenviar.putSerializable("ListaZona",DatosZonas)
         reenviar.putSerializable("ListaCategoria",listaCategoria)
-        
-
-
-
-
-
-
-
         reenviar.putSerializable("BORRADOR",listaPedidoBorrador)
 
         //CONSULTA SI HAY PEDIDO PARA COLOCAR LIBRE O OCUPADO
@@ -789,7 +782,6 @@ class FrgCatPlat: Fragment() {
         getDataPlato(nameCategoria)
         iv_buscarPlato?.setOnClickListener { iconbuscarPlato(nameCategoria) }
     }
-
     fun getDataCategoria() {
         CoroutineScope(Dispatchers.IO).launch {
             val response = apiInterface!!.getCategoria()
@@ -807,7 +799,6 @@ class FrgCatPlat: Fragment() {
             }
         }
     }
-
     fun inyectarDatosCategoria(lista: ArrayList<DCCategoriaItem>){
 
         ///*************   ROOM FUNCIONAL ******************************************************
@@ -836,40 +827,6 @@ class FrgCatPlat: Fragment() {
         }
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     //********************        PLATOS        ********************//
     fun initPlato(){
         val rv_plato = view?.findViewById<RecyclerView>(R.id.rv_platillo)
@@ -938,11 +895,15 @@ class FrgCatPlat: Fragment() {
         val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
 
         if (listaPedido.size>0){
-            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"O")
-        }else{
-            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"L")
+            if (listaPedido.size<2){
+                cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"O")
+                println("Cambio a O")
+            }
         }
-
+        if (listaPedido.size<0){
+            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"L")
+            println("Cambio a L")
+        }
 
         actualizarPrecioTotal()
     }
@@ -953,7 +914,6 @@ class FrgCatPlat: Fragment() {
         var sv_buscador = view.findViewById<SearchView>(R.id.sv_buscador)
         var tv_cartelCategoria = view.findViewById<TextView>(R.id.tv_cartelCategoria)
         var bt_cerrarbusqueda = view.findViewById<Button>(R.id.bt_cerrarbusqueda)
-
 
         //Pasando la vista al builder
         builder.setView(view)
@@ -1067,20 +1027,25 @@ class FrgCatPlat: Fragment() {
                 if (listaPedido[viewHolder.bindingAdapterPosition].estadoPedido == "PENDIENTE"){
                     listaPedido.removeAt(viewHolder.bindingAdapterPosition)
                     actualizarPrecioTotal()
+
                     viewHolder.itemView.setBackgroundResource(R.drawable.effect_clic_pedido)
 
                     val datosRecuperados = arguments
                     val IDZONA = datosRecuperados?.getString("IDZONA")
                     val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
 
-                    rv_pedido?.adapter?.notifyDataSetChanged()
-
                     if (listaPedido.size>0){
-                        cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"O")
-                    }else{
+                        if (listaPedido.size<2){
+                            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"O")
+                            println("Cambio a O")
+                        }
+                    }
+                    if (listaPedido.size==0){
                         cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"L")
+                        println("Cambio a L")
                     }
 
+                    rv_pedido?.adapter?.notifyDataSetChanged()
                 }else{
                     rv_pedido?.adapter?.notifyDataSetChanged()
                 }
@@ -1157,14 +1122,11 @@ class FrgCatPlat: Fragment() {
 
         }
 
-
-
         //****************************** PRUEBA *******************************
-
-
-        val viewHolder: RecyclerView.ViewHolder = rv_pedido!!.getChildViewHolder(rv_pedido.getChildAt(0))
-        viewHolder.itemView.setBackgroundResource(R.drawable.effect_clic_pedido)
-
+        //val viewHolder: RecyclerView.ViewHolder = rv_pedido!!.getChildViewHolder()
+        println("*******************************")
+        //println("${viewHolder.itemView}")
+        println("*******************************")
 
 
 
@@ -1191,6 +1153,8 @@ class FrgCatPlat: Fragment() {
         //-----------BOTON AUMENTAR---------------
         bt_aumentar?.setOnClickListener {
 
+            //viewHolder.itemView.setBackgroundResource(R.drawable.effect_clic_pedido)
+
             for (i in listaPedido.indices){
                 if (datos.estadoPedido == "PENDIENTE"){
 
@@ -1202,7 +1166,6 @@ class FrgCatPlat: Fragment() {
                             var cantidad = lt.cantidad+1
                             var precioTotal = lt.precio*cantidad
                             listaPedido[index] = DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion,"PENDIENTE",lt.idProducto,lt.camanda,lt.igv,lt.psigv)
-
                             rv_pedido?.adapter?.notifyDataSetChanged()
 
                         }
@@ -1284,7 +1247,6 @@ class FrgCatPlat: Fragment() {
 
 
     }
-
 
     //******************** FUNCIONES ADICIONALES ***********************
     //INICIA DATOS DE LA ZONA Y MESA

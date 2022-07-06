@@ -18,10 +18,19 @@
             android:layout_width="match_parent"
             android:layout_height="150dp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_mesa2"
-            android:layout_width="match_parent"
-            android:layout_height="450dp" />
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/sr_mesa"
+            >
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_mesa2"
+                android:layout_width="match_parent"
+                android:layout_height="450dp" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
     </LinearLayout>
 

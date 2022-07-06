@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.apppedido.*
 import com.example.apppedido.DataBase.ComandaDB
 import com.example.apppedido.DataBase.EntityZona
@@ -37,17 +38,13 @@ class FrgZonaPiso : Fragment() {
     private val listaZona = ArrayList<DCZonaItem>()
     private val listaInjeccion = ArrayList<DCZonaItem>()
     private val listaMesa = ArrayList<DCMesaItem>()
-
     var apiInterface: APIService? = null
-
-
 
     //*************** FIN ATRIBUTOS ********************
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_frg_zona_piso, container, false)
         return view
     }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -58,15 +55,16 @@ class FrgZonaPiso : Fragment() {
         initZona()
         iniciarZonas()
         initMesa()
-
-
+        refreshMesa()
 
         //INICIAR DATOS
-        getDataMesa("0001")
-
 
         //DESAPARECER BARRA DE NAVEGACION
         desaparecerBarraNavegacion()
+
+    }
+
+    private fun refreshMesa() {
 
     }
 
@@ -76,10 +74,19 @@ class FrgZonaPiso : Fragment() {
             getDataZona()
         }else{
             val lista2: ArrayList<DCZonaItem> = datosRecuperados?.getSerializable("ListaZona") as ArrayList<DCZonaItem>
+            val sr_mesa = view?.findViewById<SwipeRefreshLayout>(R.id.sr_mesa)
             listaZona.addAll(lista2)
+            getDataMesa(listaZona[0].idZona)
+
+            sr_mesa?.setOnRefreshListener{
+                getDataMesa(listaZona[0].idZona)
+                sr_mesa.isRefreshing = false
+            }
+
             adapterZona.notifyDataSetChanged()
         }
     }
+
 
 
     //DESAPARECER BARRA DE NAVEGACION
@@ -107,6 +114,13 @@ class FrgZonaPiso : Fragment() {
     private fun onItemDatosZonas(dataclassZonas: DCZonaItem) {
         val idZona = dataclassZonas.idZona
         getDataMesa(idZona)
+
+        val sr_mesa = view?.findViewById<SwipeRefreshLayout>(R.id.sr_mesa)
+        sr_mesa?.setOnRefreshListener{
+            getDataMesa(idZona)
+            sr_mesa.isRefreshing = false
+        }
+
     }
 
     // Obtiene la informacion del API Zona
@@ -126,39 +140,31 @@ class FrgZonaPiso : Fragment() {
     }
 
     fun inyectarDatosZonas(lista: ArrayList<DCZonaItem>){
-
-        println("******** LISTA DE ZONAS ***********")
-        println(lista)
-        println("***********************************")
-
+        
         ///*************   ROOM FUNCIONAL ******************************************************
         GlobalScope.launch(Dispatchers.Default) {
             database.daoZona().deleteTable()
             database.daoZona().clearPrimaryKey()
-            lista.forEach { database.daoZona().insertZona(EntityZona(0,it.idZona,it.nombreZonas)) }
+            lista.forEach {database.daoZona().insertZona(EntityZona(0,it.idZona,it.nombreZonas))}
 
             for (i in 1..lista.size){
                 val zonasId = database.daoZona().getZonaId(i)
                 val zonasNombre = database.daoZona().getZonaNombre(i)
 
-                println("*************************************")
-                println(zonasId)
-                println(zonasNombre)
-                println("*************************************")
-
                 withContext(Dispatchers.Main) {
                     listaZona.add(DCZonaItem(zonasNombre,zonasId))
-
                     if (i == lista.size){
                         adapterZona.notifyDataSetChanged()
                     }
 
+                    val sr_mesa = view?.findViewById<SwipeRefreshLayout>(R.id.sr_mesa)
+                    sr_mesa?.setOnRefreshListener{
+                        getDataMesa(listaZona[0].idZona)
+                        sr_mesa.isRefreshing = false
+                    }
+                    getDataMesa(listaZona[0].idZona)
                 }
-
             }
-
-
-
         }
     }
 

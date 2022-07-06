@@ -1,16 +1,21 @@
 package com.example.apppedido.application.View
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import com.example.apppedido.DataBase.ComandaDB
+import com.example.apppedido.DataBase.EntityCategoria
 import com.example.apppedido.DataBase.EntityZona
 import com.example.apppedido.R
+import com.example.apppedido.ValidarConfiguracion
 import com.example.apppedido.ValidarConfiguracion.Companion.database
+import com.example.apppedido.domain.Model.DCCategoriaItem
 import com.example.apppedido.domain.Model.DCUsuarioItem
 import com.example.apppedido.domain.Model.DCZonaItem
 import com.example.apppedido.infraestruture.network.APIService
@@ -34,6 +39,8 @@ class ActyPanelPedidos : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_panel_pedidos)
 
+        val bt_cerrar = findViewById<Button>(R.id.bt_cerrar)
+
         //RECIBIR DATOS
         val recibirDatos = intent.getSerializableExtra("DATOSUSUARIO")
 
@@ -55,8 +62,24 @@ class ActyPanelPedidos : AppCompatActivity() {
         //DESAPARECER BARRA DE NAVEGACION
         desaparecerBarraNavegacion()
 
-
+        bt_cerrar.setOnClickListener { cerrarSesionDatos() }
     }
+
+    fun cerrarSesionDatos() {
+        val intent = Intent(this, ActyUsuario::class.java)
+
+
+        GlobalScope.launch(Dispatchers.Default) {
+            database.daoCategoria().deleteTable()
+            database.daoCategoria().clearPrimaryKey()
+
+            database.daoZona().deleteTable()
+            database.daoZona().clearPrimaryKey()
+        }
+
+        startActivity(intent)
+    }
+
 
     override fun onBackPressed() {
         val count = supportFragmentManager.backStackEntryCount
