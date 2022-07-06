@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list android:opacity="opaque"
+
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/trans" />
+    <item android:width="25dp"
+        android:height="25dp"
+        >
+        <bitmap android:src="@drawable/icon_cerrar_sesion"/>
+    </item>
+
+
+</layer-list>

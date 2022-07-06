@@ -555,6 +555,12 @@ class FrgCatPlat: Fragment() {
         var TotalIgv = listaPedidoFiltrado.sumOf { t -> t.igv }             //******
         var subTotalLista= listaPedidoFiltrado.sumOf { t -> t.psigv}       //******
 
+        println("****************************************")
+        println("Importe: $importeTotalLista")
+        println("Total IGV:$TotalIgv")
+        println("Total S-IGV$subTotalLista")
+        println("****************************************")
+
 
         val formato= DecimalFormat()
         formato.maximumFractionDigits = 2 //Numero maximo de decimales a mostrar
@@ -562,6 +568,12 @@ class FrgCatPlat: Fragment() {
         importeTotalLista = formato.format(importeTotalLista).toDouble()
         TotalIgv = formato.format(TotalIgv).toDouble()
         subTotalLista = formato.format(subTotalLista).toDouble()
+
+        println("****************************************")
+        println("Importe: $importeTotalLista")
+        println("Total IGV:$TotalIgv")
+        println("Total S-IGV$subTotalLista")
+        println("****************************************")
 
 
         println("****************************************")
@@ -690,7 +702,7 @@ class FrgCatPlat: Fragment() {
                 val IDZONA = datosRecuperados?.getString("IDZONA")
                 val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
 
-                //enviarComanda("103190")
+                enviarComanda("${response.body()?.iD_PEDIDO}")
 
                 if (listaPedido.size > 0){
                     cambiarEstadoMesa(IDZONA!!,IDMESA!!,"O")
@@ -1515,7 +1527,7 @@ class FrgCatPlat: Fragment() {
                 val IDZONA = datosRecuperados.getString("IDZONA")
                 val IDMESA = datosRecuperados.getString("IDMESA")?.toInt()
 
-                //enviarComanda("103190")
+                //enviarComanda("${response.body()?.iD_PEDIDO}")
 
                 if (listaPedido.size > 0){
                     cambiarEstadoMesa(IDZONA!!,IDMESA!!,"O")
@@ -1542,11 +1554,17 @@ class FrgCatPlat: Fragment() {
                     val r = response.body()!!
                     val impComanda = ImprimirComanda()
 
-                    for (i in r.indices ){
-                        listaComanda.add(DCComandaItem(r[i].numerO_PEDIDO,r[i].destino,r[i].zona,r[i].mesa,r[i].mesero,r[i].fechayhora,r[i].detalle))
-                        impComanda.printTcp("192.168.1.114",9100,listaComanda[i])
-                    }
+                    println("***********************************")
+                    println("***********************************")
 
+                    for (i in r.indices ){
+                        println("***********************************")
+                        listaComanda.add(DCComandaItem(r[i].numerO_PEDIDO,r[i].destino,r[i].zona,r[i].mesa,"",r[i].fechayhora,r[i].detalle))
+                        println(listaComanda)
+
+                        impComanda.printTcp("192.168.1.114",9100,listaComanda[i])
+                        println("***********************************")
+                    }
                 }else{
                     Toast.makeText(activity, "Error", Toast.LENGTH_SHORT).show()
                 }

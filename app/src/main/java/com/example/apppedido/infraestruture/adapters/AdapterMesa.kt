@@ -48,7 +48,7 @@ class AdapterMesa(private val data: ArrayList<DCMesaItem>, private val onClickLi
 
             println(data.estadoTrans)
 
-            if (data.estadoTrans == "L"){
+            if (data.estadoTrans == "L" && data.idPedido != ""){
                 tx_mesa.text = "Mesa ${data.idMesa}"
                 tx_mesa.setTextColor(Color.parseColor("#0E83C9"))
                 iv_mesa.setColorFilter(Color.parseColor("#0E83C9"))

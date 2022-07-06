@@ -16,6 +16,7 @@ import com.example.apppedido.R
 import com.example.apppedido.ValidarConfiguracion
 import com.example.apppedido.ValidarConfiguracion.Companion.database
 import com.example.apppedido.domain.Model.DCCategoriaItem
+import com.example.apppedido.domain.Model.DCLoginDatosExito
 import com.example.apppedido.domain.Model.DCUsuarioItem
 import com.example.apppedido.domain.Model.DCZonaItem
 import com.example.apppedido.infraestruture.network.APIService
@@ -66,18 +67,10 @@ class ActyPanelPedidos : AppCompatActivity() {
     }
 
     fun cerrarSesionDatos() {
-        val intent = Intent(this, ActyUsuario::class.java)
 
-
-        GlobalScope.launch(Dispatchers.Default) {
-            database.daoCategoria().deleteTable()
-            database.daoCategoria().clearPrimaryKey()
-
-            database.daoZona().deleteTable()
-            database.daoZona().clearPrimaryKey()
-        }
-
+        val intent = Intent(this@ActyPanelPedidos, ActyUsuario::class.java)
         startActivity(intent)
+
     }
 
 

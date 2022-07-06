@@ -71,11 +71,14 @@ class FrgZonaPiso : Fragment() {
     private fun iniciarZonas() {
         val datosRecuperados = arguments
         if (datosRecuperados?.getSerializable("ListaZona")==null){
+
             getDataZona()
+
         }else{
             val lista2: ArrayList<DCZonaItem> = datosRecuperados?.getSerializable("ListaZona") as ArrayList<DCZonaItem>
             val sr_mesa = view?.findViewById<SwipeRefreshLayout>(R.id.sr_mesa)
             listaZona.addAll(lista2)
+
             getDataMesa(listaZona[0].idZona)
 
             sr_mesa?.setOnRefreshListener{
@@ -112,6 +115,7 @@ class FrgZonaPiso : Fragment() {
     //SELECCIONAR ZONA Y SE LISTA LAS MESAS
 
     private fun onItemDatosZonas(dataclassZonas: DCZonaItem) {
+
         val idZona = dataclassZonas.idZona
         getDataMesa(idZona)
 
@@ -140,7 +144,6 @@ class FrgZonaPiso : Fragment() {
     }
 
     fun inyectarDatosZonas(lista: ArrayList<DCZonaItem>){
-        
         ///*************   ROOM FUNCIONAL ******************************************************
         GlobalScope.launch(Dispatchers.Default) {
             database.daoZona().deleteTable()
@@ -161,6 +164,7 @@ class FrgZonaPiso : Fragment() {
                     sr_mesa?.setOnRefreshListener{
                         getDataMesa(listaZona[0].idZona)
                         sr_mesa.isRefreshing = false
+                        adapterZona.notifyDataSetChanged()
                     }
                     getDataMesa(listaZona[0].idZona)
                 }
@@ -223,7 +227,7 @@ class FrgZonaPiso : Fragment() {
         fragment.arguments = enviarDatos
 
         //CAMBIAR FRAMENT
-        transaction!!.replace(R.id.frm_panel, fragment).addToBackStack(null).commit()
+        transaction!!.replace(R.id.frm_panel, fragment).commit()
     }
 
     // Obtiene la informacion del API Mesa
