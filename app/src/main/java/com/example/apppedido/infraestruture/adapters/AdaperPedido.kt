@@ -69,7 +69,6 @@ class AdapterPedido(private val data: ArrayList<DataClassPedido>, private val on
                 cantidad.setTextColor(Color.parseColor("#11468F"))
                 total.setTextColor(Color.parseColor("#11468F"))
                 tv_nota.setTextColor(Color.parseColor("#11468F"))
-
             }else{
                 tv_nombrePlato.setTextColor(Color.parseColor("#DA1212"))
                 tv_precio.setTextColor(Color.parseColor("#DA1212"))

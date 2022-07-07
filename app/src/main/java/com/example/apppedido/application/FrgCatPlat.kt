@@ -10,6 +10,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -18,17 +19,12 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
-import com.example.apppedido.DataBase.ComandaDB
 import com.example.apppedido.DataBase.EntityCategoria
-import com.example.apppedido.DataBase.EntityZona
 import com.example.apppedido.Imprimir
 import com.example.apppedido.ImprimirComanda
 import com.example.apppedido.R
@@ -53,16 +49,14 @@ import com.example.apppedido.infraestruture.network.RetrofitCall
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.NonDisposableHandle.parent
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.IOException
-import java.io.Serializable
 import java.text.DecimalFormat
 import java.time.LocalDateTime
-import kotlin.properties.Delegates
 
 
 class FrgCatPlat: Fragment() {
@@ -1090,7 +1084,6 @@ class FrgCatPlat: Fragment() {
 
         var datos = dataclassPedido.copy()
 
-
         //-------------Posicion--------------------------------------
         var index = -1
         for (i in listaPedido.indices) {
@@ -1134,29 +1127,35 @@ class FrgCatPlat: Fragment() {
 
         }
 
+        /*
+
         //****************************** PRUEBA *******************************
         //val viewHolder: RecyclerView.ViewHolder = rv_pedido!!.getChildViewHolder()
         println("*******************************")
         //println("${viewHolder.itemView}")
         println("*******************************")
 
+        ItemClickSupport.addTo(rv_pedido).setOnItemClickListener(
+            object : AdapterView.OnItemClickListener {
+                fun onItemClicked(recyclerView: RecyclerView?, position: Int, v: View?) {
+                    TODO("Not yet implemented")
+                }
 
+                override fun onItemClick( parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                ) {
+                    TODO("Not yet implemented")
+                }
+            }
+        )
 
+        val viewHolder: RecyclerView.ViewHolder = rv_pedido.
+        val recyclerView: RecyclerView
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        viewHolder.itemView.setOnClickListener {
+        }
+        
+         */
+        */
 
 
 

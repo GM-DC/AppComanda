@@ -92,6 +92,7 @@ class activityPasscode : AppCompatActivity()  {
                     intent.putExtras(bundle)
                     startActivity(intent)
                     numeroAleatorio()
+                    finish()
                 }
             }
         }

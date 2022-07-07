@@ -1,34 +1,12 @@
 package com.example.apppedido.application.View
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import androidx.room.Room
-import com.example.apppedido.DataBase.ComandaDB
-import com.example.apppedido.DataBase.EntityCategoria
-import com.example.apppedido.DataBase.EntityZona
 import com.example.apppedido.R
-import com.example.apppedido.ValidarConfiguracion
-import com.example.apppedido.ValidarConfiguracion.Companion.database
-import com.example.apppedido.domain.Model.DCCategoriaItem
-import com.example.apppedido.domain.Model.DCLoginDatosExito
-import com.example.apppedido.domain.Model.DCUsuarioItem
 import com.example.apppedido.domain.Model.DCZonaItem
 import com.example.apppedido.infraestruture.network.APIService
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 class ActyPanelPedidos : AppCompatActivity() {
@@ -67,12 +45,10 @@ class ActyPanelPedidos : AppCompatActivity() {
     }
 
     fun cerrarSesionDatos() {
-
-        val intent = Intent(this@ActyPanelPedidos, ActyUsuario::class.java)
-        startActivity(intent)
-
+        val count = supportFragmentManager.backStackEntryCount
+        if (count == 0) { super.onBackPressed()}
+        else { supportFragmentManager.popBackStack() }
     }
-
 
     override fun onBackPressed() {
         val count = supportFragmentManager.backStackEntryCount
