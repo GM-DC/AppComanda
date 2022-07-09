@@ -11,7 +11,10 @@ data class DCMesaItem(
     val secuencia: Int,
     val tipo: String,
     val idPedido: String,
-    val nombreMozo: String
-
+    val NombreMozo: String
 )
 
+
+data class DCMesaMozo(
+    val NombreMozo: String
+)

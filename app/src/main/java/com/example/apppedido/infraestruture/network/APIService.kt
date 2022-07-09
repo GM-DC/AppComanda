@@ -33,8 +33,8 @@ interface APIService {
     @GET("api/Mesas")
     suspend fun getMesa(@Query("filter") filter:String) : Response<List<DCMesaItem>>
 
-    @GET("api/Mesas")
-    fun getMesa2(@Query("filter") filter:String) : Call<List<DCMesaItem>>
+    @GET("api/Mesas?select=nombreMozo")
+    suspend fun getMesa2(@Query("filter") filter:String) : Response<List<DCMesaMozo>>
 
     @GET("api/TablasBasicas/Detail?filter=codigo eq 'CATE_PROD' and referencia4 eq 'R'&select=nombre,numero&orderby=nombre asc")
     suspend fun getCategoria() : Response<List<DCCategoriaItem>>

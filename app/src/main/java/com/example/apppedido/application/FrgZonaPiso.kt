@@ -178,7 +178,7 @@ class FrgZonaPiso : Fragment() {
         println("$recibeDatosBorrador")
         println("***** *******************************")
 
-        val nameMozo = dataclassMesa.nombreMozo
+        val nameMozo = dataclassMesa.NombreMozo
         val idZona = dataclassMesa.idZona
         var nameZona = ""
 
@@ -220,7 +220,7 @@ class FrgZonaPiso : Fragment() {
     // Obtiene la informacion del API Mesa
     private fun getDataMesa(idZona:String) {
         CoroutineScope(Dispatchers.IO).launch {
-            val response = apiInterface!!.getMesa("piso eq '$idZona'" )
+            val response = apiInterface!!.getMesa("piso eq '$idZona' and tipo eq 'A'" )
             activity?.runOnUiThread{
                 if(response.isSuccessful){
                     listaMesa.clear()

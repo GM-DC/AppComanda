@@ -79,7 +79,8 @@ class FrgCatPlat: Fragment() {
 
     var apiInterface: APIService? = null
     var idpedido = 0
-    var NAMEMOZOTEMPORAL: String? = null
+    private var NAMEMOZOTEMPORAL: String? = null
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_frg_cat_plat, container, false)
@@ -135,40 +136,23 @@ class FrgCatPlat: Fragment() {
         val IDZONA = datosRecuperados?.getString("IDZONA")
         val IDMESA = datosRecuperados?.getString("IDMESA")
 
-        println("*****************************************")
-        println("************* $IDMESA  ******************")
-        println("*****************************************")
-
-
         CoroutineScope(Dispatchers.IO).launch {
-            val response = apiInterface!!.getMesa2("piso eq '$IDZONA'" )
-                response.enqueue(object  : Callback<List<DCMesaItem>>{
-                    override fun onResponse(
-                        call: Call<List<DCMesaItem>>,
-                        response: Response<List<DCMesaItem>>
-                    ) {
-                        for(i in response.body()!!.indices){
-                            if (response.body()!![i].idMesa == IDMESA?.toInt()){
+            val response = apiInterface!!.getMesa2("piso eq '$IDZONA' and idMesa eq $IDMESA")
+            activity?.runOnUiThread {
+                if (response.isSuccessful) {
 
-                                println("********** VALIDACION DE MESA*******************")
-                                println(response.body()!![i].idMesa == IDMESA?.toInt())
-                                println("************************************************")
+                    println("***************************************************************")
+                    println("Respuesta de Corrutina: ${response.body()?.get(0)?.NombreMozo}")
+                    println("***************************************************************")
 
-                                if(response.body()!![i].nombreMozo == null){
-                                    NAMEMOZOTEMPORAL = " "
-                                }else{
-                                    NAMEMOZOTEMPORAL = response.body()!![i].nombreMozo
-                                }
-                                println("Nombre del ${NAMEMOZOTEMPORAL}")
-                                break
-                            }
-                        }
+                    if (response.body()?.get(0)?.NombreMozo==null){
+
+                    }else{
+                        NAMEMOZOTEMPORAL = response.body()?.get(0)?.NombreMozo
+                        Toast.makeText(activity, "EN ATENCION POR: $NAMEMOZOTEMPORAL", Toast.LENGTH_SHORT).show()
                     }
-
-                    override fun onFailure(call: Call<List<DCMesaItem>>, t: Throwable) {
-                        Toast.makeText(activity, "Error", Toast.LENGTH_SHORT).show()
-                    }
-                })
+                }
+            }
         }
 
     }
@@ -189,6 +173,11 @@ class FrgCatPlat: Fragment() {
         var size = listaPedido.size
         var cont = 0
 
+        val datosRecuperados = arguments
+        val DatosUsuario: DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
+        val IDZONA = datosRecuperados.getString("IDZONA")
+        val IDMESA = datosRecuperados.getString("IDMESA")?.toInt()
+
         if (listaPedido.size>0){
             do{
                 if (listaPedido[cont].estadoPedido=="PENDIENTE"){
@@ -199,6 +188,42 @@ class FrgCatPlat: Fragment() {
                     cont+=1
                 }
             }while(size != cont)
+        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = apiInterface!!.getMesa2("piso eq '$IDZONA' and idMesa eq $IDMESA")
+            activity?.runOnUiThread {
+                if (response.isSuccessful) {
+
+                    println("***************************************************************")
+                    println("Respuesta de Corrutina: ${response.body()?.get(0)?.NombreMozo}")
+                    println("***************************************************************")
+
+                    if (response.body()?.get(0)?.NombreMozo==null){
+                        NAMEMOZOTEMPORAL = " "
+                    }else{
+                        NAMEMOZOTEMPORAL = response.body()?.get(0)?.NombreMozo
+                    }
+
+                    println("***************************************************************")
+                    println("NAMEMOZOTEMPORAL : ${NAMEMOZOTEMPORAL}")
+                    println("***************************************************************")
+
+
+                    if (listaPedido.size<=0){
+                        if (NAMEMOZOTEMPORAL==DatosUsuario.nombreMozo || NAMEMOZOTEMPORAL==" "){
+                            cambiarEstadoMesa(IDZONA.toString(), IDMESA!!, "L", " ")
+                        }
+                    }
+
+                    for (i in listaPedido.indices){
+                        if (listaPedido[i].estadoPedido == "ATENDIDO"){
+                            cambiarEstadoMesa(IDZONA.toString(), IDMESA!!, "L", " ")
+                            break
+                        }
+                    }
+                }
+            }
         }
 
         adapterPedido.notifyDataSetChanged()
@@ -240,28 +265,45 @@ class FrgCatPlat: Fragment() {
         println("Lista de borrador "+ listaPedidoBorrador)
         println("*****************************************")
 
-
-
-
-
-
-
-
-
         fragment.arguments = reenviar
         reenviar.putSerializable("DATOUSUARIO",DatosUsuario)
         reenviar.putSerializable("ListaZona",DatosZonas)
         reenviar.putSerializable("ListaCategoria",listaCategoria)
         reenviar.putSerializable("BORRADOR",listaPedidoBorrador)
 
-        //CONSULTA SI HAY PEDIDO PARA COLOCAR LIBRE O OCUPADO
-        if(listaPedido.size>0){
-            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!.toInt(),"O",DatosUsuario.nombreMozo)
-        }else{
-            if (DatosUsuario.nombreMozo == NAMEMOZOTEMPORAL || NAMEMOZOTEMPORAL==" "){
-                println("Paso Aqui")
-                Toast.makeText(activity, "PASO AQUI", Toast.LENGTH_SHORT).show()
-                cambiarEstadoMesa(IDZONA.toString(),IDMESA!!.toInt(),"L"," ")
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = apiInterface!!.getMesa2("piso eq '$IDZONA' and idMesa eq $IDMESA")
+            activity?.runOnUiThread {
+                if (response.isSuccessful) {
+
+                    println("***************************************************************")
+                    println("Respuesta de Corrutina: ${response.body()?.get(0)?.NombreMozo}")
+                    println("***************************************************************")
+
+                    if (response.body()?.get(0)?.NombreMozo==null){
+                        NAMEMOZOTEMPORAL = " "
+                    }else{
+                        NAMEMOZOTEMPORAL = response.body()?.get(0)?.NombreMozo
+                    }
+
+                    println("***************************************************************")
+                    println("NAMEMOZOTEMPORAL : ${NAMEMOZOTEMPORAL}")
+                    println("***************************************************************")
+
+
+                    if (listaPedido.size<=0){
+                        if (NAMEMOZOTEMPORAL==DatosUsuario.nombreMozo || NAMEMOZOTEMPORAL==" "){
+                            Toast.makeText(activity, "SE LIBERA MESA", Toast.LENGTH_SHORT).show()
+                            cambiarEstadoMesa(IDZONA.toString(), IDMESA!!, "L", " ")
+                        }
+                    }else{
+                        if (NAMEMOZOTEMPORAL==DatosUsuario.nombreMozo || NAMEMOZOTEMPORAL==" "){
+                            Toast.makeText(activity, "MESA RESERVADA", Toast.LENGTH_SHORT).show()
+                            cambiarEstadoMesa(IDZONA.toString(), IDMESA!!.toInt(), "O", DatosUsuario.nombreMozo)
+                        }
+                    }
+                }
             }
         }
 
@@ -844,11 +886,11 @@ class FrgCatPlat: Fragment() {
                     if(response.isSuccessful){
                         if (!response.body()!!.isEmpty()){
                             idpedido = response.body()?.get(0)?.idPedido!!
-                            cambiarEstadoMesa(IDZONA!!,IDMESA!!,"O",DatosUsuario.nombreMozo)
+
                             getDataPreCuenta(idpedido.toString())
                         }else{
                             if (DatosUsuario.nombreMozo == NAMEMOZOTEMPORAL || NAMEMOZOTEMPORAL==null || NAMEMOZOTEMPORAL==" ") {
-                                cambiarEstadoMesa(IDZONA!!, IDMESA!!, "L", " ")
+
                             }
                             iniciarDatosGuardadosBorrador()
 
@@ -910,11 +952,6 @@ class FrgCatPlat: Fragment() {
                 val categoriaId = ValidarConfiguracion.database.daoCategoria().getCategoriaId(i)
                 val categoriaNombre = ValidarConfiguracion.database.daoCategoria().getCategoriaNombre(i)
 
-                println("*************************************")
-                println(categoriaId)
-                println(categoriaNombre)
-                println("*************************************")
-
                 withContext(Dispatchers.Main) {
                     listaCategoria.add(DCCategoriaItem(categoriaNombre,categoriaId))
                     if (i == lista.size){
@@ -970,52 +1007,58 @@ class FrgCatPlat: Fragment() {
                 break
             }
         }
+        //*******************   PRUEBA *******************************
 
-        //----------------  AGREGA O AUMENTA LA CANTIDAD -------------------
+        println("********** ANTES DE GET*************")
+        println("Nombre del ${NAMEMOZOTEMPORAL}")
+        println("IDZONA del ${IDZONA}")
+        println("IDMESA del ${IDMESA}")
+        println("************************************")
 
-        if (listaPedido.size==0){
-            getNameMozo()
-        }
 
-        println("********** VALIDAR DATOS USUARIOS ***************")
-        println("Nombre del Mozo: ${NAMEMOZOTEMPORAL}")
-        println("Nombre Usuario: ${DatosUsuario.nombreMozo}")
-        println("*************************************************")
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = apiInterface!!.getMesa2("piso eq '$IDZONA' and idMesa eq $IDMESA")
+            activity?.runOnUiThread {
+                if (response.isSuccessful) {
 
-        if (DatosUsuario.nombreMozo == NAMEMOZOTEMPORAL || NAMEMOZOTEMPORAL==" " ){
-            if (action == 0){
-                listaPedido.add(DataClassPedido(1,datos.nombre,datos.codigo,datos.preciO_VENTA,datos.preciO_VENTA,"","PENDIENTE",datos.iD_PRODUCTO,datos.comanda,datos.igv.toDouble(),datos.psigv.toDouble()))
-                rv_pedido?.adapter?.notifyDataSetChanged()
-                adapterPedido.getItemId(pos)
-                rv_pedido?.scrollToPosition(listaPedido.size-1)
-            }else{
-                val lt = listaPedido[pos]
-                var cantidad = lt.cantidad+1
-                var precioTotal = dataClassPlato.preciO_VENTA*cantidad
-                println("El precio es: $precioTotal")
-                listaPedido.set(pos, DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion,"PENDIENTE",lt.idProducto,lt.camanda,lt.igv,lt.psigv))
-                rv_pedido?.adapter?.notifyDataSetChanged()
+                    println("***************************************************************")
+                    println("Respuesta de Corrutina: ${response.body()?.get(0)?.NombreMozo}")
+                    println("***************************************************************")
+
+                    if (response.body()?.get(0)?.NombreMozo==null){
+                        NAMEMOZOTEMPORAL = " "
+                    }else{
+                        NAMEMOZOTEMPORAL = response.body()?.get(0)?.NombreMozo
+                    }
+
+                    println("***************************************************************")
+                    println("NAMEMOZOTEMPORAL : ${NAMEMOZOTEMPORAL}")
+                    println("***************************************************************")
+
+                    if (NAMEMOZOTEMPORAL == DatosUsuario.nombreMozo || NAMEMOZOTEMPORAL == " "){
+                        //Agrega el producto
+                        cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"O",DatosUsuario.nombreMozo)
+                        if (action == 0) {
+                            listaPedido.add(DataClassPedido(1,datos.nombre,datos.codigo,datos.preciO_VENTA,datos.preciO_VENTA,"","PENDIENTE",datos.iD_PRODUCTO,datos.comanda,datos.igv.toDouble(),datos.psigv.toDouble()))
+                            rv_pedido?.adapter?.notifyDataSetChanged()
+                            adapterPedido.getItemId(pos)
+                            rv_pedido?.scrollToPosition(listaPedido.size - 1)
+                        } else {
+                            val lt = listaPedido[pos]
+                            var cantidad = lt.cantidad + 1
+                            var precioTotal = dataClassPlato.preciO_VENTA * cantidad
+                            println("El precio es: $precioTotal")
+                            listaPedido.set(pos,DataClassPedido(cantidad,lt.namePlato,lt.categoria,lt.precio,precioTotal,lt.observacion,"PENDIENTE",lt.idProducto,lt.camanda,lt.igv,lt.psigv))
+                            rv_pedido?.adapter?.notifyDataSetChanged()
+                        }
+                    }else{
+                        Toast.makeText(activity, "La mesa esta siendo atendida por $NAMEMOZOTEMPORAL", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
-
-            if (listaPedido.size>0){
-                cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"O",DatosUsuario.nombreMozo)
-            }
-
-            Toast.makeText(activity, "${DatosUsuario.nombreMozo}", Toast.LENGTH_SHORT).show()
-        }else{
-
-            Toast.makeText(activity, "Esta siendo ocupado por: ${NAMEMOZO}", Toast.LENGTH_SHORT).show()
         }
 
         //-------------------------------------------------------------------
-        if (listaPedido.size<0){
-            if (DatosUsuario.nombreMozo == NAMEMOZOTEMPORAL || NAMEMOZOTEMPORAL==null || NAMEMOZOTEMPORAL==" ") {
-                cambiarEstadoMesa(IDZONA.toString(), IDMESA!!, "L", " ")
-                println("Cambio a L")
-            }
-        }
-
-
         actualizarPrecioTotal()
     }
 
@@ -1135,11 +1178,9 @@ class FrgCatPlat: Fragment() {
             ): Boolean { return false }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-
                 if (listaPedido[viewHolder.bindingAdapterPosition].estadoPedido == "PENDIENTE"){
                     listaPedido.removeAt(viewHolder.bindingAdapterPosition)
                     actualizarPrecioTotal()
-
                     viewHolder.itemView.setBackgroundResource(R.drawable.effect_clic_pedido)
 
                     val datosRecuperados = arguments
@@ -1148,27 +1189,52 @@ class FrgCatPlat: Fragment() {
                     val DatosUsuario: DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
                     val NAMEMOZO = datosRecuperados?.getString("NAMEMOZO")
 
+                    println("****************  SWIPE  ***************")
+                    println("Nombre del Mozo: $NAMEMOZOTEMPORAL")
+                    println("****************************************")
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val response = apiInterface!!.getMesa2("piso eq '$IDZONA' and idMesa eq $IDMESA")
+                        activity?.runOnUiThread {
+                            if (response.isSuccessful) {
+
+                                println("***************************************************************")
+                                println("Respuesta de Corrutina: ${response.body()?.get(0)?.NombreMozo}")
+                                println("***************************************************************")
+
+                                if (response.body()?.get(0)?.NombreMozo==null){
+                                    NAMEMOZOTEMPORAL = " "
+                                }else{
+                                    NAMEMOZOTEMPORAL = response.body()?.get(0)?.NombreMozo
+                                }
+
+                                println("***************************************************************")
+                                println("NAMEMOZOTEMPORAL : ${NAMEMOZOTEMPORAL}")
+                                println("***************************************************************")
 
 
+                                if (listaPedido.size<=0){
+                                    if (NAMEMOZOTEMPORAL==DatosUsuario.nombreMozo || NAMEMOZOTEMPORAL==" "){
+                                        cambiarEstadoMesa(IDZONA.toString(), IDMESA!!, "L", " ")
+                                    }
+                                }
 
-                    if (listaPedido.size>0){
-                        if (listaPedido.size<2){
-                            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"O",DatosUsuario.nombreMozo)
-                            println("Cambio a O")
+                                for (i in listaPedido.indices){
+                                    if (listaPedido[i].estadoPedido == "ATENDIDO"){
+                                        cambiarEstadoMesa(IDZONA.toString(), IDMESA!!, "L", " ")
+                                        break
+                                    }
+                                }
+                            }
                         }
                     }
-                    if (listaPedido.size==0){
-                        if (DatosUsuario.nombreMozo == NAMEMOZOTEMPORAL || NAMEMOZOTEMPORAL==" ") {
-                            cambiarEstadoMesa(IDZONA.toString(), IDMESA!!, "L", " ")
-                            println("Cambio a L")
-                        }
-                    }
+
+
 
                     rv_pedido?.adapter?.notifyDataSetChanged()
                 }else{
                     rv_pedido?.adapter?.notifyDataSetChanged()
                 }
-
             }
         }
 
