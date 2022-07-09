@@ -16,6 +16,7 @@ data class DCComandaItem(
     val zona: String,
     val mesa: String,
     val mesero: String,
+    val rutacomanda: String,
     val fechayhora: String,
     val detalle: List<Detalle>
 )
@@ -30,3 +31,4 @@ data class Detalle(
     val noM_IMP: String,
     val secuencia: Int
 )
+

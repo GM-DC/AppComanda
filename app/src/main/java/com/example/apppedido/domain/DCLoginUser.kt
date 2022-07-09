@@ -24,7 +24,8 @@ data class DCLoginDatosExito (
     val iD_COTIZACION: String,
     val jwtToken: String,
     val motivo: Any,      ///****
-    @SerializedName("nombreusuario") val nameMozo: String, ////
+    @SerializedName("nombremozo") val nombreMozo: String,
+    @SerializedName("nombreusuario") val nombreUsuario: String, ////
     val poR_IGV: String,
     val puntO_VENTA: String,
     val redondeo: String,   /// ****
@@ -37,3 +38,4 @@ data class DCLoginDatosExito (
     val usuariocreacion: String,   //***
     val validez: String    //***
 ) : Serializable
+

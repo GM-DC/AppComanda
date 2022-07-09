@@ -33,6 +33,9 @@ interface APIService {
     @GET("api/Mesas")
     suspend fun getMesa(@Query("filter") filter:String) : Response<List<DCMesaItem>>
 
+    @GET("api/Mesas")
+    fun getMesa2(@Query("filter") filter:String) : Call<List<DCMesaItem>>
+
     @GET("api/TablasBasicas/Detail?filter=codigo eq 'CATE_PROD' and referencia4 eq 'R'&select=nombre,numero&orderby=nombre asc")
     suspend fun getCategoria() : Response<List<DCCategoriaItem>>
 
@@ -63,10 +66,10 @@ interface APIService {
     @POST("api/Pedido/CreateOrder")
     fun postOrdenPedido(@Body ordenPedido: DCOrdenPedido) : Call<DCOrdenPedido>
 
-    @PUT("/api/Mesas/EstadoMesa/{Piso}/{Mesa}/{Estado}")
-    suspend fun putCambiarEstadoMesa(@Path("Piso") idZona:String, @Path("Mesa") idMesa:Int, @Path("Estado") estadoMesa:String) : Response<Void>
+    @PUT("/api/Mesas/EstadoMesa/{Piso}/{Mesa}/{Estado}/{Mozo}")
+    suspend fun putCambiarEstadoMesa(@Path("Piso") idZona:String, @Path("Mesa") idMesa:Int, @Path("Estado") estadoMesa:String, @Path("Mozo") nameMozo:String) : Response<Void>
 
-    @GET("api/Pedido/Comanda?")
-    suspend fun getComanda(@Query("idPedido") idPedido:String) : Response<List<DCComandaItem>>
+    @GET("api/Pedido/Comanda")
+    fun getComanda(@Query("idPedido") idPedido:String) : Call<List<DCComandaItem>>
 
 }

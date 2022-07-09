@@ -1,8 +1,11 @@
 package com.example.apppedido.application.View
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -44,6 +47,7 @@ class ActyLogin : AppCompatActivity() {
 
                 //Creando dialog
                 val dialog = builder.create()
+                dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                 dialog.show()
 
                 val et_ip = view.findViewById<EditText>(R.id.et_ip)
@@ -84,8 +88,6 @@ class ActyLogin : AppCompatActivity() {
 
     fun goToActyUsuario(){
         startActivity(Intent(this, ActyUsuario::class.java))
+        finish()
     }
-
-
-
 }

@@ -6,10 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".application.View.ActyLogin">
 
+
+    <View
+        android:id="@+id/topView"
+        android:layout_width="0dp"
+        android:layout_height="260dp"
+        android:background="@color/azul100"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view5"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:background="@drawable/img_fondo_login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topView" />
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@color/trans"
         >
 
         <ImageView
@@ -21,57 +42,94 @@
             android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"/>
 
-        <ImageView
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
             android:layout_marginTop="50dp"
-            android:src="@drawable/img_logo_unosoft_grande"
-            />
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_unifoft"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="UNOSOFT"
+                android:layout_marginStart="20dp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="70sp"
+                android:layout_gravity="center_vertical"
+                />
+
+        </LinearLayout>
+
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="LOGIN"
+            android:textColor="@color/black"
+            android:textStyle="bold"
             android:textSize="40sp"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="210dp"
             />
 
         <EditText
             android:id="@+id/et_usuario"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:paddingStart="20dp"
-            android:hint="Login"
+            android:layout_height="80dp"
             android:textSize="20sp"
-            android:background="@drawable/input"
             android:layout_marginHorizontal="50dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="60dp"
+            android:paddingStart="36dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:drawableStart="@drawable/icon_ususer"
+            android:background="@drawable/round_border"
+            android:drawablePadding="16dp"
+            android:ems="10"
+            android:hint="Usuario"
+            android:inputType="textEmailAddress"
             />
 
         <EditText
             android:id="@+id/et_contrasena"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:paddingStart="20dp"
-            android:hint="Contraseña"
-            android:background="@drawable/input"
+            android:layout_height="80dp"
             android:textSize="20sp"
             android:layout_marginHorizontal="50dp"
             android:layout_marginTop="20dp"
+            android:paddingStart="36dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:drawableStart="@drawable/icon_lock"
+            android:background="@drawable/round_border"
+            android:drawablePadding="16dp"
+            android:ems="10"
+            android:hint="Usuario"
+            android:inputType="textPassword"
             />
 
         <Button
             android:id="@+id/bt_conectar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/azul20"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
             android:text="CONFIRMAR"
             android:textSize="22sp"
-            android:layout_marginHorizontal="50dp"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginHorizontal="100dp"
+            android:background="@drawable/round_bg"
+            android:backgroundTint="@color/azul100"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
             />
 
     </LinearLayout>

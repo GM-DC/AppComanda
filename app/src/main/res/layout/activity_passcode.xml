@@ -32,8 +32,8 @@
     </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
-        android:layout_width="@dimen/TLWidth_Passcode"
-        android:layout_height="@dimen/TLHeight_Passcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="BIENVENIDO GIAN"
-                android:textSize="@dimen/APasscore_TvBienvenida_size"
+                android:textSize="39sp"
                 android:layout_gravity="center"
                 android:textAlignment="center"
                 android:textStyle="bold"
@@ -63,7 +63,7 @@
             <TextView
                 android:id="@+id/txtCodigo"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/APasscore_TvCodigo_height"
+                android:layout_height="140dp"
                 android:inputType="text|textPassword"
                 android:gravity="center"
                 android:layout_marginTop="12dp"

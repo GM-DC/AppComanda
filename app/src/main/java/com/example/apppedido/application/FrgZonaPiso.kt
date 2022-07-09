@@ -55,41 +55,27 @@ class FrgZonaPiso : Fragment() {
         initZona()
         iniciarZonas()
         initMesa()
-        refreshMesa()
-
-        //INICIAR DATOS
 
         //DESAPARECER BARRA DE NAVEGACION
         desaparecerBarraNavegacion()
-
-    }
-
-    private fun refreshMesa() {
-
     }
 
     private fun iniciarZonas() {
         val datosRecuperados = arguments
         if (datosRecuperados?.getSerializable("ListaZona")==null){
-
             getDataZona()
-
         }else{
             val lista2: ArrayList<DCZonaItem> = datosRecuperados?.getSerializable("ListaZona") as ArrayList<DCZonaItem>
             val sr_mesa = view?.findViewById<SwipeRefreshLayout>(R.id.sr_mesa)
             listaZona.addAll(lista2)
-
             getDataMesa(listaZona[0].idZona)
-
             sr_mesa?.setOnRefreshListener{
                 getDataMesa(listaZona[0].idZona)
                 sr_mesa.isRefreshing = false
             }
-
             adapterZona.notifyDataSetChanged()
         }
     }
-
 
 
     //DESAPARECER BARRA DE NAVEGACION
@@ -159,7 +145,6 @@ class FrgZonaPiso : Fragment() {
                     if (i == lista.size){
                         adapterZona.notifyDataSetChanged()
                     }
-
                     val sr_mesa = view?.findViewById<SwipeRefreshLayout>(R.id.sr_mesa)
                     sr_mesa?.setOnRefreshListener{
                         getDataMesa(listaZona[0].idZona)
@@ -189,11 +174,11 @@ class FrgZonaPiso : Fragment() {
         val recibeDatosBorrador = datosRecuperados.getSerializable("BORRADOR")
         val recibeDatosListaCategoria = datosRecuperados.getSerializable("ListaCategoria")
 
-        println("***** lista recibira de categoria ***********")
-        println("$recibeDatosListaCategoria")
-        println("***** *************************** ***********")
+        println("***** lista Borrador ****************")
+        println("$recibeDatosBorrador")
+        println("***** *******************************")
 
-
+        val nameMozo = dataclassMesa.nombreMozo
         val idZona = dataclassMesa.idZona
         var nameZona = ""
 
@@ -210,7 +195,9 @@ class FrgZonaPiso : Fragment() {
         //ENVIAR DATOS
         val enviarDatos = Bundle()
         enviarDatos.putString("NAMEZONA",nameZona)
+        enviarDatos.putString("NAMEMOZO",nameMozo)
         enviarDatos.putString("IDMESA",idMesa.toString())
+        enviarDatos.putString("IDZONA",idZona)
         enviarDatos.putString("IDZONA",idZona)
         enviarDatos.putSerializable("DatosUsuario",recibeDatos)
         enviarDatos.putSerializable("ListaZona",listaZona)
