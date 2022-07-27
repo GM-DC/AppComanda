@@ -82,6 +82,7 @@ class activityPasscode : AppCompatActivity()  {
             val response = apiInterface!!.checkLoginComanda(DCLoginUser("$usuarioMozo","$passMozo"))
             runOnUiThread {
                 if(response.isSuccessful){
+
                     val intent = Intent(applicationContext, ActyPanelPedidos::class.java)
                     //ENVIAR DATOS
                     val bundle = Bundle()

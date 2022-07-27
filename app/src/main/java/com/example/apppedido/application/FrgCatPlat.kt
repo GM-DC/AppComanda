@@ -89,10 +89,8 @@ class FrgCatPlat: Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         //++++++++++++++++++    DECLARA COMPONENTE     +++++++++++++++++
         apiInterface = RetrofitCall.client?.create(APIService::class.java) as APIService
-
 
         val bt_enviar_comanda = view?.findViewById<Button>(R.id.bt_enviarComanda)
         val bt_cancelar = view?.findViewById<Button>(R.id.bt_cancelar)
@@ -128,7 +126,6 @@ class FrgCatPlat: Fragment() {
         desaparecerBarraNavegacion()
 
         getNameMozo()
-
     }
 
     private fun getNameMozo() {
@@ -702,7 +699,7 @@ class FrgCatPlat: Fragment() {
                         "",
                         listaPedidoFiltrado[i].camanda,
                         DatosUsuario.nombreMozo,
-                        "0001",      //***
+                            "0001",      //***
                         "",
                         0,
                         0,
