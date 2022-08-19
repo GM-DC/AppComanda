@@ -19,6 +19,23 @@
     <color name="trans">#00000000 </color>
 
 
+    <color name="colorPrimaryLight">#80005098</color>
+    <color name="colorPrimary">#005098</color>
+    <color name="colorPrimaryDark">#0B5496</color>
+    <color name="colorAccent">#E50000</color>
+    <color name="colorBackground">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="negro">#E4000000</color>
+    <color name="grey">#e4e4e4</color>
+    <color name="darkGrey">#777676</color>
+    <color name="blueLight">#E1F5FE</color>
+    <color name="green">#57ccba</color>
+    <color name="control_background">#cc4285f4</color>
+
+    <color name="negro_semitransparente">#B2000000</color>
+
+    <color name="transparente">#FF0000</color>
+
 
 
 </resources>

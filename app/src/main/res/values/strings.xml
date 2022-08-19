@@ -8,6 +8,9 @@
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_settings">Anbar</string>
+    <!-- Login -->
+    <string name="main_id">Usuario</string>
+    <string name="main_pass">Clave</string>
 
 
 

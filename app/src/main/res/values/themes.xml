@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.AppPedido" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/azul60</item>
-        <item name="colorPrimaryVariant">@color/azul60</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimary</item>
         <item name="colorOnPrimary">@color/azul100</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/azul10</item>

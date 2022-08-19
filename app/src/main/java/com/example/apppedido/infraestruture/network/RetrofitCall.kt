@@ -1,5 +1,6 @@
 package com.example.apppedido.infraestruture.network
 
+import com.example.apppedido.ValidarConfiguracion.Companion.prefs
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 
@@ -21,7 +22,7 @@ object RetrofitCall {
                 .addInterceptor(interceptor)
                 .build()
             retrofit = Retrofit.Builder()
-                .baseUrl("http://heyeldevs-001-site1.gtempurl.com/")
+                .baseUrl(prefs.getDominio())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()

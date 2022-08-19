@@ -1,5 +1,6 @@
 package com.example.apppedido.application.View
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -12,75 +13,67 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.apppedido.R
+import com.example.apppedido.ValidarConfiguracion
 import com.example.apppedido.ValidarConfiguracion.Companion.prefs
+import com.example.apppedido.domain.Model.DCLoginUser
+import com.example.apppedido.infraestruture.network.APIService
+import com.example.apppedido.infraestruture.network.RetrofitCall
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ActyLogin : AppCompatActivity() {
+
+    var apiInterface: APIService? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_acty_login)
-
-
-        dataDialogo()
         checkValores()
+        dataDialogo()
     }
 
     private fun checkValores() {
-        if (prefs.getUsuario().isNotEmpty() || prefs.getContrasena().isNotEmpty() || prefs.getDominio().isNotEmpty() || prefs.getPuerto().isNotEmpty()){
+        if (prefs.getUsuario().isNotEmpty() || prefs.getContrasena().isNotEmpty() || prefs.getDominio().isNotEmpty()){
             goToActyUsuario()
         }
     }
 
     fun dataDialogo() {
-        val btn_configuracion = findViewById<ImageView>(R.id.btn_configuracion)
-        val bt_conectar = findViewById<Button>(R.id.bt_conectar)
+        val btn_ingresar = findViewById<Button>(R.id.btn_ingresar)
+        val et_host = findViewById<EditText>(R.id.et_host)
         val et_usuario = findViewById<EditText>(R.id.et_usuario)
         val et_contrasena = findViewById<EditText>(R.id.et_contrasena)
-        var Confirmado = false
+        val Confirmado = false
 
-        btn_configuracion.setOnClickListener{
-                //Asignar Valores
-                val builder = AlertDialog.Builder(this@ActyLogin)
-                val view = layoutInflater.inflate(R.layout.dialogue_configuracion,null)
-
-                //Pasando la vista al builder
-                builder.setView(view)
-
-                //Creando dialog
-                val dialog = builder.create()
-                dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                dialog.show()
-
-                val et_ip = view.findViewById<EditText>(R.id.et_ip)
-                val et_port = view.findViewById<EditText>(R.id.et_port)
-                val bt_guardarConfiguracion = view.findViewById<Button>(R.id.bt_guardarConfiguracion)
-
-                bt_guardarConfiguracion.setOnClickListener {
-                    if (et_ip?.text!!.toString().equals("") || et_port.text!!.toString().equals("")){
-                        Confirmado = false
-                        Toast.makeText(this, "INGRESAR CONFIGURACIONES", Toast.LENGTH_SHORT).show()
-                    }else{
-                        prefs.saveDominio(et_ip.text.toString())
-                        prefs.savePuerto(et_port.text.toString())
-                        Confirmado = true
-
-                        dialog.hide()
-                    }
-                }
-        }
+        val pd = ProgressDialog(this)
+        pd.setMessage("Validando usuario....")
+        pd.setCancelable(false)
+        pd.create()
 
 
-        bt_conectar.setOnClickListener {
+        btn_ingresar.setOnClickListener {
             if (et_usuario?.text!!.toString().equals("") || et_contrasena.text!!.toString().equals("")){
-                println("FALTA INGRESAR USUARIO O CONTRASEÑA")
-                Toast.makeText(this, "FALTA INGRESAR USUARIO O CONTRASEÑA", Toast.LENGTH_SHORT).show()
+                AlertMessage("Datos inválidos")
             }else{
-                if (Confirmado==false){
+                if (Confirmado){
                     println("FALTA CONFIGURAR IP/HOST O PUERTO")
                     Toast.makeText(this, "FALTA CONFIGURAR IP/HOST O PUERTO", Toast.LENGTH_SHORT).show()
                 }else{
+                    prefs.saveDominio(et_host.text.toString())
                     prefs.saveUsuario(et_usuario.text.toString())
                     prefs.saveContrasena(et_contrasena.text.toString())
-                    goToActyUsuario()
+
+                    // DOMINIO Y PUERTO
+                    pd.show()
+                    apiInterface = RetrofitCall.client?.create(APIService::class.java) as APIService
+
+                    //*******  MANTENER
+                    getDataLogin(prefs.getUsuario(),prefs.getContrasena())
+                    pd.cancel()
                 }
             }
         }
@@ -89,5 +82,26 @@ class ActyLogin : AppCompatActivity() {
     fun goToActyUsuario(){
         startActivity(Intent(this, ActyUsuario::class.java))
         finish()
+    }
+
+    fun AlertMessage(mensaje: String?) {
+        val builder = android.app.AlertDialog.Builder(this)
+        builder.setTitle("Información")
+        builder.setMessage(mensaje)
+        builder.setCancelable(false)
+        builder.setPositiveButton("Ok") { dialog, which -> dialog.dismiss() }
+        val dialogMessage = builder.create()
+        dialogMessage.show()
+    }
+
+    private fun getDataLogin(usuarioMozo:String,passMozo:String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = apiInterface!!.postLogin(DCLoginUser(usuarioMozo,passMozo))
+            runOnUiThread {
+                if(response.isSuccessful){
+                    goToActyUsuario()
+                }
+            }
+        }
     }
 }

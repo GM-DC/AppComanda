@@ -78,15 +78,26 @@
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/menu/main.xml" value="0.55" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.142" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.142" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/drawable-v24/edittext_main_button.xml" value="0.194" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/drawable-v24/ic_port.xml" value="0.194" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/drawable/icon_categoria.xml" value="0.1995" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/drawable/img_fondo_login.xml" value="0.194" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/drawable/usuario.xml" value="0.1995" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout-land/activity_panel_pedido.xml" value="0.16225749559082892" />
-        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout-land/activity_panel_pedidos.xml" value="0.16225749559082892" />
-        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/activity_acty_login.xml" value="0.41328125" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout-land/activity_panel_pedidos.xml" value="0.3986013986013986" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/activity_acty_login.xml" value="0.48058252427184467" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/activity_inicio.xml" value="0.358695652173913" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/activity_panel_pedido.xml" value="0.19166666666666668" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/activity_passcode.xml" value="0.36328125" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/dialogue_configuracion.xml" value="0.358695652173913" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/fragment_frg_cat_plat.xml" value="0.5" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/fragment_frg_zona_piso.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/item_pedido.xml" value="1.0" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/menu/menu.xml" value="0.5578125" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/menu/menu_login.xml" value="0.5578125" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/menu/menu_panelprincipal.xml" value="0.9" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/menu/menuasaa.xml" value="0.55625" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/menu/nemu_usuario.xml" value="0.55625" />
       </map>
     </option>
   </component>

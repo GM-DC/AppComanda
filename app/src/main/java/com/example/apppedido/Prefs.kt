@@ -5,9 +5,9 @@ import android.content.Context
 class Prefs (val contexto:Context){
     val SHARE_DB = "Mydtb"
     val SHARE_DOMINO = "dominio"
-    val SHARE_PUERTO = "Pruerto"
-    val SHARE_USUARIO = "Usuario"
-    val SHARE_CONTRASENA = "Contrasena"
+    val SHARE_PUERTO = "puerto"
+    val SHARE_USUARIO = "usuario"
+    val SHARE_CONTRASENA = "contrasena"
 
     val storege = contexto.getSharedPreferences(SHARE_DB,0)
 
@@ -16,15 +16,15 @@ class Prefs (val contexto:Context){
     }
 
     fun savePuerto(puerto:String){
-        storege.edit().putString(SHARE_DOMINO,puerto).apply()
+        storege.edit().putString(SHARE_PUERTO,puerto).apply()
     }
 
     fun saveUsuario(usuario:String){
         storege.edit().putString(SHARE_USUARIO,usuario).apply()
     }
 
-    fun saveContrasena(Contrasena:String){
-        storege.edit().putString(SHARE_CONTRASENA,Contrasena).apply()
+    fun saveContrasena(contrasena:String){
+        storege.edit().putString(SHARE_CONTRASENA,contrasena).apply()
     }
 
     fun getDominio(): String {
@@ -36,11 +36,11 @@ class Prefs (val contexto:Context){
     }
 
     fun getUsuario(): String {
-        return storege.getString(SHARE_DOMINO,"")!!
+        return storege.getString(SHARE_USUARIO,"")!!
     }
 
     fun getContrasena(): String {
-        return storege.getString(SHARE_DOMINO,"")!!
+        return storege.getString(SHARE_CONTRASENA,"")!!
     }
 
     fun wipe(){

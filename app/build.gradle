@@ -87,4 +87,7 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
+    //Dialogue
+    implementation 'com.github.f0ris.sweetalert:library:1.6.2'
+
 }

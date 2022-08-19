@@ -1,10 +1,14 @@
 package com.example.apppedido.application.View
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.apppedido.R
+import com.example.apppedido.databinding.ActivityPanelPedidosBinding
 import com.example.apppedido.domain.Model.DCZonaItem
 import com.example.apppedido.infraestruture.network.APIService
 
@@ -13,12 +17,12 @@ class ActyPanelPedidos : AppCompatActivity() {
 
     var apiInterface: APIService? = null
     private val listaZona2 = ArrayList<DCZonaItem>()
+    private lateinit var binding : ActivityPanelPedidosBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_panel_pedidos)
-
-        val bt_cerrar = findViewById<Button>(R.id.bt_cerrar)
+        binding = ActivityPanelPedidosBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         //RECIBIR DATOS
         val recibirDatos = intent.getSerializableExtra("DATOSUSUARIO")
@@ -28,8 +32,8 @@ class ActyPanelPedidos : AppCompatActivity() {
         val enviarDatos = Bundle()
         enviarDatos.putSerializable("DATOUSUARIO",recibirDatos)
 
-        println("${recibirDatos}")
-
+        setSupportActionBar(binding.toolbarPapelprincipal)
+        supportActionBar!!.title = null // Sin titulo
 
         //DIRECCIONA EL LUGAR DE LOS DATOS
         val framento = FrgZonaPiso()
@@ -40,14 +44,26 @@ class ActyPanelPedidos : AppCompatActivity() {
 
         //DESAPARECER BARRA DE NAVEGACION
         desaparecerBarraNavegacion()
-
-        bt_cerrar.setOnClickListener { cerrarSesionDatos() }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu_panelprincipal, menu)
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.it_cerrarpapelprincipal -> cerrarSesionDatos()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
     fun cerrarSesionDatos() {
         val count = supportFragmentManager.backStackEntryCount
         if (count == 0) { super.onBackPressed()}
         else { supportFragmentManager.popBackStack() }
+        desaparecerBarraNavegacion()
     }
 
     override fun onBackPressed() {

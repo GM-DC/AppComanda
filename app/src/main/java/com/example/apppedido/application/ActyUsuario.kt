@@ -1,25 +1,28 @@
 package com.example.apppedido.application.View
 import android.content.Intent
-import android.os.Build
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.apppedido.infraestruture.network.APIService
-import com.example.apppedido.infraestruture.adapters.AdapterUsuario
-import com.example.apppedido.domain.Model.DCUsuarioItem
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.example.apppedido.R
+import com.example.apppedido.ValidarConfiguracion
 import com.example.apppedido.databinding.ActivityInicioBinding
-import com.example.apppedido.domain.Model.DCPedidoXMesa
+import com.example.apppedido.domain.Model.DCUsuarioItem
+import com.example.apppedido.infraestruture.adapters.AdapterUsuario
+import com.example.apppedido.infraestruture.network.APIService
 import com.example.apppedido.infraestruture.network.RetrofitCall
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.*
-import retrofit2.converter.gson.GsonConverterFactory
 
 
 class ActyUsuario : AppCompatActivity() {
@@ -32,17 +35,63 @@ class ActyUsuario : AppCompatActivity() {
     var apiInterface: APIService? = null
     //***************FIN ATRIBUTOS********************
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityInicioBinding.inflate(layoutInflater)
         setContentView(binding.root)
         apiInterface = RetrofitCall.client?.create(APIService::class.java) as APIService
 
+        setSupportActionBar(binding.toolbar)
+        supportActionBar!!.title = null // Sin titulo
+
+
         //INICIA LOS DATOS DE USUARIOS
         initUsuario()
         getData2()
     }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.nemu_usuario, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.it_cerrar -> dialogueCerrar()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun dialogueCerrar() {
+        val dialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+
+        dialog.setTitleText("Cerrar Sesión")
+        dialog.setContentText("Se cerrara la sesión y eliminar los datos temporales ¿Desea continuar?")
+
+        dialog.setConfirmText("SI").setConfirmButtonBackgroundColor(Color.parseColor("#013ADF"))
+        dialog.setConfirmButtonTextColor(Color.parseColor("#ffffff"))
+
+        dialog.setCancelText("NO").setCancelButtonBackgroundColor(Color.parseColor("#c8c8c8"))
+        dialog.setCancelable(false)
+
+        dialog.setCancelClickListener { sDialog -> // Showing simple toast message to user
+            sDialog.cancel()
+        }
+        dialog.setConfirmClickListener { sDialog ->
+            borrarPrefs()
+            sDialog.cancel()
+        }
+        dialog.show()
+    }
+
+    private fun borrarPrefs() {
+        ValidarConfiguracion.prefs.wipe()
+        val intent = Intent(this, ActyLogin::class.java)
+        startActivity(intent)
+        finish()
+    }
+
 
     //**************   INICIAR DATOS    *********************
     fun initUsuario(){
