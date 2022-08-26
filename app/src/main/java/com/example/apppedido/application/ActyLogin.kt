@@ -27,8 +27,6 @@ import retrofit2.Response
 
 class ActyLogin : AppCompatActivity() {
 
-    var apiInterface: APIService? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_acty_login)
@@ -37,7 +35,7 @@ class ActyLogin : AppCompatActivity() {
     }
 
     private fun checkValores() {
-        if (prefs.getUsuario().isNotEmpty() || prefs.getContrasena().isNotEmpty() || prefs.getDominio().isNotEmpty()){
+        if (prefs.getPuerto().isNotEmpty() || prefs.getDominio().isNotEmpty()){
             goToActyUsuario()
         }
     }
@@ -45,36 +43,21 @@ class ActyLogin : AppCompatActivity() {
     fun dataDialogo() {
         val btn_ingresar = findViewById<Button>(R.id.btn_ingresar)
         val et_host = findViewById<EditText>(R.id.et_host)
-        val et_usuario = findViewById<EditText>(R.id.et_usuario)
-        val et_contrasena = findViewById<EditText>(R.id.et_contrasena)
-        val Confirmado = false
+        val et_port = findViewById<EditText>(R.id.et_port)
 
         val pd = ProgressDialog(this)
         pd.setMessage("Validando usuario....")
         pd.setCancelable(false)
         pd.create()
 
-
         btn_ingresar.setOnClickListener {
-            if (et_usuario?.text!!.toString().equals("") || et_contrasena.text!!.toString().equals("")){
+            if (et_host.text.toString() == "" || et_port.text.toString() == ""){
                 AlertMessage("Datos inválidos")
             }else{
-                if (Confirmado){
-                    println("FALTA CONFIGURAR IP/HOST O PUERTO")
-                    Toast.makeText(this, "FALTA CONFIGURAR IP/HOST O PUERTO", Toast.LENGTH_SHORT).show()
-                }else{
-                    prefs.saveDominio(et_host.text.toString())
-                    prefs.saveUsuario(et_usuario.text.toString())
-                    prefs.saveContrasena(et_contrasena.text.toString())
+                prefs.saveDominio(et_host.text.toString())
+                prefs.savePuerto(et_port.text.toString())
 
-                    // DOMINIO Y PUERTO
-                    pd.show()
-                    apiInterface = RetrofitCall.client?.create(APIService::class.java) as APIService
-
-                    //*******  MANTENER
-                    getDataLogin(prefs.getUsuario(),prefs.getContrasena())
-                    pd.cancel()
-                }
+                goToActyUsuario()
             }
         }
     }
@@ -94,14 +77,4 @@ class ActyLogin : AppCompatActivity() {
         dialogMessage.show()
     }
 
-    private fun getDataLogin(usuarioMozo:String,passMozo:String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = apiInterface!!.postLogin(DCLoginUser(usuarioMozo,passMozo))
-            runOnUiThread {
-                if(response.isSuccessful){
-                    goToActyUsuario()
-                }
-            }
-        }
-    }
 }

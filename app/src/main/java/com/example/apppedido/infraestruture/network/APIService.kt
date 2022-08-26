@@ -48,8 +48,8 @@ interface APIService {
     @POST("api/Users/Login")
     suspend fun checkLoginComanda(@Body loginMozo: DCLoginUser) : Response<DCLoginDatosExito>
 
-    @POST("api/Users/LoginComercial")
-    suspend fun postLogin(@Body loginMozo: DCLoginUser) : Response<LoginComercialResponse>
+    @POST("api/Users/Login")
+    suspend fun postLogin(@Body loginMozo: DCLoginUser) : Response<DCLoginDatosExito>
 
     @GET("api/Pedido? orderby=idPedido desc & top=1")
     suspend fun getPedidoZonaMesa(@Query("filter") filter:String) : Response<DCPedidoXMesa>

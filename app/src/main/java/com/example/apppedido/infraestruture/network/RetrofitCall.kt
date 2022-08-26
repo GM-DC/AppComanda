@@ -22,7 +22,7 @@ object RetrofitCall {
                 .addInterceptor(interceptor)
                 .build()
             retrofit = Retrofit.Builder()
-                .baseUrl(prefs.getDominio())
+                .baseUrl("http://${prefs.getDominio()}:${prefs.getPuerto()}/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()

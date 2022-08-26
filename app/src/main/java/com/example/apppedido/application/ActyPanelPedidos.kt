@@ -27,7 +27,6 @@ class ActyPanelPedidos : AppCompatActivity() {
         //RECIBIR DATOS
         val recibirDatos = intent.getSerializableExtra("DATOSUSUARIO")
 
-
         //ENVIAR DATOS
         val enviarDatos = Bundle()
         enviarDatos.putSerializable("DATOUSUARIO",recibirDatos)
