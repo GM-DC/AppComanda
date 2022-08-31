@@ -10,6 +10,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DaoZona {
 
+    @Query("SELECT EXISTS(SELECT * FROM EntityZona)")
+    fun isExistsZonas(): Boolean
+
     @Query("SELECT * FROM EntityZona")
     fun getAllZonas(): List<EntityZona>
 

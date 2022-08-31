@@ -7,17 +7,22 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.example.apppedido.DataBase.EntityZona
 import com.example.apppedido.R
+import com.example.apppedido.ValidarConfiguracion
 import com.example.apppedido.databinding.ActivityPanelPedidosBinding
 import com.example.apppedido.domain.Model.DCZonaItem
 import com.example.apppedido.infraestruture.network.APIService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class ActyPanelPedidos : AppCompatActivity() {
 
     var apiInterface: APIService? = null
-    private val listaZona2 = ArrayList<DCZonaItem>()
     private lateinit var binding : ActivityPanelPedidosBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,11 +30,11 @@ class ActyPanelPedidos : AppCompatActivity() {
         setContentView(binding.root)
 
         //RECIBIR DATOS
-        val recibirDatos = intent.getSerializableExtra("DATOSUSUARIO")
+        val recibirDatos = intent.getSerializableExtra("DatosUsuario")
 
         //ENVIAR DATOS
         val enviarDatos = Bundle()
-        enviarDatos.putSerializable("DATOUSUARIO",recibirDatos)
+        enviarDatos.putSerializable("DatosUsuario",recibirDatos)
 
         setSupportActionBar(binding.toolbarPapelprincipal)
         supportActionBar!!.title = null // Sin titulo
@@ -43,7 +48,10 @@ class ActyPanelPedidos : AppCompatActivity() {
 
         //DESAPARECER BARRA DE NAVEGACION
         desaparecerBarraNavegacion()
+
     }
+
+    // Obtiene la informacion del API Zona
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
@@ -59,16 +67,12 @@ class ActyPanelPedidos : AppCompatActivity() {
 
 
     fun cerrarSesionDatos() {
-        val count = supportFragmentManager.backStackEntryCount
-        if (count == 0) { super.onBackPressed()}
-        else { supportFragmentManager.popBackStack() }
-        desaparecerBarraNavegacion()
+        super.onBackPressed()
     }
 
     override fun onBackPressed() {
-        val count = supportFragmentManager.backStackEntryCount
-        if (count == 0) { super.onBackPressed()}
-        else { supportFragmentManager.popBackStack() }
+        super.onBackPressed()
+
     }
 
     private fun desaparecerBarraNavegacion() {

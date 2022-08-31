@@ -17,6 +17,7 @@ import com.example.apppedido.*
 import com.example.apppedido.DataBase.ComandaDB
 import com.example.apppedido.DataBase.EntityZona
 import com.example.apppedido.ValidarConfiguracion.Companion.database
+import com.example.apppedido.domain.DataClassPedidoBorrador
 import com.example.apppedido.domain.Model.DCMesaItem
 import com.example.apppedido.domain.Model.DCZonaItem
 import com.example.apppedido.infraestruture.network.APIService
@@ -51,29 +52,44 @@ class FrgZonaPiso : Fragment() {
         //*************** INICIO ATRIBUTOS ********************
         apiInterface = RetrofitCall.client?.create(APIService::class.java) as APIService
 
-        //INICIAR ZONAS
-        initZona()
+        //INICIAR COMPONENTES
+        initComponetZona()
+        initComponentMesa()
+
+        //
         iniciarZonas()
-        initMesa()
 
         //DESAPARECER BARRA DE NAVEGACION
         desaparecerBarraNavegacion()
     }
 
     private fun iniciarZonas() {
-        val datosRecuperados = arguments
-        if (datosRecuperados?.getSerializable("ListaZona")==null){
-            getDataZona()
-        }else{
-            val lista2: ArrayList<DCZonaItem> = datosRecuperados?.getSerializable("ListaZona") as ArrayList<DCZonaItem>
-            val sr_mesa = view?.findViewById<SwipeRefreshLayout>(R.id.sr_mesa)
-            listaZona.addAll(lista2)
-            getDataMesa(listaZona[0].idZona)
-            sr_mesa?.setOnRefreshListener{
-                getDataMesa(listaZona[0].idZona)
-                sr_mesa.isRefreshing = false
+        CoroutineScope(Dispatchers.IO).launch {
+            println("*********  Tabla zona exite  ************")
+            println(database.daoZona().isExistsZonas())
+
+            if (database.daoZona().isExistsZonas()){
+                listaZona.clear()
+                database.daoZona().getAllZonas().forEach {
+                    listaZona.add(DCZonaItem(
+                        nombreZonas = it.nombreZonas,
+                        idZona = it.idZona)
+                    )
+                }
+                activity?.runOnUiThread {
+                    val sr_mesa = view?.findViewById<SwipeRefreshLayout>(R.id.sr_mesa)
+                    getDataMesa(listaZona[0].idZona)
+                    sr_mesa?.setOnRefreshListener{
+                        getDataMesa(listaZona[0].idZona)
+                        sr_mesa.isRefreshing = false
+                    }
+                    adapterZona.notifyDataSetChanged()
+                }
+            }else{
+                activity?.runOnUiThread {
+                    getDataZona()
+                }
             }
-            adapterZona.notifyDataSetChanged()
         }
     }
 
@@ -91,7 +107,7 @@ class FrgZonaPiso : Fragment() {
 
     //********************         ZONA        ********************//
     //INICIAR MESA
-    fun initZona(){
+    fun initComponetZona(){
         val rv_zona = view?.findViewById<RecyclerView>(R.id.rv_zona2)
         rv_zona?.layoutManager = LinearLayoutManager(activity,RecyclerView.HORIZONTAL,false)
         adapterZona = AdapterZona(listaZona) { dataclassZonas -> onItemDatosZonas(dataclassZonas) }
@@ -117,13 +133,32 @@ class FrgZonaPiso : Fragment() {
     private fun getDataZona(){
         CoroutineScope(Dispatchers.IO).launch {
             val response = apiInterface!!.getZonas()
-            activity?.runOnUiThread {
-                if(response.isSuccessful){
-                    val datoss = response.body()
-                    for (i in datoss?.indices!!){
-                        listaInjeccion.add(DCZonaItem(datoss[i].nombreZonas, datoss[i].idZona))
+            if(response.isSuccessful){
+                val dataResponse = response.body()!!
+                listaZona.clear()
+                database.daoZona().deleteTable()
+                database.daoZona().clearPrimaryKey()
+                dataResponse.forEach {
+                    database.daoZona().insertZona(EntityZona(
+                        id=0,
+                        idZona = it.idZona,
+                        nombreZonas = it.nombreZonas)
+                    )
+                }
+                println("Recoleccion de datos")
+                println(database.daoZona().getAllZonas())
+
+                activity?.runOnUiThread {
+                    dataResponse.forEach {
+                        listaZona.add(
+                            DCZonaItem(
+                            it.nombreZonas,
+                            it.idZona
+                            )
+                        )
                     }
-                    inyectarDatosZonas(listaInjeccion)
+                    getDataMesa(listaZona[0].idZona)
+                    adapterZona.notifyDataSetChanged()
                 }
             }
         }
@@ -159,7 +194,7 @@ class FrgZonaPiso : Fragment() {
 
     //********************         MESA        ********************//
     //INICIAR MESA
-    fun initMesa(){
+    fun initComponentMesa(){
         val rv_mesa = view?.findViewById<RecyclerView>(R.id.rv_mesa2)
         rv_mesa?.layoutManager = GridLayoutManager(activity,4, RecyclerView.HORIZONTAL,false)
         adapterMesa = AdapterMesa(listaMesa) { dataclassMesa -> onItemDatosMesa(dataclassMesa) }
@@ -170,9 +205,10 @@ class FrgZonaPiso : Fragment() {
     private fun onItemDatosMesa(dataclassMesa: DCMesaItem) {
         //ENVIAR DATOS DE MESA
         val datosRecuperados = arguments
-        val recibeDatos: DCLoginDatosExito = datosRecuperados?.getSerializable("DATOUSUARIO") as DCLoginDatosExito
-        val recibeDatosBorrador = datosRecuperados.getSerializable("BORRADOR")
-        val recibeDatosListaCategoria = datosRecuperados.getSerializable("ListaCategoria")
+        var recibeDatos: DCLoginDatosExito? = datosRecuperados!!.getSerializable("DatosUsuario") as DCLoginDatosExito
+        var recibeDatosBorrador = datosRecuperados.getSerializable("BORRADOR")
+        //var recibeDatosListaCategoria = datosRecuperados!!.getSerializable("ListaCategoria")
+
 
         println("***** lista Borrador ****************")
         println("$recibeDatosBorrador")
@@ -201,7 +237,10 @@ class FrgZonaPiso : Fragment() {
         enviarDatos.putString("IDZONA",idZona)
         enviarDatos.putSerializable("DatosUsuario",recibeDatos)
         enviarDatos.putSerializable("ListaZona",listaZona)
-        enviarDatos.putSerializable("ListaCategoria",recibeDatosListaCategoria)
+        //enviarDatos.putSerializable("ListaCategoria",recibeDatosListaCategoria)
+
+
+        println("DATOS USUARIO EXIOSO: $recibeDatos")
 
 
         println("DATOS RECIBIDO Y ENVIADO: $recibeDatosBorrador")

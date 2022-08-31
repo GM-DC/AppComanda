@@ -1,21 +1,23 @@
 package com.example.apppedido.application.View
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.pedant.SweetAlert.SweetAlertDialog
+import com.example.apppedido.DataBase.EntityUsuario
+import com.example.apppedido.DataBase.EntityZona
 import com.example.apppedido.R
 import com.example.apppedido.ValidarConfiguracion
+import com.example.apppedido.ValidarConfiguracion.Companion.database
 import com.example.apppedido.databinding.ActivityInicioBinding
 import com.example.apppedido.domain.Model.DCUsuarioItem
+import com.example.apppedido.domain.Model.DCZonaItem
 import com.example.apppedido.infraestruture.adapters.AdapterUsuario
 import com.example.apppedido.infraestruture.network.APIService
 import com.example.apppedido.infraestruture.network.RetrofitCall
@@ -46,8 +48,30 @@ class ActyUsuario : AppCompatActivity() {
 
 
         //INICIA LOS DATOS DE USUARIOS
-        initUsuario()
-        getData2()
+        initComponentUsuario()
+        initUsers()
+        //getDataZona()
+    }
+
+    private fun initUsers() {
+        CoroutineScope(Dispatchers.IO).launch {
+            if (database.daoUsuario().isExistsUsuarios()){
+                listaUsuario.clear()
+                database.daoUsuario().getAllUsuarios().forEach {
+                    listaUsuario.add(DCUsuarioItem(
+                            codigo = it.codigo,
+                            nombre = it.nombre)
+                    )
+                }
+                runOnUiThread {
+                    adapter.notifyDataSetChanged()
+                }
+            }else{
+                runOnUiThread {
+                    getData2()
+                }
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -59,20 +83,40 @@ class ActyUsuario : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.it_cerrar -> dialogueCerrar()
+            R.id.it_recargarData -> recargarData()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun recargarData() {
+        CoroutineScope(Dispatchers.IO).launch {
+            println("************  valor de datos  boleano **********************")
+            println(database.daoZona().isExistsZonas())
+            if (database.daoZona().isExistsZonas()){
+                database.daoUsuario().deleteTableUsuarios()
+                database.daoUsuario().clearPrimaryKeyUsuarios()
+                database.daoZona().deleteTable()
+                database.daoZona().clearPrimaryKey()
+                database.daoCategoria().deleteTableCategoria()
+                database.daoCategoria().clearPrimaryKeyCategoria()
+                runOnUiThread {
+                    getData2()
+
+                }
+            }
+        }
     }
 
     private fun dialogueCerrar() {
         val dialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
 
-        dialog.setTitleText("Cerrar Sesión")
-        dialog.setContentText("Se cerrara la sesión y eliminar los datos temporales ¿Desea continuar?")
+        dialog.titleText = "Cerrar Sesión"
+        dialog.contentText = "Se cerrara la sesión y eliminar los datos temporales ¿Desea continuar?"
 
-        dialog.setConfirmText("SI").setConfirmButtonBackgroundColor(Color.parseColor("#013ADF"))
-        dialog.setConfirmButtonTextColor(Color.parseColor("#ffffff"))
+        dialog.setConfirmText("SI").confirmButtonBackgroundColor = Color.parseColor("#013ADF")
+        dialog.confirmButtonTextColor = Color.parseColor("#ffffff")
 
-        dialog.setCancelText("NO").setCancelButtonBackgroundColor(Color.parseColor("#c8c8c8"))
+        dialog.setCancelText("NO").cancelButtonBackgroundColor = Color.parseColor("#c8c8c8")
         dialog.setCancelable(false)
 
         dialog.setCancelClickListener { sDialog -> // Showing simple toast message to user
@@ -94,7 +138,7 @@ class ActyUsuario : AppCompatActivity() {
 
 
     //**************   INICIAR DATOS    *********************
-    fun initUsuario(){
+    fun initComponentUsuario(){
         val rviUsuario = findViewById<RecyclerView>(R.id.rvUsuarios)
         rviUsuario.layoutManager = GridLayoutManager(this,2,RecyclerView.VERTICAL,false)
         adapter = AdapterUsuario(listaUsuario) {dataClassUsuario -> onItemSelected(dataClassUsuario)}
@@ -114,7 +158,23 @@ class ActyUsuario : AppCompatActivity() {
             val call = apiInterface!!.getUsuario2()
             call.enqueue(object : Callback<List<DCUsuarioItem>>{
                 override fun onResponse( call: Call<List<DCUsuarioItem>>, response: Response<List<DCUsuarioItem>>) {
+                    val dataResponse = response.body()!!
                     listaUsuario.clear()
+                    CoroutineScope(Dispatchers.IO).launch {
+                        if (database.daoUsuario().isExistsUsuarios()){
+                            database.daoUsuario().deleteTableUsuarios()
+                            database.daoUsuario().clearPrimaryKeyUsuarios()
+                        }
+                        dataResponse.forEach {
+                            database.daoUsuario().insertUsuarios(
+                                EntityUsuario(0,it.codigo,it.nombre)
+                            )
+                        }
+                        runOnUiThread {
+                            initUsers()
+                            getDataZona()
+                        }
+                    }
                     listaUsuario.addAll(response.body()!!)
                     adapter.notifyDataSetChanged()
                 }
@@ -122,41 +182,33 @@ class ActyUsuario : AppCompatActivity() {
                 override fun onFailure(call: Call<List<DCUsuarioItem>>, t: Throwable) {
                     Toast.makeText(this@ActyUsuario, "VERIFICAR SU INTERNET", Toast.LENGTH_LONG).show()
                 }
-
             })
         }
     }
 
-
-
-    private fun getData() {
+    private fun getDataZona(){
         CoroutineScope(Dispatchers.IO).launch {
-            val response = apiInterface!!.getUsuario()
-            //getRetrofit().getUsuario()
-            runOnUiThread {
-                if(response.isSuccessful){
-                    listaUsuario.clear()
-                    listaUsuario.addAll(response.body()!!)
-                    adapter.notifyDataSetChanged()
-                }else{
-                    Toast.makeText(this@ActyUsuario, "VERIFIQUE SU CONECCION", Toast.LENGTH_SHORT).show()
+            val response = apiInterface!!.getZonas()
+            if(response.isSuccessful){
+                val dataResponse = response.body()!!
+                database.daoZona().deleteTable()
+                database.daoZona().clearPrimaryKey()
+                dataResponse.forEach {
+                    database.daoZona().insertZona(
+                        EntityZona(
+                        id=0,
+                        idZona = it.idZona,
+                        nombreZonas = it.nombreZonas)
+                    )
+                }
+                println("Recoleccion de datos")
+                println(database.daoZona().getAllZonas())
+
+                runOnUiThread {
+                    println("cargo datos")
                 }
             }
         }
     }
-
-/*
-        val call: Call<List<DCUsuarioItem>> = getRetrofit().getUsuario()
-        call.enqueue(object : Callback<List<DCUsuarioItem>> {
-            override fun onResponse(call: Call<List<DCUsuarioItem>>?, response: Response<List<DCUsuarioItem>>?) {
-                listaUsuario.clear()
-                response!!.body()?.let { listaUsuario.addAll(it) }
-                adapter.notifyDataSetChanged()
-            }
-            override fun onFailure(call: Call<List<DCUsuarioItem>>?, t: Throwable?) {
-                println("Error ${t?.message}")
-            }
-        })
-*/
 
 }

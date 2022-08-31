@@ -10,7 +10,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -24,7 +23,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.apppedido.DataBase.EntityCategoria
+import com.example.apppedido.DataBase.EntityZona
 import com.example.apppedido.Imprimir
 import com.example.apppedido.ImprimirComanda
 import com.example.apppedido.R
@@ -34,7 +35,6 @@ import com.example.apppedido.domain.DCPedidoMesaItem
 import com.example.apppedido.domain.DataClassPedidoBorrador
 import com.example.apppedido.domain.Model.DCCategoriaItem
 import com.example.apppedido.domain.Model.DCLoginDatosExito
-import com.example.apppedido.domain.Model.DCMesaItem
 import com.example.apppedido.domain.Model.DCPedidoXMesa
 import com.example.apppedido.domain.Model.DCPlatoItem
 import com.example.apppedido.domain.Model.DCPrecuenta
@@ -50,7 +50,6 @@ import com.example.apppedido.infraestruture.network.RetrofitCall
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.NonDisposableHandle.parent
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
@@ -92,29 +91,16 @@ class FrgCatPlat: Fragment() {
         //++++++++++++++++++    DECLARA COMPONENTE     +++++++++++++++++
         apiInterface = RetrofitCall.client?.create(APIService::class.java) as APIService
 
-        val bt_enviar_comanda = view?.findViewById<Button>(R.id.bt_enviarComanda)
-        val bt_cancelar = view?.findViewById<Button>(R.id.bt_cancelar)
-        val bt_precuenta = view?.findViewById<Button>(R.id.bt_precuenta)
-        val bt_borrador = view?.findViewById<Button>(R.id.bt_guardarCambio)
-        val bt_atras = view?.findViewById<Button>(R.id.bt_atras)
-
         //++++++++++++++++++   INICIA LAS FUNCIONES    +++++++++++++++++
         //INICIAR CATEGORIA
-        initCategoria()
+        initComponentCategoria()
         iniciarCategoria()
         //INICIAR CATEGORIA
         initPlato()
         //INICIAR PEDIDO
         initPedido()
         //Iniciar Datos
-        getDataPlato("BARRA CERVEZAS")
 
-        //Enviar Comanda
-        bt_enviar_comanda?.setOnClickListener { enviarPedido() }
-        bt_cancelar?.setOnClickListener {limpiarLista()}
-        bt_precuenta?.setOnClickListener { imprimirPrecuenta() }
-        bt_borrador?.setOnClickListener { guardarCambio() }
-        bt_atras?.setOnClickListener{ guardarCambio() }
 
         //BUSCAR PLATOS
         consultaPedidosPendiente()
@@ -126,6 +112,24 @@ class FrgCatPlat: Fragment() {
         desaparecerBarraNavegacion()
 
         getNameMozo()
+
+        // Eventos de botones
+        eventsHanleds()
+    }
+
+    private fun eventsHanleds() {
+        val bt_enviar_comanda = view?.findViewById<Button>(R.id.bt_enviarComanda)
+        val bt_cancelar = view?.findViewById<Button>(R.id.bt_cancelar)
+        val bt_precuenta = view?.findViewById<Button>(R.id.bt_precuenta)
+        val bt_borrador = view?.findViewById<Button>(R.id.bt_guardarCambio)
+        val bt_atras = view?.findViewById<Button>(R.id.bt_atras)
+
+        //Enviar Comanda
+        bt_enviar_comanda?.setOnClickListener { enviarPedido() }
+        bt_cancelar?.setOnClickListener { limpiarLista() }
+        bt_precuenta?.setOnClickListener { imprimirPrecuenta() }
+        bt_borrador?.setOnClickListener { guardarCambio() }
+        bt_atras?.setOnClickListener{ guardarCambio() }
     }
 
     private fun getNameMozo() {
@@ -142,7 +146,7 @@ class FrgCatPlat: Fragment() {
                     println("Respuesta de Corrutina: ${response.body()?.get(0)?.NombreMozo}")
                     println("***************************************************************")
 
-                    if (response.body()?.get(0)?.NombreMozo==null){
+                    if (response.body()?.get(0)?.NombreMozo==null|| response.body()?.get(0)?.NombreMozo==""|| response.body()?.get(0)?.NombreMozo==" "){
 
                     }else{
                         NAMEMOZOTEMPORAL = response.body()?.get(0)?.NombreMozo
@@ -155,13 +159,27 @@ class FrgCatPlat: Fragment() {
     }
 
     private fun iniciarCategoria() {
-        val datosRecuperados = arguments
-        if (datosRecuperados?.getSerializable("ListaCategoria")==null){
-            getDataCategoria()
-        }else{
-            val lista2: ArrayList<DCCategoriaItem> = datosRecuperados?.getSerializable("ListaCategoria") as ArrayList<DCCategoriaItem>
-            listaCategoria.addAll(lista2)
-            adapterCategoria.notifyDataSetChanged()
+        CoroutineScope(Dispatchers.IO).launch {
+            println("*********  Tabla Categoria exite  ************")
+            println(ValidarConfiguracion.database.daoCategoria().isExistsCategoria())
+
+            if (ValidarConfiguracion.database.daoCategoria().isExistsCategoria()){
+                listaCategoria.clear()
+                ValidarConfiguracion.database.daoCategoria().getAllCategoria().forEach {
+                    listaCategoria.add(DCCategoriaItem(
+                        nameCategoria = it.nameCategoria,
+                        idCategoria = it.idCategoria)
+                    )
+                }
+                activity?.runOnUiThread {
+                    getDataPlato(listaCategoria[0].nameCategoria)
+                    adapterCategoria.notifyDataSetChanged()
+                }
+            }else{
+                activity?.runOnUiThread {
+                    getDataCategoria()
+                }
+            }
         }
     }
 
@@ -196,7 +214,7 @@ class FrgCatPlat: Fragment() {
                     println("Respuesta de Corrutina: ${response.body()?.get(0)?.NombreMozo}")
                     println("***************************************************************")
 
-                    if (response.body()?.get(0)?.NombreMozo==null){
+                    if (response.body()?.get(0)?.NombreMozo==null|| response.body()?.get(0)?.NombreMozo==""|| response.body()?.get(0)?.NombreMozo==" "){
                         NAMEMOZOTEMPORAL = " "
                     }else{
                         NAMEMOZOTEMPORAL = response.body()?.get(0)?.NombreMozo
@@ -263,7 +281,7 @@ class FrgCatPlat: Fragment() {
         println("*****************************************")
 
         fragment.arguments = reenviar
-        reenviar.putSerializable("DATOUSUARIO",DatosUsuario)
+        reenviar.putSerializable("DatosUsuario",DatosUsuario)
         reenviar.putSerializable("ListaZona",DatosZonas)
         reenviar.putSerializable("ListaCategoria",listaCategoria)
         reenviar.putSerializable("BORRADOR",listaPedidoBorrador)
@@ -278,7 +296,7 @@ class FrgCatPlat: Fragment() {
                     println("Respuesta de Corrutina: ${response.body()?.get(0)?.NombreMozo}")
                     println("***************************************************************")
 
-                    if (response.body()?.get(0)?.NombreMozo==null){
+                    if (response.body()?.get(0)?.NombreMozo==null || response.body()?.get(0)?.NombreMozo==""|| response.body()?.get(0)?.NombreMozo==" "){
                         NAMEMOZOTEMPORAL = " "
                     }else{
                         NAMEMOZOTEMPORAL = response.body()?.get(0)?.NombreMozo
@@ -300,12 +318,11 @@ class FrgCatPlat: Fragment() {
                             cambiarEstadoMesa(IDZONA.toString(), IDMESA!!.toInt(), "O", DatosUsuario.nombreMozo)
                         }
                     }
+                    val transaction = fragmentManager?.beginTransaction()
+                    transaction?.replace(R.id.frm_panel,fragment)!!.commit()
                 }
             }
         }
-
-        val transaction = fragmentManager?.beginTransaction()
-        transaction?.replace(R.id.frm_panel,fragment)?.commit()
     }
 
     private fun iniciarDatosGuardadosBorrador() {
@@ -323,13 +340,14 @@ class FrgCatPlat: Fragment() {
                 break
             }
         }
+        actualizarPrecioTotal()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun imprimirPrecuenta() {
         //OBTENER DATOS DE ZONA Y MESA
         val datosRecuperados = arguments
-        val DatosUsuario: DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
+        val DatosUsuario: DCLoginDatosExito = datosRecuperados!!.getSerializable("DatosUsuario") as DCLoginDatosExito
         val NAMEZONA = datosRecuperados.getString("NAMEZONA")
         val IDMESA = datosRecuperados.getString("IDMESA")?.toInt()
         val datoZona = datosRecuperados.getString("IDZONA")
@@ -603,7 +621,7 @@ class FrgCatPlat: Fragment() {
         val datosRecuperados = arguments
         val DatosUsuario: DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
         val reenviar = Bundle()
-        reenviar.putSerializable("DATOUSUARIO",DatosUsuario)
+        reenviar.putSerializable("DatosUsuario",DatosUsuario)
         val fragment = FrgZonaPiso()
         fragment.arguments = reenviar
 
@@ -813,6 +831,7 @@ class FrgCatPlat: Fragment() {
                     val transaction = fragmentManager?.beginTransaction()
                     transaction?.replace(R.id.frm_panel,fragment)?.commit()
 
+
                 println(response.body()?.iD_PEDIDO)
 
             }
@@ -911,7 +930,7 @@ class FrgCatPlat: Fragment() {
 
 
     //********************       CATEGORIA        ********************//
-    fun initCategoria(){
+    fun initComponentCategoria(){
         val rv_categoria = view?.findViewById<RecyclerView>(R.id.rv_categoria)
         rv_categoria?.layoutManager = GridLayoutManager(activity,2, RecyclerView.HORIZONTAL,false)
         adapterCategoria = AdapterCategoria(listaCategoria) { dataclassCategoria -> onItemDatosCategoria(dataclassCategoria) }
@@ -926,35 +945,53 @@ class FrgCatPlat: Fragment() {
     fun getDataCategoria() {
         CoroutineScope(Dispatchers.IO).launch {
             val response = apiInterface!!.getCategoria()
-            activity?.runOnUiThread {
-                if(response.isSuccessful){
-                    val datoss = response.body()
-                    for (i in datoss?.indices!!){
-                        listaCategoriaInjeccion.add(DCCategoriaItem(datoss[i].nameCategoria, datoss[i].idCategoria))
-                    }
-                    inyectarDatosCategoria(listaCategoriaInjeccion)
+            if(response.isSuccessful){
+                val dataResponse = response.body()!!
+                listaCategoria.clear()
+                ValidarConfiguracion.database.daoCategoria().deleteTableCategoria()
+                ValidarConfiguracion.database.daoCategoria().clearPrimaryKeyCategoria()
+                dataResponse.forEach {
+                    ValidarConfiguracion.database.daoCategoria().insertCategoria(
+                        EntityCategoria(
+                        id=0,
+                        idCategoria = it.idCategoria,
+                        nameCategoria = it.nameCategoria)
+                    )
+                }
+                println("Recoleccion de datos")
+                println(ValidarConfiguracion.database.daoZona().getAllZonas())
 
-                }else{
-                    Toast.makeText(activity, "Error", Toast.LENGTH_SHORT).show()
+                activity?.runOnUiThread {
+                    dataResponse.forEach {
+                        listaCategoria.add(
+                            DCCategoriaItem(
+                                it.nameCategoria,
+                                it.idCategoria
+                            )
+                        )
+                    }
+                    getDataPlato(listaCategoria[0].nameCategoria)
+                    adapterCategoria.notifyDataSetChanged()
                 }
             }
         }
     }
+
     fun inyectarDatosCategoria(lista: ArrayList<DCCategoriaItem>){
 
         ///*************   ROOM FUNCIONAL ******************************************************
         GlobalScope.launch(Dispatchers.Default) {
-            ValidarConfiguracion.database.daoCategoria().deleteTable()
-            ValidarConfiguracion.database.daoCategoria().clearPrimaryKey()
+            //ValidarConfiguracion.database.daoCategoria().DAOdeleteTable()
+            //ValidarConfiguracion.database.daoCategoria().clearPrimaryKey()
 
             lista.forEach { ValidarConfiguracion.database.daoCategoria().insertCategoria(EntityCategoria(0,it.idCategoria,it.nameCategoria)) }
 
             for (i in 1..lista.size){
-                val categoriaId = ValidarConfiguracion.database.daoCategoria().getCategoriaId(i)
-                val categoriaNombre = ValidarConfiguracion.database.daoCategoria().getCategoriaNombre(i)
+                //val categoriaId = ValidarConfiguracion.database.daoCategoria().getCategoriaId(i)
+                //val categoriaNombre = ValidarConfiguracion.database.daoCategoria().getCategoriaNombre(i)
 
                 withContext(Dispatchers.Main) {
-                    listaCategoria.add(DCCategoriaItem(categoriaNombre,categoriaId))
+                    //listaCategoria.add(DCCategoriaItem(categoriaNombre,categoriaId))
                     if (i == lista.size){
                         adapterCategoria.notifyDataSetChanged()
                     }
@@ -1026,7 +1063,7 @@ class FrgCatPlat: Fragment() {
                     println("Respuesta de Corrutina: ${response.body()?.get(0)?.NombreMozo}")
                     println("***************************************************************")
 
-                    if (response.body()?.get(0)?.NombreMozo==null){
+                    if (response.body()?.get(0)?.NombreMozo==null|| response.body()?.get(0)?.NombreMozo==""|| response.body()?.get(0)?.NombreMozo==" "){
                         NAMEMOZOTEMPORAL = " "
                     }else{
                         NAMEMOZOTEMPORAL = response.body()?.get(0)?.NombreMozo
@@ -1203,7 +1240,7 @@ class FrgCatPlat: Fragment() {
                                 println("Respuesta de Corrutina: ${response.body()?.get(0)?.NombreMozo}")
                                 println("***************************************************************")
 
-                                if (response.body()?.get(0)?.NombreMozo==null){
+                                if (response.body()?.get(0)?.NombreMozo==null|| response.body()?.get(0)?.NombreMozo==""|| response.body()?.get(0)?.NombreMozo==" "){
                                     NAMEMOZOTEMPORAL = " "
                                 }else{
                                     NAMEMOZOTEMPORAL = response.body()?.get(0)?.NombreMozo
@@ -1246,8 +1283,13 @@ class FrgCatPlat: Fragment() {
         val datosRecuperados = arguments
         val IDZONA = datosRecuperados?.getString("IDZONA")
         val IDMESA = datosRecuperados?.getString("IDMESA")?.toInt()
+
         val DatosUsuario: DCLoginDatosExito = datosRecuperados?.getSerializable("DatosUsuario") as DCLoginDatosExito
-        val NAMEMOZO = datosRecuperados?.getString("NAMEMOZO")
+
+
+
+
+        val NAMEMOZO = datosRecuperados.getString("NAMEMOZO")
 
 
         if (listaPedido.size>0){
@@ -1498,7 +1540,7 @@ class FrgCatPlat: Fragment() {
             val response = apiInterface!!.putCambiarEstadoMesa(idZona,idMesa,estadoMesa,nameMozo)
             activity?.runOnUiThread {
                 if(response.isSuccessful){
-                    Toast.makeText(activity, "Se cambio estado ${estadoMesa} y mozo ${nameMozo}", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(activity, "Se cambio estado ${estadoMesa} y mozo ${nameMozo}", Toast.LENGTH_SHORT).show()
                 }else{
 
                 }
@@ -1810,7 +1852,7 @@ class FrgCatPlat: Fragment() {
         }
 
         val reenviar = Bundle()
-        reenviar.putSerializable("DATOUSUARIO",DatosUsuario)
+        reenviar.putSerializable("DatosUsuario",DatosUsuario)
         reenviar.putSerializable("BORRADOR",listaPedidoBorrador)
 
         val fragment = FrgZonaPiso()

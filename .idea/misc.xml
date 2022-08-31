@@ -11,9 +11,6 @@
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/efecto_clic_mesa.xml" value="0.1295" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/efecto_clic_pedido.xml" value="0.1" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/efecto_clic_zona.xml" value="0.1295" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/effect_clic.xml" value="0.2555" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/effect_clic_mesa.xml" value="0.2555" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/effect_clic_pedido.xml" value="0.2555" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/effect_clic_zona.xml" value="0.204" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/ic_anyconv_com__camp_table.xml" value="0.1" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.204" />
@@ -22,29 +19,19 @@
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/ic_icons8_tablecloth_100__2_.xml" value="0.1" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/icon_categoria.xml" value="0.1" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/icon_cerrarsesion.xml" value="0.2" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/icon_close.xml" value="0.2305" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/icon_lock.xml" value="0.2645" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/icon_mesa.xml" value="0.1" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/icon_persona.xml" value="0.2645" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/icon_platillo.xml" value="0.1755" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/icon_search.xml" value="0.11" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/icon_setting.xml" value="0.1925" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/icon_usuario.xml" value="0.2415" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/icon_ususer.xml" value="0.2645" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/icon_zona.xml" value="0.1" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/image_logo.xml" value="0.1" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/img_fondo_login.xml" value="0.3675" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/input.xml" value="0.1915" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/input_buscardor.xml" value="0.2415" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/person-48px.xml" value="0.193" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/prueba.xml" value="0.2645" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/round_bg.xml" value="0.3675" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/splash.xml" value="0.1" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/testp.xml" value="0.2565" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/drawable/usuario.xml" value="0.1" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout-land/activity_panel_pedido.xml" value="0.25" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout-land/activity_panel_pedidos.xml" value="0.67" />
+        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout-land/activity_panel_pedidos.xml" value="0.2109375" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout-v28/item_usuarios.xml" value="0.16757246376811594" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.41217798594847777" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout-w936dp/activity_login.xml" value="0.15616681455190773" />
@@ -55,14 +42,8 @@
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/activity_panel_pedido.xml" value="0.33" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/activity_panel_pedidos.xml" value="0.25262368815592207" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/activity_passcode.xml" value="0.20026881720430106" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/dialogue_buscador.xml" value="0.47815533980582525" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/dialogue_configuracion.xml" value="0.47148058252427183" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/dialogue_confirma_comanda.xml" value="0.75" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/dialogue_confirmar_cancelacion.xml" value="0.334375" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/dialogue_confirmar_guardado.xml" value="0.40625" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/dialogue_detalle.xml" value="0.75" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/fragment_dialog_frg_buscador.xml" value="0.47148058252427183" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/fragment_dialogue_confcomanda.xml" value="0.47148058252427183" />
+        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/dialogue_detalle.xml" value="0.5" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/fragment_dialogue_precuenta.xml" value="0.9" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/fragment_frg_cat_plat.xml" value="0.5" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/fragment_frg_zona_piso.xml" value="0.25262368815592207" />
@@ -71,33 +52,22 @@
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/item_pedido.xml" value="0.5" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/item_platillos.xml" value="0.1707193515704154" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/item_plato.xml" value="0.5" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/item_platobuscado.xml" value="0.67" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/item_usuarios.xml" value="0.4331395348837209" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/item_zona.xml" value="1.0" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/layout/loginprueba.xml" value="0.4702669902912621" />
-        <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/menu/main.xml" value="0.55" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.142" />
         <entry key="..\:/Users/Gian/Documents/AndroidStudio/AppPedidoV0.1/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.142" />
-        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/drawable-v24/edittext_main_button.xml" value="0.194" />
-        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/drawable-v24/ic_port.xml" value="0.194" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/drawable/icon_categoria.xml" value="0.1995" />
-        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/drawable/img_fondo_login.xml" value="0.194" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/drawable/usuario.xml" value="0.1995" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout-land/activity_panel_pedido.xml" value="0.16225749559082892" />
-        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout-land/activity_panel_pedidos.xml" value="0.3986013986013986" />
-        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/activity_acty_login.xml" value="0.48058252427184467" />
-        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/activity_inicio.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout-land/activity_panel_pedidos.xml" value="0.16225749559082892" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/activity_acty_login.xml" value="0.41328125" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/activity_panel_pedido.xml" value="0.19166666666666668" />
-        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/activity_passcode.xml" value="0.36328125" />
-        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/dialogue_configuracion.xml" value="0.358695652173913" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/fragment_frg_cat_plat.xml" value="0.5" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/fragment_frg_zona_piso.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/item_pedido.xml" value="1.0" />
-        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/menu/menu.xml" value="0.5578125" />
-        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/menu/menu_login.xml" value="0.5578125" />
-        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/menu/menu_panelprincipal.xml" value="0.9" />
-        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/menu/menuasaa.xml" value="0.55625" />
-        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/menu/nemu_usuario.xml" value="0.55625" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaRestrablecer/app/src/main/res/layout-land/activity_panel_pedidos.xml" value="0.25793650793650796" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaRestrablecer/app/src/main/res/layout/activity_acty_login.xml" value="0.35280797101449274" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaRestrablecer/app/src/main/res/menu/nemu_usuario.xml" value="0.19166666666666668" />
       </map>
     </option>
   </component>

@@ -88,7 +88,7 @@ class activityPasscode : AppCompatActivity()  {
                     val bundle = Bundle()
                     val DatosUsuario = response.body()
 
-                    bundle.putSerializable("DATOSUSUARIO", DatosUsuario)
+                    bundle.putSerializable("DatosUsuario", DatosUsuario)
 
                     intent.putExtras(bundle)
                     startActivity(intent)

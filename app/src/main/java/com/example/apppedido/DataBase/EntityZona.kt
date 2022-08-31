@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 data class EntityZona (
 
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 1,
+    val id: Int = 0,
 
     @ColumnInfo(name = "idZona")
     val idZona: String,
