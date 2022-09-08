@@ -40,7 +40,7 @@
 
                     <TextView
                         android:id="@+id/tv_TitleZona"
-                        android:layout_width="250dp"
+                        android:layout_width="160dp"
                         android:textAlignment="center"
                         android:layout_height="wrap_content"
                         android:textSize="25sp"
@@ -49,13 +49,22 @@
                         android:text="Zona"/>
                     <TextView
                         android:id="@+id/tv_TitleMesa"
-                        android:layout_width="250dp"
+                        android:layout_width="160dp"
                         android:textAlignment="center"
                         android:layout_height="wrap_content"
                         android:textSize="25sp"
                         android:textStyle="bold"
                         android:textColor="@color/white"
                         android:text="Mesa"/>
+                    <TextView
+                        android:id="@+id/tv_Mozo"
+                        android:layout_width="160dp"
+                        android:textAlignment="center"
+                        android:layout_height="wrap_content"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:text="Atendido"/>
 
                 </LinearLayout>
 
@@ -70,8 +79,8 @@
 
             <ImageView
                 android:id="@+id/iv_buscarPlato"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginEnd="20dp"
                 android:queryHint="Buscar Producto"
                 android:src="@drawable/icon_search"

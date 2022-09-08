@@ -133,7 +133,7 @@ class FrgZonaPiso : Fragment() {
     private fun getDataZona(){
         CoroutineScope(Dispatchers.IO).launch {
             val response = apiInterface!!.getZonas()
-            if(response.isSuccessful){
+            if(response.code() == 200){
                 val dataResponse = response.body()!!
                 listaZona.clear()
                 database.daoZona().deleteTable()
@@ -160,6 +160,8 @@ class FrgZonaPiso : Fragment() {
                     getDataMesa(listaZona[0].idZona)
                     adapterZona.notifyDataSetChanged()
                 }
+            }else{
+                Toast.makeText(activity, "Error: ${response.code()} // getDataZona ", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -261,12 +263,12 @@ class FrgZonaPiso : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             val response = apiInterface!!.getMesa("piso eq '$idZona' and tipo eq 'A'" )
             activity?.runOnUiThread{
-                if(response.isSuccessful){
+                if(response.code() == 200){
                     listaMesa.clear()
                     listaMesa.addAll(response.body()!!)
                     adapterMesa.notifyDataSetChanged()
                 }else{
-                    Toast.makeText(activity, "Error", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "Error: ${response.code()} // getDataMesa // piso eq '$idZona' and tipo eq 'A'", Toast.LENGTH_SHORT).show()
                 }
             }
         }

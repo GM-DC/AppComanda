@@ -130,10 +130,22 @@ class ActyUsuario : AppCompatActivity() {
     }
 
     private fun borrarPrefs() {
-        ValidarConfiguracion.prefs.wipe()
-        val intent = Intent(this, ActyLogin::class.java)
-        startActivity(intent)
-        finish()
+        CoroutineScope(Dispatchers.IO).launch {
+            if (database.daoUsuario().isExistsUsuarios()){
+                database.daoUsuario().deleteTableUsuarios()
+                database.daoUsuario().clearPrimaryKeyUsuarios()
+                database.daoZona().deleteTable()
+                database.daoZona().clearPrimaryKey()
+                database.daoCategoria().deleteTableCategoria()
+                database.daoCategoria().clearPrimaryKeyCategoria()
+            }
+            runOnUiThread {
+                ValidarConfiguracion.prefs.wipe()
+                val intent = Intent(this@ActyUsuario, ActyLogin::class.java)
+                startActivity(intent)
+                finish()
+            }
+        }
     }
 
 

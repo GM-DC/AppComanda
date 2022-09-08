@@ -11,6 +11,7 @@ import com.example.apppedido.DataBase.EntityZona
 import com.example.apppedido.R
 import com.example.apppedido.ValidarConfiguracion
 import com.example.apppedido.databinding.ActivityPanelPedidosBinding
+import com.example.apppedido.domain.Model.DCLoginDatosExito
 import com.example.apppedido.domain.Model.DCZonaItem
 import com.example.apppedido.infraestruture.network.APIService
 import kotlinx.coroutines.CoroutineScope
@@ -30,7 +31,9 @@ class ActyPanelPedidos : AppCompatActivity() {
         setContentView(binding.root)
 
         //RECIBIR DATOS
-        val recibirDatos = intent.getSerializableExtra("DatosUsuario")
+        val recibirDatos = intent.getSerializableExtra("DatosUsuario") as DCLoginDatosExito
+
+        binding.tvUsuario.text = recibirDatos.nombreMozo
 
         //ENVIAR DATOS
         val enviarDatos = Bundle()

@@ -13,5 +13,4 @@ data class DCPlatoItem(
     val comanda: String,
     val igv: String,
     val psigv: String
-
 )
