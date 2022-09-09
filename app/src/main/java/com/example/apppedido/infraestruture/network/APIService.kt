@@ -14,7 +14,7 @@ interface APIService {
     @GET("api/Users/")
     suspend fun getUsuario(): Response<List<DCUsuarioItem>>
 
-    @GET("api/Users/")
+    @GET("api/Users?filter=referencia33 eq 'S'")
     fun getUsuario2(): Call<List<DCUsuarioItem>>
 
     @GET("api/TablasBasicas/Detail?filter=codigo eq 'CDG_PISO'&select=nombre,numero")
@@ -22,10 +22,6 @@ interface APIService {
 
     @GET("api/TablasBasicas/Detail?filter=codigo eq 'CDG_PISO'&select=nombre,numero")
     fun getZonas2(): Call<List<DCZonaItem>>
-
-
-
-
 
     @GET("api/Producto")
     suspend fun getPlatoBuscado(): Response<List<DCPlatoItem>>

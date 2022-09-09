@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
     entities = [EntityZona::class,
         EntityCategoria::class,
         EntityUsuario::class],
-    version = 2)
+    version = 3)
 abstract class ComandaDB : RoomDatabase() {
     abstract fun daoZona(): DaoZona
     abstract fun daoCategoria(): DaoCategoria

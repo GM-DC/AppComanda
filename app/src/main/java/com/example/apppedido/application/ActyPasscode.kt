@@ -4,6 +4,7 @@ import com.example.apppedido.domain.Model.DCLoginUser
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.apppedido.ValidarConfiguracion.Companion.prefs
 import com.example.apppedido.infraestruture.network.APIService
 import com.example.apppedido.databinding.ActivityPasscodeBinding
 import com.example.apppedido.infraestruture.network.RetrofitCall
@@ -87,6 +88,8 @@ class activityPasscode : AppCompatActivity()  {
                     //ENVIAR DATOS
                     val bundle = Bundle()
                     val DatosUsuario = response.body()
+
+                    prefs.saveIGV(response.body()!!.poR_IGV)
 
                     bundle.putSerializable("DatosUsuario", DatosUsuario)
 

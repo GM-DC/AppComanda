@@ -33,7 +33,7 @@ class ActyPanelPedidos : AppCompatActivity() {
         //RECIBIR DATOS
         val recibirDatos = intent.getSerializableExtra("DatosUsuario") as DCLoginDatosExito
 
-        binding.tvUsuario.text = recibirDatos.nombreMozo
+        binding.tvUsuario.text = recibirDatos.nombreUsuario
 
         //ENVIAR DATOS
         val enviarDatos = Bundle()

@@ -313,14 +313,14 @@ class FrgCatPlat: Fragment() {
 
 
                     if (listaPedido.size<=0){
-                        if (NAMEMOZOTEMPORAL==DatosUsuario.nombreMozo || NAMEMOZOTEMPORAL==" "){
+                        if (NAMEMOZOTEMPORAL==DatosUsuario.nombreUsuario || NAMEMOZOTEMPORAL==" "){
                             Toast.makeText(activity, "SE LIBERA MESA", Toast.LENGTH_SHORT).show()
                             cambiarEstadoMesa(IDZONA.toString(), IDMESA!!, "L", " ")
                         }
                     }else{
-                        if (NAMEMOZOTEMPORAL==DatosUsuario.nombreMozo || NAMEMOZOTEMPORAL==" "){
+                        if (NAMEMOZOTEMPORAL==DatosUsuario.nombreUsuario || NAMEMOZOTEMPORAL==" "){
                             Toast.makeText(activity, "MESA RESERVADA", Toast.LENGTH_SHORT).show()
-                            cambiarEstadoMesa(IDZONA.toString(), IDMESA!!.toInt(), "O", DatosUsuario.nombreMozo)
+                            cambiarEstadoMesa(IDZONA.toString(), IDMESA!!.toInt(), "O", DatosUsuario.nombreUsuario)
                         }
                     }
                     val transaction = fragmentManager?.beginTransaction()
@@ -418,7 +418,7 @@ class FrgCatPlat: Fragment() {
                         var Total = response.body()!!.total
 
                         if(listadetalleprecuenta.size>0){
-                            val boletaPreCuenta = DCPrecuenta(idpedido.toString(),DatosUsuario.nombreMozo,NAMEZONA!!,IDMESA.toString()!!,"${LocalDateTime.now()}","","${sub}","$igv","$Total",listadetalleprecuenta.toList())
+                            val boletaPreCuenta = DCPrecuenta(idpedido.toString(),DatosUsuario.nombreUsuario,NAMEZONA!!,IDMESA.toString()!!,"${LocalDateTime.now()}","","${sub}","$igv","$Total",listadetalleprecuenta.toList())
                             val imprimir = Imprimir()
                             imprimir.printTcp("192.168.1.114",9100, boletaPreCuenta)
 
@@ -724,7 +724,7 @@ class FrgCatPlat: Fragment() {
                         "0",      //***
                         "",
                         listaPedidoFiltrado[i].camanda,
-                        DatosUsuario.nombreMozo,
+                        DatosUsuario.nombreUsuario,
                             "0001",      //***
                         "",
                         0,
@@ -830,9 +830,9 @@ class FrgCatPlat: Fragment() {
                     enviarComanda("${response.body()?.iD_PEDIDO}")
 
                     if (listaPedido.size > 0){
-                        cambiarEstadoMesa(IDZONA.toString(),IDMESA!!.toInt(),"O"," ")
+                        cambiarEstadoMesa(IDZONA.toString(),IDMESA!!.toInt(),"O",DatosUsuario.nombreUsuario)
                     }else{
-                        if (DatosUsuario.nombreMozo == NAMEMOZOTEMPORAL || NAMEMOZO==null || NAMEMOZO==" ") {
+                        if (DatosUsuario.nombreUsuario == NAMEMOZOTEMPORAL || NAMEMOZO==null || NAMEMOZO==" ") {
                             cambiarEstadoMesa(IDZONA.toString(), IDMESA!!.toInt(), "L", " ")
                         }
                     }
@@ -917,7 +917,7 @@ class FrgCatPlat: Fragment() {
 
                             getDataPreCuenta(idpedido.toString())
                         }else{
-                            if (DatosUsuario.nombreMozo == NAMEMOZOTEMPORAL || NAMEMOZOTEMPORAL==null || NAMEMOZOTEMPORAL==" ") {
+                            if (DatosUsuario.nombreUsuario == NAMEMOZOTEMPORAL || NAMEMOZOTEMPORAL==null || NAMEMOZOTEMPORAL==" ") {
 
                             }
                             iniciarDatosGuardadosBorrador()
@@ -1086,9 +1086,9 @@ class FrgCatPlat: Fragment() {
                     println("NAMEMOZOTEMPORAL : ${NAMEMOZOTEMPORAL}")
                     println("***************************************************************")
 
-                    if (NAMEMOZOTEMPORAL == DatosUsuario.nombreMozo || NAMEMOZOTEMPORAL == " "){
+                    if (NAMEMOZOTEMPORAL == DatosUsuario.nombreUsuario || NAMEMOZOTEMPORAL == " "){
                         //Agrega el producto
-                        cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"O",DatosUsuario.nombreMozo)
+                        cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"O",DatosUsuario.nombreUsuario)
                         if (action == 0) {
                             listaPedido.add(DataClassPedido(1,datos.nombre,datos.codigo,datos.preciO_VENTA,datos.preciO_VENTA,"","PENDIENTE",datos.iD_PRODUCTO,datos.comanda,datos.igv.toDouble(),datos.psigv.toDouble()))
                             adapterPedido.getItemId(pos)
@@ -1227,9 +1227,9 @@ class FrgCatPlat: Fragment() {
                     println("NAMEMOZOTEMPORAL : ${NAMEMOZOTEMPORAL}")
                     println("***************************************************************")
 
-                    if (NAMEMOZOTEMPORAL == DatosUsuario.nombreMozo || NAMEMOZOTEMPORAL == " "){
+                    if (NAMEMOZOTEMPORAL == DatosUsuario.nombreUsuario || NAMEMOZOTEMPORAL == " "){
                         //Agrega el producto
-                        cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"O",DatosUsuario.nombreMozo)
+                        cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"O",DatosUsuario.nombreUsuario)
                         if (action == 0) {
                             listaPedido.add(DataClassPedido(1,datos.nombre,datos.codigo,datos.preciO_VENTA,datos.preciO_VENTA,"","PENDIENTE",datos.iD_PRODUCTO,datos.comanda,datos.igv.toDouble(),datos.psigv.toDouble()))
                             adapterPedido.getItemId(pos)
@@ -1308,7 +1308,7 @@ class FrgCatPlat: Fragment() {
 
 
                                 if (listaPedido.size<=0){
-                                    if (NAMEMOZOTEMPORAL==DatosUsuario.nombreMozo || NAMEMOZOTEMPORAL==" "){
+                                    if (NAMEMOZOTEMPORAL==DatosUsuario.nombreUsuario || NAMEMOZOTEMPORAL==" "){
                                         cambiarEstadoMesa(IDZONA.toString(), IDMESA!!, "L", " ")
                                     }
                                 }
@@ -1324,8 +1324,6 @@ class FrgCatPlat: Fragment() {
                             }
                         }
                     }
-
-
 
                     rv_pedido?.adapter?.notifyDataSetChanged()
                 }
@@ -1350,9 +1348,9 @@ class FrgCatPlat: Fragment() {
 
 
         if (listaPedido.size>0){
-            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"O",DatosUsuario.nombreMozo)
+            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"O",DatosUsuario.nombreUsuario)
         }else{
-            if (DatosUsuario.nombreMozo == NAMEMOZO || NAMEMOZO==null || NAMEMOZO==" ") {
+            if (DatosUsuario.nombreUsuario == NAMEMOZO || NAMEMOZO==null || NAMEMOZO==" ") {
                 cambiarEstadoMesa(IDZONA.toString(), IDMESA!!, "L", "")
             }
         }
@@ -1542,9 +1540,9 @@ class FrgCatPlat: Fragment() {
 
 
         if (listaPedido.size>0){
-            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"O",DatosUsuario.nombreMozo)
+            cambiarEstadoMesa(IDZONA.toString(),IDMESA!!,"O",DatosUsuario.nombreUsuario)
         }else{
-            if (DatosUsuario.nombreMozo == NAMEMOZO || NAMEMOZO==null || NAMEMOZO==" ") {
+            if (DatosUsuario.nombreUsuario == NAMEMOZO || NAMEMOZO==null || NAMEMOZO==" ") {
                 cambiarEstadoMesa(IDZONA.toString(), IDMESA!!, "L", " ")
             }
         }
@@ -1731,7 +1729,7 @@ class FrgCatPlat: Fragment() {
                     "0",      //***
                     "",
                     listaPedidoFiltrado[i].camanda,
-                    DatosUsuario.nombreMozo,
+                    DatosUsuario.nombreUsuario,
                     "0001",      //***
                     "",
                     0,
