@@ -1,7 +1,6 @@
 package com.example.apppedido;
 
 import android.annotation.SuppressLint;
-
 import com.emh.thermalprinter.EscPosPrinter;
 import com.emh.thermalprinter.connection.tcp.TcpConnection;
 import com.emh.thermalprinter.exceptions.EscPosBarcodeException;
@@ -22,25 +21,26 @@ public class Imprimir {
 
                     final StringBuilder builder = new StringBuilder();
                     item.getDetalle().forEach((val)->{
-                        builder.append("[L] <b>"+val.getCantidad()+" "+val.getNombre() +"[R]"+val.getImporte()+"\n");
+                        builder.append("[L]<font size='tall'>"+val.getCantidad()+" "+val.getNombre() +"[R]"+val.getImporte()+"</font>\n");
                     });
 
                     // imprimes
                     printer.printFormattedTextAndCut(
-                                    "[C]<u><font size='big'>ORDER N°"+item.getNumerO_PEDIDO()+"</font></u>\n[L]\n" +
-                                    "[C]<u><font size='tall'>"+item.getZona()+" MESA: "+item.getMesa()+"</font></u>\n[L]\n" +
+                                    "[C]<b><u><font size='big'>PRE-CUENTA</font></u></b>\n[L]\n" +
+                                    "[L]<b><font size='tall'> PEDIDO: "+item.getNumerO_PEDIDO()+"</font></b>[L]\n"+
+                                    "[L]<font size='tall'> ZONA: "+item.getZona()+"</font>[L]\n"+
+                                    "[L]<font size='tall'> MESA: "+item.getMesa()+"</font>[L]\n"+
+                                    "[L]<font size='tall'> MOZO: "+item.getMesero()+"</font>[L]\n"+
                                     "[L] _______________\n" +
-                                    "[L] Descripcion [R]Importe \n[L]\n" +
+                                    "[L]<font size='tall'> Descripcion [R]Importe \n</font>[L]\n" +
                                     builder+
                                     "[L] _______________\n" +
-                                    "[L] SUBTOTAL [R]"+item.getSubtotal()+"\n" +
-                                    "[L] IGV [R]"+item.getIgv()+"\n" +
-                                    "[L] IMPORTE TOTAL [R]"+item.getTotal()+"\n" +
+                                    "[L]<font size='tall'> SUBTOTAL [R]"+item.getSubtotal()+"\n" +
+                                    "[L]<font size='tall'> IGV [R]"+item.getIgv()+"\n" +
+                                    "[L]<font size='tall'> IMPORTE TOTAL [R]"+item.getTotal()+"\n" +
                                     "[L]\n" +
                                     "[L] _______________\n" +
                                     "[L]\n"
-                            //  "[L] <barcode type='ean13' height='10'>831254784551</barcode>\n[L]\n" +
-                            //  "[L] <qrcode>http://github.com/EmHaseeb/</qrcode>\n[L]\n[L]\n[L]\n"
                     );
                     printer.disconnectPrinter();
                 } catch (EscPosConnectionException | EscPosParserException | EscPosEncodingException | EscPosBarcodeException e) {

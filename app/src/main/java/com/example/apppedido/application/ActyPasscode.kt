@@ -89,8 +89,11 @@ class activityPasscode : AppCompatActivity()  {
                     val bundle = Bundle()
                     val DatosUsuario = response.body()
 
-                    prefs.saveIGV(response.body()!!.poR_IGV)
+                    println("**************** id cliente  **********************")
+                    println(response.body()!!)
+                    println("***************************************************")
 
+                    prefs.saveIGV(response.body()!!.poR_IGV)
                     bundle.putSerializable("DatosUsuario", DatosUsuario)
 
                     intent.putExtras(bundle)

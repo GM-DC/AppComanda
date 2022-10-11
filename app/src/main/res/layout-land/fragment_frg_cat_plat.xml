@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context=".application.View.FrgCatPlat"
+    android:paddingHorizontal="15dp"
+    android:background="#0E83C9"
+    android:hapticFeedbackEnabled="true">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#0E83C9"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#0E83C9"
+            >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="@dimen/RV_PP_Pedido_Margin">
+
+                    <Button
+                        android:id="@+id/bt_atras"
+                        android:layout_width="70dp"
+                        android:layout_height="60dp"
+                        android:backgroundTint="@color/white"
+                        android:text="ATRAS"
+                        android:padding="0dp"
+                        android:textSize="14sp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_TitleZona"
+                        android:layout_width="160dp"
+                        android:textAlignment="center"
+                        android:layout_height="wrap_content"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:text="Zona"/>
+                    <TextView
+                        android:id="@+id/tv_TitleMesa"
+                        android:layout_width="160dp"
+                        android:textAlignment="center"
+                        android:layout_height="wrap_content"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:text="Mesa"/>
+                    <TextView
+                        android:id="@+id/tv_Mozo"
+                        android:layout_width="160dp"
+                        android:textAlignment="center"
+                        android:layout_height="wrap_content"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:text="Atendido"/>
+
+                </LinearLayout>
+
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_categoria"
+                android:layout_width="600dp"
+                android:layout_height="190dp"
+                android:layout_margin="@dimen/RV_PP_Pedido_Margin"
+                />
+
+            <ImageView
+                android:id="@+id/iv_buscarPlato"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="20dp"
+                android:queryHint="Buscar Producto"
+                android:src="@drawable/icon_search"
+                android:layout_gravity="end"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_platillo"
+                android:layout_width="600dp"
+                android:layout_height="380dp"
+                android:layout_margin="@dimen/RV_PP_Pedido_Margin"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_pedido"
+                        android:layout_width="450dp"
+                        android:layout_height="550dp"
+                        android:layout_margin="@dimen/RV_PP_Pedido_Margin"
+                        />
+                    <TextView
+                        android:id="@+id/tv_PTotal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="40sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:layout_gravity="end"
+                        tools:text="S/ 0.0"
+                        />
+
+                </LinearLayout>
+
+
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+                    <Button
+                        android:id="@+id/bt_aumentar"
+                        android:padding="0dp"
+                        android:backgroundTint="@color/white"
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:textSize="22sp"
+                        android:textColor="#0E83C9"
+                        android:text="+"
+                        />
+                    <Button
+                        android:id="@+id/bt_disminuir"
+                        android:padding="0dp"
+                        android:backgroundTint="@color/white"
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:textSize="22sp"
+                        android:textColor="#0E83C9"
+                        android:text="-"
+                        />
+                    <Button
+                        android:id="@+id/bt_detalle"
+                        android:padding="0dp"
+                        android:backgroundTint="@color/white"
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:textSize="22sp"
+                        android:textColor="#0E83C9"
+                        android:text="N"
+                        />
+                    <Button
+                        android:id="@+id/bt_precuenta"
+                        android:padding="0dp"
+                        android:backgroundTint="@color/white"
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:textSize="15sp"
+                        android:text="Pre-Cuenta"
+                        android:textColor="#0E83C9"
+                        />
+                    <Button
+                        android:id="@+id/bt_guardarCambio"
+                        android:padding="0dp"
+                        android:backgroundTint="@color/white"
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:textSize="15sp"
+                        android:text="GUARDAR"
+                        android:textColor="#0E83C9"
+                        />
+
+                    <Button
+                        android:id="@+id/bt_cancelar"
+                        android:padding="0dp"
+                        android:backgroundTint="@color/white"
+                        android:layout_width="120dp"
+                        android:layout_height="80dp"
+                        android:textSize="15sp"
+                        android:text="LIMPIAR"
+                        android:textColor="#0E83C9"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                >
+
+                <Button
+                    android:id="@+id/bt_enviarComanda"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/white"
+                    android:text="Enviar"
+                    android:textColor="#0E83C9"
+                    android:textSize="20sp"
+                    android:layout_marginHorizontal="15dp"
+                    />
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+</FrameLayout>

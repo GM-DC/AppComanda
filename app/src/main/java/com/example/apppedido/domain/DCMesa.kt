@@ -11,10 +11,10 @@ data class DCMesaItem(
     val secuencia: Int,
     val tipo: String,
     val idPedido: String,
-    val NombreMozo: String
+    @SerializedName("nombreMozo") val NombreMozo: String
 )
 
 
 data class DCMesaMozo(
-    val NombreMozo: String
+    @SerializedName("NombreMozo") val NombreMozo: String
 )

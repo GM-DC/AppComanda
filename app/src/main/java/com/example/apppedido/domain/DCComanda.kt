@@ -28,7 +28,7 @@ data class Detalle(
     val precio: Double,
     val importe: Double,
     val observacion: String,
-    val noM_IMP: String,
+    val noM_IMP: String?,
     val secuencia: Int
 )
 

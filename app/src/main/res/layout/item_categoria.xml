@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="185dp"
-    android:layout_height="75dp"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:animateLayoutChanges="true"
@@ -14,7 +14,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
 
@@ -27,17 +27,14 @@
         <TextView
             android:id="@+id/tx_categoria"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="3dp"
+            android:lines="5"
             android:textSize="@dimen/BT_PP_Categoria_TextoSize"
             tools:text="Cevicheria"
             android:gravity="center_vertical"
             android:textStyle="bold"/>
 
-
     </LinearLayout>
-
-
-
 
 </androidx.cardview.widget.CardView>

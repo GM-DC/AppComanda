@@ -28,7 +28,6 @@ class AdapterUsuario(val usuario: MutableList<DCUsuarioItem>, private val onClic
 
 
     class holderUsuario(private val view: View):RecyclerView.ViewHolder(view){
-
         fun render (usuario: DCUsuarioItem, onClickListener: (DCUsuarioItem) -> Unit){
             val tv_usuario = view.findViewById<TextView>(R.id.tx_Nombre)
             val cv_usuario = view.findViewById<ImageView>(R.id.iv_iconUsuario)

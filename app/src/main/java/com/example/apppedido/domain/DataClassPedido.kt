@@ -15,7 +15,7 @@ data class DataClassPedido (
     var idProducto:Int,
     var camanda:String,
     val igv: Double,
-    val psigv: Double
-
+    val psigv: Double,
+    val flag_color:Int
     )
 

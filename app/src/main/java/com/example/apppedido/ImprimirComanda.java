@@ -26,21 +26,23 @@ public class ImprimirComanda {
 
                     final StringBuilder builder = new StringBuilder();
                     item.getDetalle().forEach((val)->{
-                        builder.append("[L] <b>"+val.getCantidad()+" "+val.getProducto()+"[L]\n");
+                        builder.append("[L] <font size='tall'>"+val.getCantidad()+" "+val.getProducto()+"</font>[L]\n");
                         if(!val.getObservacion().isEmpty()){
-                        builder.append("[L] Obs: "+val.getObservacion()+"[L]\n");
+                        builder.append("[L] <font size='tall'> Obs: "+val.getObservacion()+"</font>[L]\n");
                         builder.append("[L] _______________\n");
                         }
                     });
 
                     // imprimes
                     printer.printFormattedTextAndCut(
-                            "[C]<u><font size='big'>ORDER N°"+item.getNumerO_PEDIDO()+"</font></u>\n[L]\n" +
-                                    "[C]<u><font size='tall'>"+item.getZona()+" MESA: "+item.getMesa()+"</font></u>\n[L]\n" +
-                                    "[L] _______________\n" +
-                                    "[L] FECHAR Y HORA: "+item.getFechayhora()+"[L]\n"+
-                                    "[L] DESTINO: "+item.getDestino()+"[L]\n"+
-                                    "[L] PRODUCTOS [L]\n" +
+                                    "[C]<b><u><font size='big'>"+item.getDestino()+"</font></u></b>\n[L]\n" +
+                                    "[L]<b><font size='tall'> ZONA: "+item.getZona()+"</font></b>[L]\n"+
+                                    "[L]<b><font size='tall'> MESA: "+item.getMesa()+"</font></b>[L]\n"+
+                                    "[L]<b><font size='tall'> MOZO: "+item.getMesero()+"</font></b>[L]\n"+
+                                    "[L]<font size='tall'> PEDIDO: "+item.getNumerO_PEDIDO()+"</font>[L]\n"+
+                                    "[L]<font size='tall'> FECHAR Y HORA:"+item.getFechayhora()+"</font>[L]\n"+
+                                    "[L] \n" +
+                                    "[L]<font size='tall'> PRODUCTOS [L]</font>\n" +
                                     builder+
                                     "[L] _______________\n"+
                                     "[L]\n"

@@ -65,9 +65,25 @@
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/fragment_frg_cat_plat.xml" value="0.5" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/fragment_frg_zona_piso.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComanda/app/src/main/res/layout/item_pedido.xml" value="1.0" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaAntiguo/AppComandaRestrablecer/app/src/main/res/drawable/effect_clic_mesa.xml" value="0.283" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaAntiguo/AppComandaRestrablecer/app/src/main/res/drawable/effect_clic_zona.xml" value="0.283" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaAntiguo/AppComandaRestrablecer/app/src/main/res/drawable/input_buscardor.xml" value="0.283" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaAntiguo/AppComandaRestrablecer/app/src/main/res/drawable/round_bg.xml" value="0.283" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaAntiguo/AppComandaRestrablecer/app/src/main/res/drawable/round_border.xml" value="0.283" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaAntiguo/AppComandaRestrablecer/app/src/main/res/drawable/shape_boton_redondo.xml" value="0.283" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaAntiguo/AppComandaRestrablecer/app/src/main/res/layout-land/activity_panel_pedidos.xml" value="0.14547677261613692" />
-        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaAntiguo/AppComandaRestrablecer/app/src/main/res/layout/fragment_frg_cat_plat.xml" value="0.25" />
-        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaAntiguo/AppComandaRestrablecer/app/src/main/res/layout/item_plato.xml" value="0.1859375" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaAntiguo/AppComandaRestrablecer/app/src/main/res/layout-land/fragment_frg_cat_plat.xml" value="0.3148148148148148" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaAntiguo/AppComandaRestrablecer/app/src/main/res/layout/activity_acty_login.xml" value="0.1859375" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaAntiguo/AppComandaRestrablecer/app/src/main/res/layout/activity_passcode.xml" value="0.17698019801980197" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaAntiguo/AppComandaRestrablecer/app/src/main/res/layout/dialogue_configuracion.xml" value="0.1859375" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaAntiguo/AppComandaRestrablecer/app/src/main/res/layout/dialogue_detalle.xml" value="0.1859375" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaAntiguo/AppComandaRestrablecer/app/src/main/res/layout/fragment_frg_cat_plat.xml" value="0.15759075907590758" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaAntiguo/AppComandaRestrablecer/app/src/main/res/layout/fragment_frg_zona_piso.xml" value="0.17698019801980197" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaAntiguo/AppComandaRestrablecer/app/src/main/res/layout/item_categoria.xml" value="0.1" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaAntiguo/AppComandaRestrablecer/app/src/main/res/layout/item_mesa.xml" value="0.17698019801980197" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaAntiguo/AppComandaRestrablecer/app/src/main/res/layout/item_pedido.xml" value="0.33" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaAntiguo/AppComandaRestrablecer/app/src/main/res/layout/item_plato.xml" value="0.5" />
+        <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaAntiguo/AppComandaRestrablecer/app/src/main/res/layout/item_zona.xml" value="0.17698019801980197" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaRestrablecer/app/src/main/res/layout-land/activity_panel_pedidos.xml" value="0.25793650793650796" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaRestrablecer/app/src/main/res/layout/activity_acty_login.xml" value="0.35280797101449274" />
         <entry key="..\:/Users/buhor/Documents/Kotlin/AppComandaRestrablecer/app/src/main/res/menu/nemu_usuario.xml" value="0.19166666666666668" />

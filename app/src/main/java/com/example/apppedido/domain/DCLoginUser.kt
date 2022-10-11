@@ -36,7 +36,8 @@ data class DCLoginDatosExito (
     val usuario: String,
     val usuarioautoriza: String,   //***
     val usuariocreacion: String,   //***
-    val validez: String    //***
+    val validez: String,
+    val cdG_VENDEDOR: String//***
 ) : Serializable
 
 

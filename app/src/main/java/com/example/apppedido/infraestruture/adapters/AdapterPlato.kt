@@ -37,14 +37,6 @@ class AdapterPlato(var data: ArrayList<DCPlatoItem>, private val onClickListener
             tx_platoPrecio.setTextColor(Color.parseColor("#0E83C9"))
             tx_plato.setTextColor(Color.parseColor("#0E83C9"))
 
-            /*
-            var hue:Float = Math.random() // Saturation between 0.1 and 0.3 final float
-            saturation = (random.nextInt(2000) + 1000) / 10000f;
-            final float luminance = 0.9f;
-            final Color color = Color.getHSBColor(hue, saturation, luminance);
-            */
-
-
             iv_iconPlato.setColorFilter(Color.parseColor("#0E83C9"))
 
             itemView.setOnClickListener{onClickListener(data)}

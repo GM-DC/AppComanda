@@ -33,7 +33,7 @@ interface APIService {
     @GET("api/Mesas?select=nombreMozo")
     suspend fun getMesa2(@Query("filter") filter:String) : Response<List<DCMesaMozo>>
 
-    @GET("api/TablasBasicas/Detail?filter=codigo eq 'CATE_PROD' and referencia4 eq 'R'&select=nombre,numero&orderby=nombre asc")
+    @GET("/api/TablasBasicas/Detail?filter=codigo eq 'CATE_PROD' and referencia4 eq 'R' and ESTADO eq '1'&select=codigo,nombre,numero&orderby=nombre asc")
     suspend fun getCategoria() : Response<List<DCCategoriaItem>>
 
     @GET("/{nombrecategoria},{moneda}")
@@ -72,4 +72,6 @@ interface APIService {
     @GET("api/Pedido/Comanda")
     fun getComanda(@Query("idPedido") idPedido:String) : Call<List<DCComandaItem>>
 
+    @PUT("/api/Pedido/EstadoComandado/{comanda}/{idpedido}")
+    suspend fun getEstadoComandado(@Path("comanda") comanda:String,@Path("idpedido") idpedido:Int) : Response<Void>
 }

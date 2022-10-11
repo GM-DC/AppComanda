@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "165566648555",
+    "project_id": "actualizacion-comanda",
+    "storage_bucket": "actualizacion-comanda.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:165566648555:android:126db39f0de5bef8bdeeae",
+        "android_client_info": {
+          "package_name": "com.example.apppedido"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "165566648555-btgk0mv3rfs0td7bneeph553unvbhkhd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMZ5xhjgmF4dpsBBbaNXurPpE4gXwxYWc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "165566648555-btgk0mv3rfs0td7bneeph553unvbhkhd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -7,17 +7,16 @@ import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import com.example.apppedido.R
 import com.example.apppedido.ValidarConfiguracion
 import com.example.apppedido.ValidarConfiguracion.Companion.prefs
 import com.example.apppedido.domain.Model.DCLoginUser
+import com.example.apppedido.domain.Model.DataClassPedido
 import com.example.apppedido.infraestruture.network.APIService
 import com.example.apppedido.infraestruture.network.RetrofitCall
+import com.example.apppedido.utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,12 +31,40 @@ class ActyLogin : AppCompatActivity() {
         setContentView(R.layout.activity_acty_login)
         checkValores()
         dataDialogo()
+        eventsHanldert()
+    }
+
+    private fun eventsHanldert() {
+        var Im_configuracion = findViewById<ImageView>(R.id.Im_configuracion)
+        Im_configuracion.setOnClickListener {dialogueImpresoraPrecuenta() }
     }
 
     private fun checkValores() {
         if (prefs.getPuerto().isNotEmpty() || prefs.getDominio().isNotEmpty()){
             goToActyUsuario()
         }
+    }
+
+    private fun dialogueImpresoraPrecuenta() {
+        val builder = AlertDialog.Builder(this)
+        val vista = layoutInflater.inflate(R.layout.dialogue_configuracion,null)
+        vista.setBackgroundResource(R.color.trans)
+        builder.setView(vista)
+        val dialog = builder.create()
+        dialog.show()
+
+        //***********Declara elementos *****************
+        var et_detalle = vista.findViewById<EditText>(R.id.et_ip)
+        val bt_guardarDetalle = vista.findViewById<Button>(R.id.bt_guardarConfiguracion)
+
+        //*********** BOTON GUARDAR DEL DIALOGO ********
+        bt_guardarDetalle.setOnClickListener {
+            var detalle:String = et_detalle.text.toString()
+            prefs.saveIPPrecuenta(detalle)
+            println("**** dato guardado ${prefs.getIPPrecuenta()}")
+            dialog?.hide()
+        }
+
     }
 
     fun dataDialogo() {

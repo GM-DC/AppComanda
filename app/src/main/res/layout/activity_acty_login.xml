@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".application.View.ActyLogin">
 
-
     <View
         android:id="@+id/topView"
         android:layout_width="0dp"
@@ -14,6 +13,15 @@
         android:background="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/Im_configuracion"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/icon_setting"
+        android:layout_margin="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View

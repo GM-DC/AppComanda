@@ -7,7 +7,7 @@ class Prefs (val contexto:Context){
     val SHARE_DOMINO = "dominio"
     val SHARE_PUERTO = "puerto"
     val SHARE_IGV = "igv"
-    val SHARE_CONTRASENA = "contrasena"
+    val SHARE_IPPRECUENTA= "ipprecuenta"
 
     val storege = contexto.getSharedPreferences(SHARE_DB,0)
 
@@ -23,8 +23,8 @@ class Prefs (val contexto:Context){
         storege.edit().putString(SHARE_IGV,igv).apply()
     }
 
-    fun saveContrasena(contrasena:String){
-        storege.edit().putString(SHARE_CONTRASENA,contrasena).apply()
+    fun saveIPPrecuenta(ipprecuenta:String){
+        storege.edit().putString(SHARE_IPPRECUENTA,ipprecuenta).apply()
     }
 
     fun getDominio(): String {
@@ -39,8 +39,8 @@ class Prefs (val contexto:Context){
         return storege.getString(SHARE_IGV,"")!!
     }
 
-    fun getContrasena(): String {
-        return storege.getString(SHARE_CONTRASENA,"")!!
+    fun getIPPrecuenta(): String {
+        return storege.getString(SHARE_IPPRECUENTA,"")!!
     }
 
     fun wipe(){
