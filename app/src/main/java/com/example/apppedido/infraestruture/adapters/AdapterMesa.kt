@@ -10,7 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.apppedido.R
 import com.example.apppedido.domain.Model.DCMesaItem
 
-class AdapterMesa(private val data: ArrayList<DCMesaItem>, private val onClickListener: (DCMesaItem) -> Unit): RecyclerView.Adapter<AdapterMesa.holderMesa>() {
+class AdapterMesa(
+    private val data: MutableList<DCMesaItem>,
+    private val onClickListener: (DCMesaItem) -> Unit
+    ): RecyclerView.Adapter<AdapterMesa.holderMesa>() {
 
     var selectedPosition = -1
 
@@ -45,7 +48,6 @@ class AdapterMesa(private val data: ArrayList<DCMesaItem>, private val onClickLi
             val tx_mesa = view.findViewById<TextView>(R.id.tx_mesa)
             val iv_mesa = view.findViewById<ImageView>(R.id.iv_iconMesa)
             val tx_nombreMozo = view.findViewById<TextView>(R.id.tx_nombreMozo)
-            val tx_idPedido = view.findViewById<TextView>(R.id.tx_idPedido)
 
             var nombreMozo = ""
 
@@ -58,7 +60,6 @@ class AdapterMesa(private val data: ArrayList<DCMesaItem>, private val onClickLi
             if (data.estadoTrans == "L" && data.idPedido.isNullOrEmpty()){
                 tx_mesa.text = "Mesa ${data.idMesa}"
                 tx_nombreMozo.text = "${nombreMozo}"
-                tx_idPedido.text = ""
                 tx_nombreMozo.setTextColor(Color.parseColor("#0E83C9"))
                 tx_mesa.setTextColor(Color.parseColor("#0E83C9"))
                 iv_mesa.setColorFilter(Color.parseColor("#0E83C9"))
@@ -66,7 +67,6 @@ class AdapterMesa(private val data: ArrayList<DCMesaItem>, private val onClickLi
             if (data.estadoTrans == "O" && !data.idPedido.isNullOrEmpty()) {
                 tx_mesa.text = "Mesa ${data.idMesa}"
                 tx_nombreMozo.text = "${nombreMozo}"
-                tx_idPedido.text = ""
                 tx_nombreMozo.setTextColor(Color.parseColor("#D50000"))
                 tx_mesa.setTextColor(Color.parseColor("#D50000"))
                 iv_mesa.setColorFilter(Color.parseColor("#D50000"))
@@ -74,15 +74,19 @@ class AdapterMesa(private val data: ArrayList<DCMesaItem>, private val onClickLi
             if (data.estadoTrans == "O" && data.idPedido.isNullOrEmpty()) {
                 tx_mesa.text = "Mesa ${data.idMesa}"
                 tx_nombreMozo.text = "${nombreMozo}"
-                tx_idPedido.text = ""
                 tx_nombreMozo.setTextColor(Color.parseColor("#CC705D00"))
                 tx_mesa.setTextColor(Color.parseColor("#CC705D00"))
                 iv_mesa.setColorFilter(Color.parseColor("#CC705D00"))
             }else{
                 tx_mesa.text = "Mesa ${data.idMesa}"
-                tx_idPedido.text = "${data.idPedido}"
                 tx_nombreMozo.text = "${nombreMozo}"
             }
         }
+    }
+
+    fun setItems(list: MutableList<DCMesaItem>) {
+        data.clear()
+        data.addAll(list)
+        notifyDataSetChanged()
     }
 }

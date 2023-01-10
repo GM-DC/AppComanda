@@ -676,7 +676,6 @@ class FrgCatPlat: Fragment() {
         println("****************************************")
 
         for (i in listaPedidoFiltrado.indices){
-
             listaDetalleOrdenPedido.add(
                 Detalle(
                     iD_PEDIDO=IDPedido,
@@ -690,7 +689,7 @@ class FrgCatPlat: Fragment() {
                     canT_DESPACHADA=0,
                     canT_FACTURADA=0,
                     observacion=listaPedidoFiltrado[i].observacion,
-                    secuencia=i,
+                    secuencia=i+1,
                     preciO_ORIGINAL=listaPedidoFiltrado[i].precio,
                     tipo="1",            //***
                     importE_DSCTO=0,
@@ -827,7 +826,6 @@ class FrgCatPlat: Fragment() {
             }
         })
     }
-
     private fun cambiarColorComandado(comada:String,ippedido:Int) {
         CoroutineScope(Dispatchers.IO).launch {
             val response = apiInterface!!.getEstadoComandado(comada, ippedido)
@@ -841,14 +839,13 @@ class FrgCatPlat: Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             val response = apiInterface!!.getComanda("$idPedido")
             response.enqueue(object  : Callback<List<DCComandaItem>>{
-                override fun onResponse(
-                    call: Call<List<DCComandaItem>>,
-                    response: Response<List<DCComandaItem>>
-                ) {
+                override fun onResponse( call: Call<List<DCComandaItem>>,response: Response<List<DCComandaItem>>) {
                     val impComanda = ImprimirComanda()
                     val r = response.body()!!
+                    var count = 0
 
                     r.forEach { cabezera ->
+
                         cabezera.detalle.forEach { detalleComanda ->
                             for (i in listaPedido.indices){
                                 if(detalleComanda.producto == listaPedido[i].namePlato && listaPedido[i].estadoPedido == "PENDIENTE"){
@@ -865,7 +862,11 @@ class FrgCatPlat: Fragment() {
                                 }
                             }
                         }
+
+
                         println(" listaDetalleComanda: $listaDetalleComanda ")
+                        println(" listaDetalleComanda: $listaDetalleComanda ")
+
                         listaComanda.add(DCComandaItem(cabezera.numerO_PEDIDO,cabezera.destino,cabezera.zona,cabezera.mesa,cabezera.mesero,cabezera.rutacomanda,cabezera.fechayhora,listaDetalleComanda))
                     }
 

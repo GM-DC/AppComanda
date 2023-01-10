@@ -53,17 +53,6 @@
                 android:textStyle="bold"
                 android:gravity="center_vertical"/>
 
-            <TextView
-                android:id="@+id/tx_idPedido"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:textSize="@dimen/BT_PP_Mesa_TextoSize"
-                tools:text="codigo"
-                android:textStyle="bold"
-                android:gravity="center_vertical"/>
-
-
         </LinearLayout>
 
     </LinearLayout>

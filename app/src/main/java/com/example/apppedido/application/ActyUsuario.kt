@@ -148,7 +148,6 @@ class ActyUsuario : AppCompatActivity() {
         }
     }
 
-
     //**************   INICIAR DATOS    *********************
     fun initComponentUsuario(){
         val rviUsuario = findViewById<RecyclerView>(R.id.rvUsuarios)

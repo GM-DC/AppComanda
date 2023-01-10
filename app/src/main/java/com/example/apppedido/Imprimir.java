@@ -12,7 +12,6 @@ import com.example.apppedido.domain.Model.DCPrecuenta;
 public class Imprimir {
 
     public void printTcp(String ip, int port, DCPrecuenta item ) {
-
         new Thread(new Runnable() {
             @SuppressLint("NewApi")
             public void run() {
@@ -35,8 +34,6 @@ public class Imprimir {
                                     "[L]<font size='tall'> Descripcion [R]Importe \n</font>[L]\n" +
                                     builder+
                                     "[L] _______________\n" +
-                                    "[L]<font size='tall'> SUBTOTAL [R]"+item.getSubtotal()+"\n" +
-                                    "[L]<font size='tall'> IGV [R]"+item.getIgv()+"\n" +
                                     "[L]<font size='tall'> IMPORTE TOTAL [R]"+item.getTotal()+"\n" +
                                     "[L]\n" +
                                     "[L] _______________\n" +
@@ -48,7 +45,6 @@ public class Imprimir {
                 }
             }
         }).start();
-
     }
 
     String imp(String texto,int index)//Función sin parámetros

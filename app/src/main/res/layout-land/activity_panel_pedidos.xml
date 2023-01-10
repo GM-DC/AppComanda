@@ -56,7 +56,6 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/frm_panel"
-            android:name="com.example.apppedido.application.View.FrgZonaPiso"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="20dp"

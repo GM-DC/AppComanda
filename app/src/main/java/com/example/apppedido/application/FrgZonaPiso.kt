@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,22 +26,22 @@ import com.example.apppedido.infraestruture.network.APIService
 import com.example.apppedido.infraestruture.adapters.AdapterMesa
 import com.example.apppedido.infraestruture.adapters.AdapterZona
 import com.example.apppedido.infraestruture.network.RetrofitCall
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 
 class FrgZonaPiso : Fragment() {
-
+    private val _listTable: MutableLiveData<MutableList<DCMesaItem>> = MutableLiveData()
+    var listTable: LiveData<MutableList<DCMesaItem>> = _listTable
+    private val listatable = mutableListOf<DCMesaItem>()
     //*************** INICIO ATRIBUTOS ********************
     private lateinit var adapterZona: AdapterZona
     private lateinit var adapterMesa: AdapterMesa
     private val listaZona = ArrayList<DCZonaItem>()
     private val listaInjeccion = ArrayList<DCZonaItem>()
-    private val listaMesa = ArrayList<DCMesaItem>()
+    private val listaMesa = mutableListOf<DCMesaItem>()
     var apiInterface: APIService? = null
+
+    lateinit var job: Job
 
     //*************** FIN ATRIBUTOS ********************
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
@@ -56,18 +58,21 @@ class FrgZonaPiso : Fragment() {
         initComponetZona()
         initComponentMesa()
 
-        //
         iniciarZonas()
+        getListTable()
 
         //DESAPARECER BARRA DE NAVEGACION
         desaparecerBarraNavegacion()
     }
 
+    val init = 0
     private fun iniciarZonas() {
+        init + 1
+        println("REPETIR  EL MISMO"+init)
         CoroutineScope(Dispatchers.IO).launch {
             println("*********  Tabla zona exite  ************")
             println(database.daoZona().isExistsZonas())
-
+            println("Exite")
             if (database.daoZona().isExistsZonas()){
                 listaZona.clear()
                 database.daoZona().getAllZonas().forEach {
@@ -77,23 +82,17 @@ class FrgZonaPiso : Fragment() {
                     )
                 }
                 activity?.runOnUiThread {
-                    val sr_mesa = view?.findViewById<SwipeRefreshLayout>(R.id.sr_mesa)
                     getDataMesa(listaZona[0].idZona)
-                    sr_mesa?.setOnRefreshListener{
-                        getDataMesa(listaZona[0].idZona)
-                        sr_mesa.isRefreshing = false
-                    }
                     adapterZona.notifyDataSetChanged()
                 }
             }else{
+                println("No Exite")
                 activity?.runOnUiThread {
                     getDataZona()
                 }
             }
         }
     }
-
-
     //DESAPARECER BARRA DE NAVEGACION
     private fun desaparecerBarraNavegacion() {
         val decorView = view
@@ -104,7 +103,6 @@ class FrgZonaPiso : Fragment() {
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_FULLSCREEN)
     }
-
     //********************         ZONA        ********************//
     //INICIAR MESA
     fun initComponetZona(){
@@ -112,23 +110,13 @@ class FrgZonaPiso : Fragment() {
         rv_zona?.layoutManager = LinearLayoutManager(activity,RecyclerView.HORIZONTAL,false)
         adapterZona = AdapterZona(listaZona) { dataclassZonas -> onItemDatosZonas(dataclassZonas) }
         rv_zona?.adapter = adapterZona
-
     }
     //SELECCIONAR ZONA Y SE LISTA LAS MESAS
-
     private fun onItemDatosZonas(dataclassZonas: DCZonaItem) {
-
         val idZona = dataclassZonas.idZona
+        cancelarCorrutine()
         getDataMesa(idZona)
-
-        val sr_mesa = view?.findViewById<SwipeRefreshLayout>(R.id.sr_mesa)
-        sr_mesa?.setOnRefreshListener{
-            getDataMesa(idZona)
-            sr_mesa.isRefreshing = false
-        }
-
     }
-
     // Obtiene la informacion del API Zona
     private fun getDataZona(){
         CoroutineScope(Dispatchers.IO).launch {
@@ -153,8 +141,7 @@ class FrgZonaPiso : Fragment() {
                         listaZona.add(
                             DCZonaItem(
                             it.nombreZonas,
-                            it.idZona
-                            )
+                            it.idZona)
                         )
                     }
                     getDataMesa(listaZona[0].idZona)
@@ -165,44 +152,14 @@ class FrgZonaPiso : Fragment() {
             }
         }
     }
-
-    fun inyectarDatosZonas(lista: ArrayList<DCZonaItem>){
-        ///*************   ROOM FUNCIONAL ******************************************************
-        GlobalScope.launch(Dispatchers.Default) {
-            database.daoZona().deleteTable()
-            database.daoZona().clearPrimaryKey()
-            lista.forEach {database.daoZona().insertZona(EntityZona(0,it.idZona,it.nombreZonas))}
-
-            for (i in 1..lista.size){
-                val zonasId = database.daoZona().getZonaId(i)
-                val zonasNombre = database.daoZona().getZonaNombre(i)
-
-                withContext(Dispatchers.Main) {
-                    listaZona.add(DCZonaItem(zonasNombre,zonasId))
-                    if (i == lista.size){
-                        adapterZona.notifyDataSetChanged()
-                    }
-                    val sr_mesa = view?.findViewById<SwipeRefreshLayout>(R.id.sr_mesa)
-                    sr_mesa?.setOnRefreshListener{
-                        getDataMesa(listaZona[0].idZona)
-                        sr_mesa.isRefreshing = false
-                        adapterZona.notifyDataSetChanged()
-                    }
-                    getDataMesa(listaZona[0].idZona)
-                }
-            }
-        }
-    }
-
     //********************         MESA        ********************//
     //INICIAR MESA
     fun initComponentMesa(){
         val rv_mesa = view?.findViewById<RecyclerView>(R.id.rv_mesa2)
         rv_mesa?.layoutManager = GridLayoutManager(activity,4, RecyclerView.HORIZONTAL,false)
-        adapterMesa = AdapterMesa(listaMesa) { dataclassMesa -> onItemDatosMesa(dataclassMesa) }
+        adapterMesa = AdapterMesa(listatable) { dataclassMesa -> onItemDatosMesa(dataclassMesa) }
         rv_mesa?.adapter = adapterMesa
     }
-
     //SELECCIONAR MESA
     private fun onItemDatosMesa(dataclassMesa: DCMesaItem) {
         //ENVIAR DATOS DE MESA
@@ -255,23 +212,33 @@ class FrgZonaPiso : Fragment() {
         fragment.arguments = enviarDatos
 
         //CAMBIAR FRAMENT
+        for (i in 1..2){
+            cancelarCorrutine()
+        }
         transaction!!.replace(R.id.frm_panel, fragment).commit()
     }
-
     // Obtiene la informacion del API Mesa
     private fun getDataMesa(idZona:String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = apiInterface!!.getMesa("piso eq '$idZona' and tipo eq 'A'" )
-            activity?.runOnUiThread{
-                if(response.code() == 200){
-                    listaMesa.clear()
-                    listaMesa.addAll(response.body()!!)
-                    adapterMesa.notifyDataSetChanged()
-                }else{
-                    Toast.makeText(activity, "Error: ${response.code()} // getDataMesa // piso eq '$idZona' and tipo eq 'A'", Toast.LENGTH_SHORT).show()
+        job = CoroutineScope(Dispatchers.IO).launch {
+            while (true){
+                val response = apiInterface!!.getMesa("piso eq '$idZona' and tipo eq 'A'" )
+                activity?.runOnUiThread{
+                    if(response.code() == 200){
+                        _listTable.value = response.body()!!.toMutableList()
+                    }else{
+                        Toast.makeText(activity, "Error: ${response.code()} // getDataMesa // piso eq '$idZona' and tipo eq 'A'", Toast.LENGTH_SHORT).show()
+                    }
                 }
+                delay(1500)
             }
         }
     }
-
+    private fun getListTable() {
+        listTable.observe(viewLifecycleOwner){ it ->
+            adapterMesa.setItems(it)
+        }
+    }
+    fun cancelarCorrutine(){
+        job.cancel()
+    }
 }
